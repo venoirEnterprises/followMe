@@ -1,0 +1,20 @@
+﻿@{
+    //ViewBag.Title = "youllKnowWhatToDo";
+    followMe.Services.deployment deploy = new followMe.Services.deployment();
+    var server = deploy.getMongoClient();
+      ;
+    var db = server.getDatabase("this");
+}
+
+<br />
+<hr />
+<div style="float: right; width: 20%" id="mDB">
+    [from mDB]<br />
+</div>
+<select id="namelist"></select>
+
+<input type="text" id="newname" />
+<button id="namesubmit">Update</button>
+<button id="insert">Insert</button><br />
+<button id="delete">Delete</button>
+Message: <p id="responseMessage"></p>

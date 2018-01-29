@@ -1,0 +1,135 @@
+﻿@model followMe.Models.userDefined
+@{
+    followMe.ViewModels.achievementsAwardsViewModel aavm = new followMe.ViewModels.achievementsAwardsViewModel();
+}
+
+@using (Html.BeginForm())
+{
+
+    @Html.HiddenFor(m => m.difficulty, new { @id = "difficulty" })
+    @Html.HiddenFor(m => m.username, new { @id = "userdesigned" })
+    @Html.HiddenFor(m => m.enter, new { @id = "userenter" })
+    @Html.HiddenFor(m => m.left, new { @id = "userleft" })
+    @Html.HiddenFor(m => m.right, new { @id = "userright" })
+    @Html.HiddenFor(m => m.up, new { @id = "userup" })
+    @Html.HiddenFor(m => m.surrender, new { @id = "usersurrender" })
+    @Html.HiddenFor(m => m.special, new { @id = "userspecial" })
+    @Html.HiddenFor(m => m.isVenoir, new { @id = "IsVenoirGet" })
+    @Html.HiddenFor(m => m.online, new { @id = "IsOnlineGet" })
+    @Html.HiddenFor(m => m.email, new { @id = "useremail" })
+    @Html.HiddenFor(m => m.friendlyFire, new { @id = "IsFriendlyFireGet" })
+    @Html.HiddenFor(m => m.socialOnly, new { @id = "IsSocialOnlyGet" })
+    @Html.HiddenFor(m => m.rankOnline, new { @id = "IsRankOnlineGet" })
+    @Html.HiddenFor(m => m.shareXPInHelp, new { @id = "IsShareXPInHelpGet" })
+    <input data-role="none" type="submit" value="Back To the Game" />
+}
+<br />
+
+
+<section class="flexboxDefined" id="furtherDetails">
+
+    <aside id="otherDetails" class="smallboxDefined">
+        <button id="achievementsButton">Achievements & Awards</button>
+        <button id="videosButton">Videos</button>
+        <button id="soundsButton">Sounds and other options</button>
+        <button id="keyboardButton">Program keys</button>
+        <button id="playerProgressButton">Your progress</button>
+        <br />
+        <aside id="achievements">
+            <h4>Achievements and Awards</h4>
+            @Html.Partial("achievementsAwards", aavm)
+        </aside>
+        <aside id="videos">
+            <h4>Your previous videos</h4>
+            1 : What happened<br />
+            <iframe class="other" src="https://www.youtube.com/embed/Ci5XxhCAqvM" frameborder="0" allowfullscreen></iframe>
+        </aside>
+
+
+
+        <aside id="sounds">
+            <h4>Other options</h4>
+            <select id="difficultySet">
+                <option value="1">Easy</option>
+                <option value="2">Standard</option>
+                <option value="3">A challenge</option>
+                <option value="4">Are you sure?</option>
+            </select>
+            Join the community?<input type="checkbox" id="setIsVenoir" />
+            Go online?<input type="checkbox" id="setIsOnline" />
+            <aside id="onlineDetails">
+                Your email?: <input type="email" id="setuseremail" placeholder="If you want to connect" />
+                Friendly fire? [You will be rewarded, but shot] <input type="checkbox" id="setIsFriendlyFire" />
+                Private rooms? [Online, only the friends who have selected this can be seen] <input type="checkbox" id="setIsSocialOnly" />
+                Only see your rank? [Online, your rank or all of them?] <input type="checkbox" id="setIsRankOnline" />
+                Share XP? [When you ask for help, all XP is divided in two] <input type="checkbox" id="setIsShareXPInHelp" />
+            </aside>
+            <hr />
+            <h4>Sounds</h4>
+
+            Background? <input type="checkbox" id="backgroundMute" />
+            Effects<input type="checkbox" id="effectsMute"><br />
+            Volume<input type="number" max="100" min="1" id="gameVolume">
+
+
+        </aside>
+
+        <aside id="keyboard">
+            <h4>Program your keys</h4>
+
+            <table id="keyboardProgam">
+                <tr>
+                    <td>
+                        Up [To enter doors]:
+                    </td>
+                    <td>
+                        <input type="text" id="designEnter" /><b id="enter"></b>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Move Left:
+                    </td>
+                    <td>
+                        <input type="text" id="designLeft" /><b id="left"></b>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Move Right:
+                    </td>
+                    <td>
+                        <input type="text" id="designRight" /><b id="right"></b>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Jump [if right or left held]
+                    </td>
+                    <td>
+                        <input type="text" id="designUp" /><b id="up"></b>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Surrender [back to level select]
+                    </td>
+                    <td>
+                        <input type="text" id="designSurrender" /><b id="surrender"></b>
+                    </td>
+                </tr>
+                <tr id="specialAbilityProgram">
+                    <td>
+                        Speical [Activate your primary ability]
+                    </td>
+                    <td>
+                        <input type="text" id="designSpecial" /><b id="special"></b>
+                    </td>
+                </tr>
+            </table>
+        </aside>
+        <aside id="playerProgress">
+            <h4>Your progress</h4>
+        </aside>
+    </aside>
+</section>

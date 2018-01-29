@@ -1,0 +1,38 @@
+﻿@model followMe.Models.connection
+@using (Html.BeginForm())
+{
+    @Html.LabelFor(m => m.register)
+    @Html.EditorFor(m => m.register)
+    <br />
+    @Html.TextBoxFor(m => m.username, new { @Placeholder = "Username" })
+    <br />
+    @Html.TextBoxFor(m => m.firstPassword, new { @Placeholder = "Your Password", @type = "password" })
+    <br />
+    <br />
+
+    @Html.LabelFor(m => m.goOnline)
+    @Html.CheckBoxFor(m => m.goOnline)
+
+
+    <p id="venoirError" class="red">@ViewBag.connectError</p>
+    <input type="submit" id="welcomeSubmit" /><br />
+
+
+    <br />
+
+    @Html.LabelFor(m => m.isVenoir)
+    @Html.CheckBoxFor(m => m.isVenoir, new { @Id = "addCommunity" })
+
+
+
+    <h3>Community Details</h3>
+
+    @Html.LabelFor(m => m.email)
+    @Html.EditorFor(m => m.email, new { @Placeholder = "Email [your username if that's empty]" })
+}
+<p>Headline : The social network where you make the connections</p>
+<button id="registerHeadline">Register in Headline</button><p id="registerHeadlineStatus"></p>
+<br />
+<p>SelfImprove : Edutainment tailored for you</p>
+<button id="registerSelfImprove">Register In SelfImprove</button>
+<br />

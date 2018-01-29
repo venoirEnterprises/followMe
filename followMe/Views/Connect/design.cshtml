@@ -1,0 +1,72 @@
+﻿@model followMe.Models.userDefined
+
+@using (Html.BeginForm())
+{
+    @Html.HiddenFor(m => m.username, new { @id = "userdesigned" })
+    @Html.HiddenFor(m => m.head, new { @id = "headDisplay" })
+    @Html.HiddenFor(m => m.chest, new { @id = "chestDisplay" })
+    @Html.HiddenFor(m => m.legs, new { @id = "legsDisplay" })
+    @Html.HiddenFor(m => m.personType, new { @id = "personTypeSelected" })
+    @*@Html.TextBoxFor(m => m.username, @Value = @Model.username)*@
+
+    <p class="linkNoBorder">@ViewBag.connectError</p>
+
+    <input type="submit" />
+    if (ViewBag.regitration == true)
+    {
+        <section class="showAboveOthers">
+            <iframe id="whatHappened"class="main" src="https://www.youtube.com/embed/Ci5XxhCAqvM" frameborder="0" allowfullscreen></iframe>
+        </section>
+        <section class="right" id="playerXPMessage">
+            <p>Select person type</p>
+            <ul>
+                <li>
+                    <input type="radio" name="personTypeSelect" value="1" id="dangerMode"/>
+                    Danger Mode: More powerful, but your health is draining every second<br />
+                </li>
+                <li>
+                    <input type="radio" name="personTypeSelect" value="2" id="standardMode" />
+                    Standard Mode: Vanilla, you can go straight up and down<br />
+                </li>
+                <li>
+                    <input type="radio" name="personTypeSelect" value="3" id="stealthMode"/>
+                    Stealth Mode: invisible, but unarmed<br />
+                </li>
+            </ul>
+        </section>
+    }
+
+    <aside style="float:left; width:20%;clear:both">
+        <label for="for-head">head</label>
+        <input type="number" name="for-head" id="forhead" min="0" max="1" step="1" value="0" /><br />
+        <label for="for-legs">legs</label>
+        <input type="number" name="for-chest" id="forchest" min="0" max="1" step="1" value="0" /><br />
+        <label for="for-chest">chest</label>
+        <input type="number" name="for-legs" id="forlegs" min="0" max="1" step="1" value="0" /><br />
+    </aside>
+    <div style="position:absolute; left: 256px;">
+        <aside id="headsubmit" class="head image"></aside>
+        <aside id="chestsubmit" class="torso image"></aside>
+        <aside id="legssubmit" class="legs image"></aside><br />
+        </div>
+    <div style="position:absolute;" id="weaponFull">
+
+        @for (int i = 1; i < 4; i++)
+        {
+
+            <aside>
+                <p id="weapon_@i" class="weaponImage weapon image"></p>
+                <p id="weaponDetail_@i" class="weaponImage weaponDetail weapon image">
+
+                </p>
+            </aside>
+            <br />
+        }
+
+
+    </div>
+    @Html.HiddenFor(m => m.weaponID)
+    
+
+}
+
