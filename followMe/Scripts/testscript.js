@@ -162,10 +162,11 @@ $("#game").on('pagebeforeshow ready', function () {
         }
     }
 
-    followMe.x = function (divId, position) {
+    followMe.x = function (divId, position, physical) {
+        //Need to make the distinction between "real" and "objecT" coordinate. When somethine else moves me, my physical coord should change more dyamically than non-physical
         if ($("#isGame").val() == "yes") {
-            if (position) {
-                followMe.players[1].x = position;
+            if (position && (physical == undefined || physical == true) ) {
+                
                 if (divId.search("player") != -1) {
                     $("#weapon1").css("left", position - 96)
                 }
@@ -174,15 +175,25 @@ $("#game").on('pagebeforeshow ready', function () {
                 $("#weapon1").css("left", position - 96)
 
             }
-            else {
+            if (position && !physical)
+            {
+                followMe.players[1].x = position - 96;
+            }
+            if(position == undefined) {
                 return parseFloat($("#" + divId).css("left"));
             }
         }
     }
-    followMe.y = function (divId, position, rate) {
+    followMe.y = function (divId, position, rate, physical) {
         if ($("#isGame").val() == "yes") {
-            if (position) {
-                followMe.players[1].y = position;
+
+            if (rate == "fan") {
+                followMe.y("player", followMe.y("player") - 384)
+                followMe.defineDrop("", followMe.x("player"), "", "player")
+            }
+
+            if (position && (physical == undefined || physical == true)) {
+                //followMe.players[1].y = position;
                 if (divId.search("player") != -1) {
                     $("#weapon1").css("top", position - 10)
                     $("#weapon1").animate({ "top": position - 10 }, rate / 4)
@@ -191,12 +202,12 @@ $("#game").on('pagebeforeshow ready', function () {
                 $("#" + followMe.players[1].username + "name").css("top", position - 64)
                 $("#weapon1").css("top", position - 10)
             }
-
-            if (rate == "fan") {
-                followMe.y("player", followMe.y("player") - 384)
-                followMe.defineDrop("", followMe.x("player"), "", "player")
+            if (position && !physical)
+            {
+                followMe.players[1].y = position - 10;
             }
-            else {
+            
+            if (position == undefined) {
                 return parseFloat($("#" + divId).css("top"));
             }
         }
