@@ -80,6 +80,7 @@
         }
     }
     followMe.resetPlayer = function (end) {
+        window.console.log(localStorage.getItem("startX") + ", " + localStorage.getItem("startY"))
         localStorage.setItem("resetting", true)
         if (followMe.players[1].personType == "3") {
             followMe.players[1].usedStealth = 0
@@ -96,14 +97,9 @@
         //    object.lives -= 1
         //}
         $("#livesPlayer").val(parseFloat(object.lives))
-        $("#player").animate({
-            "left": localStorage.getItem("startX"),
-            "top": localStorage.getItem("startY")
-        }, 50);
-        $("#weapon1").animate({
-            "left": localStorage.getItem("startX") - 96,
-            "top": localStorage.getItem("startY")
-        }, 50);
+        $("#player, #weapon1").css("top", localStorage.getItem("startY"))//instant now instead of animated for 50ms, but should show an animation when reloading, and stop player interaction
+        $("#player").css("left", localStorage.getItem("startX") + "px")
+        $("#weapon1").css("left", (localStorage.getItem("startX") - 96) + "px")
         followMe.showOtherPlayer(localStorage.getItem("startX"), localStorage.getItem("startY"), followMe.players[1].username)
 
         localStorage.setItem("enemyHit", "")
