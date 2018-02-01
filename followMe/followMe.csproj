@@ -296,6 +296,7 @@
     <None Include="Properties\PublishProfiles\venoirFollowMe - Web Deploy %284%29.pubxml" />
     <None Include="Properties\PublishProfiles\venoirFollowMe - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\venoirFollowMe.pubxml" />
+    <Content Include="README.md" />
     <None Include="Scripts\jquery-1.6.4-vsdoc.js" />
     <Content Include="Scripts\Abilities.js" />
     <Content Include="Scripts\Angular.js" />
