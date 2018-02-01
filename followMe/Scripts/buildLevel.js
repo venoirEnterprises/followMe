@@ -565,7 +565,7 @@
         var myMaxY = 0;
         var myX = 0;
         var myMaxX = 0;
-        var timeToMove = 200;
+        var timeToMove = 500;
         switch (objectName) {
             case "surface":
                 object = followMe.surfaces[iduse];

@@ -7,3 +7,6 @@ followMe/bin/Antlr3.Runtime.pdb
 *.cache
 *.txt
 *.cache
+*.dll
+*.pdb
+*.config
