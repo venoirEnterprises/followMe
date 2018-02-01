@@ -592,38 +592,38 @@
 
         if (object.backToStartPoint) {
             setInterval(function () {
-                //The loop is right, down, left, up
+            //The loop is right, down, left, up
 
 
-                if (object.xend > 0) {
-                    moveObjectOnLoop(object.xend, top, left, object, iduse, objectName, timeToMove, code, myX, myY, false, false);
-                }
-                if (object.yend > 0 && (object.fly || objectName != "enemies")) {
-                    moveObjectOnLoop(object.yend, top, left, object, iduse, objectName, timeToMove, code, myX, myY, true, false);
-                }
-                if (object.xend > 0) {
-                    moveObjectOnLoop(object.xend, top, left, object, iduse, objectName, timeToMove, code, myX, myY, false, true);
-                }
-                if (object.yend > 0 && (object.fly || objectName != "enemies")) {
-                    moveObjectOnLoop(object.yend, top, left, object, iduse, objectName, timeToMove, code, myX, myY, true, true);
-                }
-            }, 1000)
-        }
-        //sleep(500)
-        //Not back to startpoint
-        else {
             if (object.xend > 0) {
                 moveObjectOnLoop(object.xend, top, left, object, iduse, objectName, timeToMove, code, myX, myY, false, false);
             }
             if (object.yend > 0 && (object.fly || objectName != "enemies")) {
                 moveObjectOnLoop(object.yend, top, left, object, iduse, objectName, timeToMove, code, myX, myY, true, false);
             }
+            if (object.xend > 0) {
+                moveObjectOnLoop(object.xend, top, left, object, iduse, objectName, timeToMove, code, myX, myY, false, true);
+            }
+            if (object.yend > 0 && (object.fly || objectName != "enemies")) {
+                moveObjectOnLoop(object.yend, top, left, object, iduse, objectName, timeToMove, code, myX, myY, true, true);
+            }
+            }, 1000)
+        }
+        //sleep(500)
+        //Not back to startpoint
+        else {
+                if (object.xend > 0) {
+                    moveObjectOnLoop(object.xend, top, left, object, iduse, objectName, timeToMove, code, myX, myY, false, false);
+                }
+                if (object.yend > 0 && (object.fly || objectName != "enemies")) {
+                    moveObjectOnLoop(object.yend, top, left, object, iduse, objectName, timeToMove, code, myX, myY, true, false);
+                }
         }
     }
 
 
-    //27/01/18 code centralised for object animation looping, called above
-    function moveObjectOnLoop(valueToLoop, top, left, object, iduse, objectName, timeToMove, code, myX, myY, isY, reverse) {
+        //27/01/18 code centralised for object animation looping, called above
+        function moveObjectOnLoop(valueToLoop, top, left, object, iduse, objectName, timeToMove, code, myX, myY, isY, reverse) {
         for (var i = 0; i < valueToLoop; i++) {
             var newattribute = parseFloat(left) + 64 /** (i+1)*/ + "px"
             if (reverse) {
@@ -637,11 +637,12 @@
                 attributeToChange = "left";
             }
             var animationProperties = {}; animationProperties[attributeToChange] = "+=64px";
-            if (reverse) {
+            if (reverse)
+            {
                 animationProperties = {}; animationProperties[attributeToChange] = "-=64px";
             }
 
-
+            
 
             $(identifier).animate(animationProperties,
                 {
@@ -656,7 +657,7 @@
                                 followMe.enemyHurt(fx.end, iduse, object)
                                 break;
                             case "surface":
-
+                                
                                 object.minx = myX;
                                 object.miny = myY;
                                 var playerObj = followMe.players[1];
@@ -666,15 +667,15 @@
                                 else {
                                     object.mayy = fx.end;
                                 }
-                                if (playerObj.currentSurfaceID == iduse) {
+                                if (playerObj.currentSurfaceID == iduse) {                                                                        
 
                                     iduse2 = ".surface#" + iduse
                                     var realTop = $(iduse2).css("top");//will need to get the current x as it animates, so the player moves along
                                     var realLeft = $(iduse2).css("left");
+                                    
 
-
-                                    followMe.x("player", realLeft.substring(0, realLeft.length - 2) - 10, true);
-                                    followMe.y("player", realTop.substring(0, realTop.length - 2) - 96, 0, true);//Set the physical here, the other one will just move when an animation ends
+                                    followMe.x("player", realLeft.substring(0, realLeft.length - 2)-10);
+                                    followMe.y("player", realTop.substring(0, realTop.length - 2)-96);
                                 }
                                 break;
                         }
@@ -683,12 +684,10 @@
                         if (!isY) {
                             myX = fx.end
                             myMaxX = fx.end + object.widthX;
-                            followMe.x("player", myMaxX - 10, false);//followme.players[1].x set here, delayed so matching is slightly less brutal
                         }
                         else {
                             myY = fx.end
                             myMaxY = fx.end + object.heightY;
-                            followMe.y("player", myMaxY - 96, 0, false);
                         }
 
                     }
@@ -703,4 +702,4 @@
     }
 
 
-})
+    })
