@@ -318,6 +318,8 @@
                         maxx = minx
                         miny = followMe.enemies[x].y
                         maxy = miny + 96
+
+                        //window.console.log(minx + ", "+ maxx + "; "+ miny + ", "+ maxy)
                     }
 
                     if (parseFloat(minx) <= parseFloat(playerleftx) && parseFloat(playerleftx) <= parseFloat(maxx) &&
@@ -354,8 +356,10 @@
                 ////y inside
                 if (parseFloat(playertopy) < parseFloat(miny) && parseFloat(maxy) < parseFloat(playerbottomy))
                 { matchType = 5; }
-                if (matchType != "no match") {
 
+                
+                if (matchType != "no match") {
+                    if (classCheck == ".enemies") { window.console.log(matchType, playerid) }
 
                     if (classCheck == ".teleports" && followMe.teleports[x].teleportAllowed) {
                         if (confirm("Are you sure you want to travel to the " +
@@ -378,7 +382,7 @@
                         }
 
                         if ((classCheck == ".enemies" && playerid != localStorage.getItem("bulletFired"))
-                            || localStorage.getItem("bulletFired") == null) {
+                        ) {
                             $("#" + playerid).remove();
                             followMe.hurtEnemy(x, playerid, local)
                             if (followMe.helpRequest != null) {

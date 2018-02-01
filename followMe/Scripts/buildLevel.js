@@ -650,10 +650,16 @@
                     step: function (now, fx) {
                         switch (objectName) {
                             case "enemies":
-                                if (!isY && object.fly == false) {
+                                if (!isY) {
                                     followMe.enemyDrop(code, fx.end, ".enemies#" + iduse, object.fly)
+                                    followMe.enemies[iduse].x = fx.end;
+                                }
+                                if (isY)
+                                {
+                                    followMe.enemies[iduse].y = fx.end;
                                 }
                                 followMe.enemyHurt(fx.end, iduse, object)
+                                
                                 break;
                             case "surface":
 
@@ -667,11 +673,9 @@
                                     object.mayy = fx.end;
                                 }
                                 if (playerObj.currentSurfaceID == iduse) {
-
                                     iduse2 = ".surface#" + iduse
                                     var realTop = $(iduse2).css("top");//will need to get the current x as it animates, so the player moves along
                                     var realLeft = $(iduse2).css("left");
-
 
                                     followMe.x("player", realLeft.substring(0, realLeft.length - 2) - 10, true);
                                     followMe.y("player", realTop.substring(0, realTop.length - 2) - 96, 0, true);//Set the physical here, the other one will just move when an animation ends
