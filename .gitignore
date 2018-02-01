@@ -10,3 +10,6 @@ followMe/bin/Antlr3.Runtime.pdb
 *.dll
 *.pdb
 *.config
+*.config
+.vs/followMe/v15/.suo
+*.dll
