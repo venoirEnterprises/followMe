@@ -641,8 +641,6 @@
                 animationProperties = {}; animationProperties[attributeToChange] = "-=64px";
             }
 
-
-
             $(identifier).animate(animationProperties,
                 {
                     duration: timeToMove
@@ -652,17 +650,17 @@
                             case "enemies":
                                 if (!isY) {
                                     followMe.enemyDrop(code, fx.end, ".enemies#" + iduse, object.fly)
-                                    followMe.enemies[iduse].x = fx.end;
+                                    object.x = fx.end;
                                 }
                                 if (isY)
                                 {
-                                    followMe.enemies[iduse].y = fx.end;
+                                    object.y = fx.end;
                                 }
                                 followMe.enemyHurt(fx.end, iduse, object)
                                 
                                 break;
                             case "surface":
-
+                                //Got to make it wider for the matching to take place less harshly as they do if the surface isn't moving'
                                 object.minx = myX;
                                 object.miny = myY;
                                 var playerObj = followMe.players[1];
@@ -676,9 +674,12 @@
                                     iduse2 = ".surface#" + iduse
                                     var realTop = $(iduse2).css("top");//will need to get the current x as it animates, so the player moves along
                                     var realLeft = $(iduse2).css("left");
-
-                                    followMe.x("player", realLeft.substring(0, realLeft.length - 2) - 10, true);
-                                    followMe.y("player", realTop.substring(0, realTop.length - 2) - 96, 0, true);//Set the physical here, the other one will just move when an animation ends
+                                    if (!isY) {
+                                        followMe.x("player", realLeft.substring(0, realLeft.length - 2) - 10, true);
+                                    }
+                                    else {
+                                        followMe.y("player", realTop.substring(0, realTop.length - 2) - 96, 0, true);//Set the physical here, the other one will just move when an animation ends
+                                    }
                                 }
                                 break;
                         }
@@ -687,12 +688,10 @@
                         if (!isY) {
                             myX = fx.end
                             myMaxX = fx.end + object.widthX;
-                            followMe.x("player", myMaxX - 10, false);//followme.players[1].x set here, delayed so matching is slightly less brutal
                         }
                         else {
                             myY = fx.end
                             myMaxY = fx.end + object.heightY;
-                            followMe.y("player", myMaxY - 96, 0, false);
                         }
 
                     }

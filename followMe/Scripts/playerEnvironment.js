@@ -80,7 +80,7 @@
         }
     }
     followMe.resetPlayer = function (end) {
-        window.console.log(localStorage.getItem("startX") + ", " + localStorage.getItem("startY"))
+        //window.console.log(localStorage.getItem("startX") + ", " + localStorage.getItem("startY"))
         localStorage.setItem("resetting", true)
         if (followMe.players[1].personType == "3") {
             followMe.players[1].usedStealth = 0
@@ -101,7 +101,7 @@
         $("#player").css("left", localStorage.getItem("startX") + "px")
         $("#weapon1").css("left", (localStorage.getItem("startX") - 96) + "px")
         followMe.showOtherPlayer(localStorage.getItem("startX"), localStorage.getItem("startY"), followMe.players[1].username)
-
+        object.currentSurfaceID = 0;
         localStorage.setItem("enemyHit", "")
         if ($("#lives").text() != "0" && end != 1 && $("#welcome").text() != "levelSelect") {
             //followMe.updatehealth(localStorage.getItem("username"), 0)
