@@ -114,7 +114,8 @@
                 maxy: -1,
                 backToStartPoint: false,
                 xend: 0,
-                yend: 0
+                yend: 0,
+                surfaceAnimationCollection: ""
             }
         $.extend(this, defaultValues, options);
     };
@@ -176,8 +177,10 @@
                 identifier: object.uniqueIdenitifer,
                 backToStartPoint: object.backToStartPoint,
                 xend: object.xend,
-                yend: object.yend
+                yend: object.yend,
+                surfaceAnimationCollection: object.surfaceAnimationCollection
             });
+
 
 
             followMe.surfaceID += 1;
@@ -574,7 +577,7 @@
                 myX = object.minx;
                 myMaxX = object.maxx;
                 iduse = objectName + iduse;
-                timeToMove = 800;
+                timeToMove = 500;
                 break;
             case "enemies":
                 myY = object.y;
@@ -621,6 +624,11 @@
         }
     }
 
+    //based on surface collection, set the max and min coordinates of the "surfaceAnimationCollection"
+    function checksurfaceAnimationCollection(surfaces) {
+        return surfaces.surfaceAnimationCollection === followMe.checkSurfaceAnimationCollection;
+    }
+
 
     //27/01/18 code centralised for object animation looping, called above
     function moveObjectOnLoop(valueToLoop, top, left, object, iduse, objectName, timeToMove, code, myX, myY, isY, reverse) {
@@ -652,20 +660,37 @@
                                     followMe.enemyDrop(code, fx.end, ".enemies#" + iduse, object.fly)
                                     object.x = fx.end;
                                 }
-                                if (isY)
-                                {
+                                if (isY) {
                                     object.y = fx.end;
                                 }
                                 followMe.enemyHurt(fx.end, iduse, object)
-                                
+
                                 break;
                             case "surface":
-                                //Got to make it wider for the matching to take place less harshly as they do if the surface isn't moving'
-                                object.minx = myX;
+                                
                                 object.miny = myY;
                                 var playerObj = followMe.players[1];
                                 if (!isY) {
-                                    object.maxx = fx.end;
+                                    if (object.surfaceAnimationCollection !== "")//This should always be true, we're in an animation collection, the min and max x forced by the overall width
+                                    {
+                                        //Got to make it wider for the matching to take place less harshly as they do if the surface isn't moving'
+                                        followMe.checkSurfaceAnimationCollection = object.surfaceAnimationCollection;
+                                        var arrayToModifyXCoords = followMe.surfaces.filter(checksurfaceAnimationCollection);
+                                        //object.minx = arrayToModifyXCoords[0].minx;
+                                        //object.maxx = arrayToModifyXCoords[arrayToModifyXCoords.length - 1].maxx
+                                        if (reverse)
+                                        {
+                                            object.minx = fx.end;
+                                            object.maxx = fx.end + 128;
+                                        }
+                                        else 
+                                        {
+                                            object.minx = fx.end - 128;
+                                            object.maxx = fx.end;
+                                        }
+                                    }
+                                    
+                                    
                                 }
                                 else {
                                     object.mayy = fx.end;
@@ -685,14 +710,6 @@
                         }
                         //Special behaviour is needed here, as they are "dynamic" objects that know where the floor is
 
-                        if (!isY) {
-                            myX = fx.end
-                            myMaxX = fx.end + object.widthX;
-                        }
-                        else {
-                            myY = fx.end
-                            myMaxY = fx.end + object.heightY;
-                        }
 
                     }
                 })
@@ -703,7 +720,5 @@
                 top = newattribute2;
             }
         }
-    }
-
-
-})
+    }    
+});

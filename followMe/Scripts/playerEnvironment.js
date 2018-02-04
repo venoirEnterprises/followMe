@@ -80,6 +80,7 @@
         }
     }
     followMe.resetPlayer = function (end) {
+        alert("live lost, resetting");
         //window.console.log(localStorage.getItem("startX") + ", " + localStorage.getItem("startY"))
         localStorage.setItem("resetting", true)
         if (followMe.players[1].personType == "3") {
@@ -110,6 +111,7 @@
             followMe.updateXPFromAction("checkpoint");
         }
     };
+    //This is the function for dropping the character on a match
     followMe.defineDrop = function (code, x, direction, player) {//
         var movement = "";
         if (code == followMe.players[1].right) { movement == "right" }
@@ -142,7 +144,8 @@
             var surfaceY = surfaceObject.miny;
             //var surfaceMaxY = x.substring(x.indexOf("y") + 1, x.length)
             if (playerX + 48 >= surfaceMinX && playerX <= surfaceMaxX && yDiff <= surfaceY
-                && continuing && surfaceObject.fan != true //&& surfaceMaxY <= playerY +192
+                && continuing && surfaceObject.fan != true
+                && (this.id != followMe.players[1].currentSurfaceID || surfaceObject.surfaceAnimationCollection == "")//Just to make sure the animated surface isn't pulling me left or right again
                 ) {
                 somethingBelow = true;
                 if ((min === null) || (surfaceY < min)) {
