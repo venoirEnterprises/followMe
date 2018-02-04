@@ -667,33 +667,32 @@
 
                                 break;
                             case "surface":
-                                
+
                                 object.miny = myY;
                                 var playerObj = followMe.players[1];
                                 if (!isY) {
-                                    if (object.surfaceAnimationCollection !== "")//This should always be true, we're in an animation collection, the min and max x forced by the overall width
+                                    if (object.surfaceAnimationCollection !== "")//This should always be true for surfaces, we're in an animation collection, the min and max x forced by the overall width
                                     {
                                         //Got to make it wider for the matching to take place less harshly as they do if the surface isn't moving'
                                         followMe.checkSurfaceAnimationCollection = object.surfaceAnimationCollection;
                                         var arrayToModifyXCoords = followMe.surfaces.filter(checksurfaceAnimationCollection);
                                         //object.minx = arrayToModifyXCoords[0].minx;
                                         //object.maxx = arrayToModifyXCoords[arrayToModifyXCoords.length - 1].maxx
-                                        if (reverse)
-                                        {
+                                        if (reverse) {
                                             object.minx = fx.end;
                                             object.maxx = fx.end + 128;
                                         }
-                                        else 
-                                        {
+                                        else {
                                             object.minx = fx.end - 128;
                                             object.maxx = fx.end;
                                         }
                                     }
-                                    
-                                    
+
+
                                 }
                                 else {
-                                    object.mayy = fx.end;
+                                    object.miny = fx.end
+                                    object.maxy = fx.end + 64;
                                 }
                                 if (playerObj.currentSurfaceID == iduse) {
                                     iduse2 = ".surface#" + iduse
@@ -720,5 +719,5 @@
                 top = newattribute2;
             }
         }
-    }    
+    }
 });

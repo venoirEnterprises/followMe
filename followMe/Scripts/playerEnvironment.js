@@ -117,9 +117,9 @@
         if (code == followMe.players[1].right) { movement == "right" }
         if (code == followMe.players[1].left) { movement == "left" }
 
-        var yDiff = followMe.y(player) + 96;
+        var yDiff = parseInt(followMe.y("player")) + 64;
         if (movement == "fan") {
-            yDiff = followMe.y(player) + 384;
+            yDiff = parseInt(followMe.y("player"))+ 384;
         }
         var min = null;
         var idDefined = "";
@@ -135,13 +135,14 @@
         followMe.hasCollided(movement, x, yDiff, ".surface")
         $(".surface").each(function () {
             var x = this.id.substring(7)
-
             var surfaceObject = followMe.surfaces[x];
             //if (surfaceObject == undefined)
             //    {alert(this.id + ", " + x)}
             var surfaceMinX = surfaceObject.minx;
             var surfaceMaxX = surfaceObject.maxx;
             var surfaceY = surfaceObject.miny;
+            if (x == 25) { window.console.log(followMe.surfaces[25].miny + ", " + followMe.surfaces[25].maxy + "; " + parseInt(followMe.y("player")) + ", " + yDiff)}
+
             //var surfaceMaxY = x.substring(x.indexOf("y") + 1, x.length)
             if (playerX + 48 >= surfaceMinX && playerX <= surfaceMaxX && yDiff <= surfaceY
                 && continuing && surfaceObject.fan != true
