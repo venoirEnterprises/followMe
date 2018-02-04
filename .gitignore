@@ -1,12 +1,7 @@
-
-*.pdb
-*.xml
-followMe/bin/Antlr3.Runtime.pdb
-*.dll
-*.txt
 *.cache
 *.dll
 *.pdb
 *.config
 *.dll
+*.pdb
 *.suo
