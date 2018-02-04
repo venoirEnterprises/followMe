@@ -21,8 +21,8 @@
                     var myright = object.x;
                     object.x += parseFloat(moveEachTime) * 20
 
-                    var rate = 20
-                    if (behind) { rate = -20 }
+                    var rate = 10
+                    if (behind) { rate = -rate }
 
                     object.y += rate;
                     $(id).css("left", object.y + "px")
@@ -30,23 +30,22 @@
                     //DOES IT HIT?
 
                     if (online === false) {
-
-                        followMe.hasCollided(parseFloat(moveEachTime * 20) * 20, object.x, object.y, ".enemies", lookingFor, true)
+                        followMe.hasCollided(parseFloat(moveEachTime * rate) * rate, object.x, object.y, ".enemies", lookingFor, true)
                         if (object.friendlyFire && followMe.players[1].friendlyFire) {
-                            followMe.hasCollided(parseFloat(moveEachTime * 20) * 20, object.x, object.y, ".player", lookingFor, true)
+                            followMe.hasCollided(parseFloat(moveEachTime * rate) * rate, object.x, object.y, ".player", lookingFor, true)
                         }
                     }
 
-                    followMe.hasCollided(parseFloat(moveEachTime * 20) * 20, object.x, object.y, ".surface", lookingFor)
+                    followMe.hasCollided(parseFloat(moveEachTime * rate) * rate, object.x, object.y, ".surface", lookingFor)
 
                     if (localStorage.currentCaveName != "") {
-                        followMe.hasCollided(parseFloat(moveEachTime * 20) * 20, object.x, object.y, ".caves", lookingFor)
+                        followMe.hasCollided(parseFloat(moveEachTime * rate) * rate, object.x, object.y, ".caves", lookingFor)
                     }
 
 
                     if (online && object.friendlyFire && followMe.players[1].friendlyFire) {
-                        //followMe.hasCollided(parseFloat(moveEachTime * 20) * 20, object.x, object.y, ".enemies", "shot" + shotID, false)
-                        followMe.hasCollided(parseFloat(moveEachTime * 20) * 20, object.x, object.y, ".player", lookingFor, false)//Search for the player in the screen first
+                        //followMe.hasCollided(parseFloat(moveEachTime * rate) * rate, object.x, object.y, ".enemies", "shot" + shotID, false)
+                        followMe.hasCollided(parseFloat(moveEachTime * rate) * rate, object.x, object.y, ".player", lookingFor, false)//Search for the player in the screen first
                         
                     }
 
@@ -188,7 +187,7 @@
 
                         setInterval(function () {
                             followMe.moveTheShot(shotID, down, moveEachTime, mouseX, mouseY, behind, false, followMe.shots[shotID])
-                        }, 50)
+                        }, 25)
                     }
                 }
             }

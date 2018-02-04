@@ -13,7 +13,7 @@ namespace followMe.Models
     public class imageHeader
     {
         [BsonId]
-        public ObjectId _id { get; set; }        
+        public ObjectId _id { get; set; }
         public string type { get; set; }
         //public List<image> images { get; set; }
         public imageHeader()
@@ -41,6 +41,7 @@ namespace followMe.Models
         public string newLevel { get; set; }
         public float xend { get; set; }
         public float yend { get; set; }
+        public string surfaceAnimationCollection { get; set; }
         public bool backToStartPoint { get; set; }
         public int hurt { get; set; }
         public bool fly { get; set; }
