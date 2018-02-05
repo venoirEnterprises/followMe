@@ -1,4 +1,4 @@
-﻿$("#game").on('pagebeforeshow ready', function () {
+﻿$(document).ready(function () {
 
         $("#furtherDetails #sounds div.ui-checkbox input").off().on("click", function () {
             var idToSet = this.id

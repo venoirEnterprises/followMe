@@ -8,11 +8,8 @@ namespace followMe
         public static void RegisterBundles(BundleCollection bundles)
         {
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
-                        "~/Scripts/jquery1.7.js"
-                        ));
-
-            bundles.Add(new ScriptBundle("~/bundles/jqueryM").Include(
-                         "~/Scripts/jquery.mobile-1.4.5.js"
+                        "~/Scripts/jquery1.7.js",
+                        "~/Scripts/angular.min.js"
                         ));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryui").Include(
@@ -27,7 +24,8 @@ namespace followMe
             bundles.Add(new ScriptBundle("~/bundles/modernizr").Include(
                         "~/Scripts/modernizr-*"));
 
-            bundles.Add(new StyleBundle("~/Content/css").Include("~/Content/site.css"));
+            bundles.Add(new StyleBundle("~/Content/css").Include("~/Content/site.css",
+                "~/Content/bootstrap.min.css"));
 
             bundles.Add(new StyleBundle("~/Content/themes/base/css").Include(
                         "~/Content/themes/base/jquery.ui.core.css",
@@ -42,6 +40,7 @@ namespace followMe
                         "~/Content/themes/base/jquery.ui.datepicker.css",
                         "~/Content/themes/base/jquery.ui.theme.css"));
             bundles.Add(new ScriptBundle("~/bundles/myScripts").Include(
+                //"~/Scripts/jquery.mobile-1.4.5.js",
                 "~/Scripts/testscript.js",
                 "~/Scripts/sounds.js",
                 "~/Scripts/enemies.js",
@@ -51,7 +50,7 @@ namespace followMe
                 "~/Scripts/playerDetails.js",
                 "~/Scripts/playerDesign.js",
                 "~/Scripts/playerEnvironment.js",
-                "~/Scripts/playerHealth.js",                
+                "~/Scripts/playerHealth.js",
                 "~/Scripts/Abilities.js",
                 "~/Scripts/Mobile.js",
                 "~/Scripts/keyboard.js",

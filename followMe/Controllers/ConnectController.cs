@@ -87,7 +87,7 @@ namespace followMe.Controllers
         [HttpGet]
         public ActionResult design(bool? isRegistering)
         {
-            ViewBag.regitration = isRegistering;
+            ViewBag.registration = isRegistering;
             ViewBag.isGame = "no";
             return View();
         }
@@ -98,7 +98,7 @@ namespace followMe.Controllers
             if (model.personType == null || model.personType == "")
             {
                 ViewBag.isGame = "no";
-                ViewBag.regitration = true;
+                ViewBag.registration = true;
                 ViewBag.connectError = "You must select a person type";
                 return View();
             }
@@ -151,9 +151,9 @@ namespace followMe.Controllers
             return View();
         }
         [HttpPost]
-        public ActionResult Welcome(connection model)
+        public ActionResult Welcome(Connection model)
         {
-            string userFirstPassword = model.firstPassword;
+            string userFirstPassword = model.FirstPassword;
             if (!ModelState.IsValid)
             {
                 ViewBag.connectError = "Please check your data, there appears to be an error";
@@ -161,37 +161,37 @@ namespace followMe.Controllers
             }
             else
             {
-                if (model.email != null && model.email != "")//Can't store email "."'s, so will need to have translation service back and to email
+                if (model.Email != null && model.Email != "")//Can't store email "."'s, so will need to have translation service back and to email
                 {
-                    model.email = userChange.changeStringDots(model.email, false);
+                    model.Email = userChange.changeStringDots(model.Email, false);
                 }
 
 
 
-                if (model.username != "" && model.username != null && model.username.Contains("."))
+                if (model.Username != "" && model.Username != null && model.Username.Contains("."))
                 {
                     ViewBag.connectError = "Sorry, but a username can't contain a '.'";
                     return View();
                 }
 
-                if (model.username == "" || model.username == null)
+                if (model.Username == "" || model.Username == null)
                 {
-                    model.username = model.email;
-                    if (model.email == "" || model.email == null)
+                    model.Username = model.Email;
+                    if (model.Email == "" || model.Email == null)
                     {
                         ViewBag.connectError = "Your username or email is required";
                         return View();
                     }
                 }
 
-                if ((model.username == "" || model.username == null) || (model.email == "" && model.email == null))
+                if ((model.Username == "" || model.Username == null) || (model.Email == "" && model.Email == null))
                 {
                     ViewBag.connectError = "Your username or email is required";
                     return View();
                 }
 
 
-                if (model.register && model.isVenoir && (model.email == null || model.email == ""))
+                if (model.Register && model.IsVenoir && (model.Email == null || model.Email == ""))
                 {
                     ViewBag.connectError = "If you want to be in the community, you must have an email address";
                     return View();
@@ -201,27 +201,27 @@ namespace followMe.Controllers
                 var collection = db.GetCollection<userDefined>("userDefined");
                 var loginLog = db.GetCollection("loginLog");
                 var levels = db.GetCollection("levelList");
-                var userExistsCount = collection.Count(Query.EQ("username", model.username));
+                var userExistsCount = collection.Count(Query.EQ("username", model.Username));
                 bool firstpasswordValid = false;
 
-                if (model.register == false && userExistsCount > 0)
+                if (model.Register == false && userExistsCount > 0)
                 {
                     var toCheckPassword = 0;
-                    if (model.firstPassword != null) { toCheckPassword = model.firstPassword.GetHashCode(); }
-                    firstpasswordValid = auth.checkpassword(model.username, toCheckPassword);
-                    if (firstpasswordValid == false) { ViewBag.connectError = "Leader password invalid"; return View(); }
+                    if (model.FirstPassword != null) { toCheckPassword = model.FirstPassword.GetHashCode(); }
+                    firstpasswordValid = auth.checkpassword(model.Username, toCheckPassword);
+                    if (firstpasswordValid == false) { ViewBag.connectError = "User Credentials invalid"; return View(); }
 
                 }
-                long passwordcount = collection.Count(Query.EQ("password", model.firstPassword.GetHashCode()));
-                long usercount = collection.Count(Query.EQ("username", model.username));
+                long passwordcount = collection.Count(Query.EQ("password", model.FirstPassword.GetHashCode()));
+                long usercount = collection.Count(Query.EQ("username", model.Username));
 
                 long emailcount = 0;
-                if (model.email != null && model.email != "")//Otherwise they don't have an email and we don't care if it's unique
+                if (model.Email != null && model.Email != "")//Otherwise they don't have an email and we don't care if it's unique
                 {
-                    emailcount = collection.Count(Query.EQ("email", model.email));
+                    emailcount = collection.Count(Query.EQ("email", model.Email));
                 }
 
-                if ((usercount > 0 || emailcount > 0) && model.register)
+                if ((usercount > 0 || emailcount > 0) && model.Register)
                 {
                     ViewBag.connectError = "Your username or email already exists, please check your details and login if that's what you want";
                     return View();
@@ -233,21 +233,21 @@ namespace followMe.Controllers
 
 
 
-                if (userExistsCount == 0 && model.register == true)
+                if (userExistsCount == 0 && model.Register == true)
                 {
-                    auth.registerUser(model.username, loginLog, userFirstPassword, false, model.email, model.isVenoir, model.goOnline);
+                    auth.registerUser(model.Username, loginLog, userFirstPassword, false, model.Email, model.IsVenoir, model.GoOnline);
 
                     return RedirectToAction("design", "Connect", new { isRegistering = true });
                 }
                 //need to count loginLog for single user now, as this is going to be a login here
-                var loginLogCount = loginLog.Count(Query.Exists(model.username));
+                var loginLogCount = loginLog.Count(Query.Exists(model.Username));
 
                 if (loginLogCount > 0)//They are already connected, user probably wrong
                 {
                     ViewBag.connectError = "You are already connected, check your usernames";
                     return View();
                 }
-                if (model.register == false)
+                if (model.Register == false)
                 {
                     if (userExistsCount == 0)
                     {
@@ -256,20 +256,20 @@ namespace followMe.Controllers
                     }
                 }
                 //If the count is 0 then they are allowed to connect
-                if (userExistsCount > 0 && model.register == false && loginLogCount == 0)
+                if (userExistsCount > 0 && model.Register == false && loginLogCount == 0)
                 {
-                    model.username = userChange.changeStringDots(model.username, false);
+                    model.Username = userChange.changeStringDots(model.Username, false);
                     var person = db.GetCollection<userDefined>("userDefined");
-                    var personToUpdate = person.FindOne(Query.EQ("username", model.username));
-                    personToUpdate.online = model.goOnline;
+                    var personToUpdate = person.FindOne(Query.EQ("username", model.Username));
+                    personToUpdate.online = model.GoOnline;
                     person.Save(personToUpdate);
-                    var newlog = new QueryDocument(model.username, 1);
+                    var newlog = new QueryDocument(model.Username, 1);
                     loginLog.Insert(newlog);
 
                     return RedirectToAction("levelSelect", "Connect");
                 }
                 //Invalid settings
-                if (userExistsCount > 0 && model.register)
+                if (userExistsCount > 0 && model.Register)
                 {
                     ViewBag.connectError = "That user already exists";
                     return View();

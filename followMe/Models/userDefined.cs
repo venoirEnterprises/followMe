@@ -51,20 +51,20 @@ namespace followMe.Models
         public DateTime lastActive { get; set; }
         public DateTime lastLoggedOut { get; set; }
     }
-    public class connection
+    public class Connection
     {
-        public bool register { get; set; }
-        [Display(Name="The leader")]
-        public string username { get; set; }        
-        [Display(Name="Your password"), Required]
-        public string firstPassword { get; set; }
-        [Display(Name="Your email [only required if you want community]"),DataType(DataType.EmailAddress)]
-        public string email { get; set; }
-        [Display(Name="Join the community?")]
-        public bool isVenoir { get; set; }
-        [Display(Name="Go into the wild [Rank 3+ recomended]")]
-        public bool goOnline { get; set; }
-        
+        public bool Register { get; set; }
+        [Display(Name = "The leader")]
+        public string Username { get; set; }
+        [Display(Name = "Your password"), Required]
+        public string FirstPassword { get; set; }
+        [Display(Name = "Your email"), DataType(DataType.EmailAddress)]
+        public string Email { get; set; }
+        [Display(Name = "Join the community?")]
+        public bool IsVenoir { get; set; }
+        [Display(Name = "Go online [rec. Rank 3+]")]
+        public bool GoOnline { get; set; }
+
     }
     public class weapon
     {
@@ -97,7 +97,7 @@ namespace followMe.Models
         public int internalID { get; set; }
         public int specialID { get; set; }
         public string type { get; set; }
-        public string action { get; set; }        
+        public string action { get; set; }
         public int xpPoints { get; set; }
         public bool special { get; set; }
         public string message { get; set; }
@@ -123,7 +123,7 @@ namespace followMe.Models
         //This declares what it is called [usually level] e.g. youllKnowWhatToDo
         public int numberDone { get; set; }
     }
- 
+
     public class notification
     {
         public ObjectId _id { get; set; }

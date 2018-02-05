@@ -1,5 +1,5 @@
 ﻿//$("#game").on('pagebeforeshow ready', function () {
-$("#game").on('pagebeforeshow ready', function () {
+$(document).ready(function () {
     localStorage.setItem("currentCaveName", "")
     $("#playerXPMessage").hide();
     if (localStorage.getItem("lastEnemyDead") == null) {
@@ -283,7 +283,7 @@ $("#game").on('pagebeforeshow ready', function () {
     //.css("backgroundPosition", "0px, 0px")
 
 
-    if (url.search("/Connect/Design/") != -1 && $("#isGame").val() != "yes") {
+    if (url.search("/Connect/Design/") != -1 || $("#isGame").val() != "yes") {
         $("#firstdesign").hide()
         $("#seconddesign").hide()
         $("#player").hide()
@@ -298,4 +298,6 @@ $("#game").on('pagebeforeshow ready', function () {
     $("#firstUserPassword").click(function () { $("#firstpassword").toggle() });
     $("#secondUserPassword").click(function () { $("#secondpassword").toggle() });
 
+
+    window.console.log(url);
 });
