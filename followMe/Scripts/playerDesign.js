@@ -1,4 +1,4 @@
-﻿$("#game").on('pagebeforeshow ready', function () {
+﻿$(function () {
 
     $(".ui-select span").text("");
     $("select").on("click change blur focus", function () {

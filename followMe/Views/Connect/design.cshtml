@@ -14,9 +14,6 @@
     <input type="submit" />
     if (ViewBag.registration == true)
     {
-        <section class="showAboveOthers">
-            <iframe id="whatHappened"class="main" src="https://www.youtube.com/embed/Ci5XxhCAqvM" frameborder="0" allowfullscreen></iframe>
-        </section>
         <section class="right" id="playerXPMessage">
             <p>Select person type</p>
             <ul>
@@ -38,11 +35,11 @@
 
     <aside style="float:left; width:20%;clear:both">
         <label for="for-head">head</label>
-        <input type="number" name="for-head" id="forhead" min="0" max="1" step="1" value="0" /><br />
+        <input type="hidden" name="for-head" id="forhead" min="0" max="1" step="1" value="0" /><br />
         <label for="for-legs">legs</label>
-        <input type="number" name="for-chest" id="forchest" min="0" max="1" step="1" value="0" /><br />
+        <input type="hidden" name="for-chest" id="forchest" min="0" max="1" step="1" value="0" /><br />
         <label for="for-chest">chest</label>
-        <input type="number" name="for-legs" id="forlegs" min="0" max="1" step="1" value="0" /><br />
+        <input type="hidden" name="for-legs" id="forlegs" min="0" max="1" step="1" value="0" /><br />
     </aside>
     <div style="position:absolute; left: 256px;">
         <aside id="headsubmit" class="head image"></aside>

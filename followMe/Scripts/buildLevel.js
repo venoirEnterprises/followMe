@@ -1,4 +1,4 @@
-﻿$("#game").on('pagebeforeshow ready', function () {
+﻿$(function () {
     var numberx = 0;
     var numbery = 0;
     followMe.teleportPicture = -562;

@@ -1,5 +1,6 @@
-﻿$("#game").on('pagebeforeshow ready', function () {
+﻿$(function () {
     $("#playerXPMessage input").click(function () {
+        window.console.log(this.id);
         $("#personTypeSelected").val($("#" + this.id).val())
         if ($("#" + this.id).val() == "3") {
             $("#weaponFull").hide()

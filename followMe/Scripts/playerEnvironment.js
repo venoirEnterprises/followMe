@@ -1,4 +1,4 @@
-﻿$("#game").on('pagebeforeshow ready', function () {
+﻿$(function () {
 
     followMe.shot = function (options) {
         var defaultValues =
