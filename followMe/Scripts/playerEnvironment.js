@@ -80,6 +80,8 @@
         }
     }
     followMe.resetPlayer = function (end) {
+        alert("live lost, resetting");
+        //window.console.log(localStorage.getItem("startX") + ", " + localStorage.getItem("startY"))
         localStorage.setItem("resetting", true)
         if (followMe.players[1].personType == "3") {
             followMe.players[1].usedStealth = 0
@@ -96,16 +98,11 @@
         //    object.lives -= 1
         //}
         $("#livesPlayer").val(parseFloat(object.lives))
-        $("#player").animate({
-            "left": localStorage.getItem("startX"),
-            "top": localStorage.getItem("startY")
-        }, 50);
-        $("#weapon1").animate({
-            "left": localStorage.getItem("startX") - 96,
-            "top": localStorage.getItem("startY")
-        }, 50);
+        $("#player, #weapon1").css("top", localStorage.getItem("startY"))//instant now instead of animated for 50ms, but should show an animation when reloading, and stop player interaction
+        $("#player").css("left", localStorage.getItem("startX") + "px")
+        $("#weapon1").css("left", (localStorage.getItem("startX") - 96) + "px")
         followMe.showOtherPlayer(localStorage.getItem("startX"), localStorage.getItem("startY"), followMe.players[1].username)
-
+        object.currentSurfaceID = 0;
         localStorage.setItem("enemyHit", "")
         if ($("#lives").text() != "0" && end != 1 && $("#welcome").text() != "levelSelect") {
             //followMe.updatehealth(localStorage.getItem("username"), 0)
@@ -114,14 +111,15 @@
             followMe.updateXPFromAction("checkpoint");
         }
     };
+    //This is the function for dropping the character on a match
     followMe.defineDrop = function (code, x, direction, player) {//
         var movement = "";
         if (code == followMe.players[1].right) { movement == "right" }
         if (code == followMe.players[1].left) { movement == "left" }
 
-        var yDiff = followMe.y(player) + 96;
+        var yDiff = parseInt(followMe.y("player")) + 64;
         if (movement == "fan") {
-            yDiff = followMe.y(player) + 384;
+            yDiff = parseInt(followMe.y("player"))+ 384;
         }
         var min = null;
         var idDefined = "";
@@ -137,16 +135,18 @@
         followMe.hasCollided(movement, x, yDiff, ".surface")
         $(".surface").each(function () {
             var x = this.id.substring(7)
-
             var surfaceObject = followMe.surfaces[x];
             //if (surfaceObject == undefined)
             //    {alert(this.id + ", " + x)}
             var surfaceMinX = surfaceObject.minx;
             var surfaceMaxX = surfaceObject.maxx;
             var surfaceY = surfaceObject.miny;
+            if (x == 25) { window.console.log(followMe.surfaces[25].miny + ", " + followMe.surfaces[25].maxy + "; " + parseInt(followMe.y("player")) + ", " + yDiff)}
+
             //var surfaceMaxY = x.substring(x.indexOf("y") + 1, x.length)
             if (playerX + 48 >= surfaceMinX && playerX <= surfaceMaxX && yDiff <= surfaceY
-                && continuing && surfaceObject.fan != true //&& surfaceMaxY <= playerY +192
+                && continuing && surfaceObject.fan != true
+                && (this.id != followMe.players[1].currentSurfaceID || surfaceObject.surfaceAnimationCollection == "")//Just to make sure the animated surface isn't pulling me left or right again
                 ) {
                 somethingBelow = true;
                 if ((min === null) || (surfaceY < min)) {
@@ -322,6 +322,8 @@
                         maxx = minx
                         miny = followMe.enemies[x].y
                         maxy = miny + 96
+
+                        //window.console.log(minx + ", "+ maxx + "; "+ miny + ", "+ maxy)
                     }
 
                     if (parseFloat(minx) <= parseFloat(playerleftx) && parseFloat(playerleftx) <= parseFloat(maxx) &&
@@ -358,8 +360,10 @@
                 ////y inside
                 if (parseFloat(playertopy) < parseFloat(miny) && parseFloat(maxy) < parseFloat(playerbottomy))
                 { matchType = 5; }
-                if (matchType != "no match") {
 
+                
+                if (matchType != "no match") {
+                    if (classCheck == ".enemies") { window.console.log(matchType, playerid) }
 
                     if (classCheck == ".teleports" && followMe.teleports[x].teleportAllowed) {
                         if (confirm("Are you sure you want to travel to the " +
@@ -382,7 +386,7 @@
                         }
 
                         if ((classCheck == ".enemies" && playerid != localStorage.getItem("bulletFired"))
-                            || localStorage.getItem("bulletFired") == null) {
+                        ) {
                             $("#" + playerid).remove();
                             followMe.hurtEnemy(x, playerid, local)
                             if (followMe.helpRequest != null) {
