@@ -297,7 +297,4 @@ $(document).ready(function () {
 
     $("#firstUserPassword").click(function () { $("#firstpassword").toggle() });
     $("#secondUserPassword").click(function () { $("#secondpassword").toggle() });
-
-
-    window.console.log(url);
 });

@@ -1,6 +1,5 @@
 ﻿$(function () {
-    $("#playerXPMessage input").click(function () {
-        window.console.log(this.id);
+    $("input[name='personTypeSelect']").click(function () {
         $("#personTypeSelected").val($("#" + this.id).val())
         if ($("#" + this.id).val() == "3") {
             $("#weaponFull").hide()
@@ -12,7 +11,10 @@
     })
 
     $("#specialAbilityProgram").hide()
-
+    if ($("#isGame").val() == "no")
+    {
+        $("#playerDesign").hide();
+    }
 
 
     //DESIGN END
