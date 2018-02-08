@@ -1,7 +1,6 @@
 *.cache
 *.dll
 *.pdb
-*.config
 *.dll
 *.pdb
 *.suo
