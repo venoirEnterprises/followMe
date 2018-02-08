@@ -4,7 +4,7 @@ FollowMe - communicate with and save the enemies all around you. Shooting is bad
 # Current features and overview
 8bit graphics platformer with checkpoints
 Level editor and % complete
-Ability to lock levels based on finishing other levels, or % complete
+Ability to lock levels based on finishing other levels, logging % complete, fastest level and your rank per level | world
 Achievement badges and levelling up which also improves your powers
 Level selector
 Configurable keys, CSV based level loading

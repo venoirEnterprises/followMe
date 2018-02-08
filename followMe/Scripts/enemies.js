@@ -21,7 +21,7 @@
     }
 
     followMe.hurtEnemy = function (enemyID, shotID, local, hurtExternal) {
-        //alert(enemyID + ",,,," + shotID);
+        window.console.log(enemyID + ",,,," + shotID);
         var shotIDhere = shotID.substring(4);
         var hurt = 0;
         //if (local) {
