@@ -103,3 +103,5 @@ C:\Users\Vincent.Norris\Source\Repos\followMe\followMe\bin\Newtonsoft.Json.xml
 C:\Users\Vincent.Norris\Source\Repos\followMe\followMe\obj\Debug\followMe.csprojResolveAssemblyReference.cache
 C:\Users\Vincent.Norris\Source\Repos\followMe\followMe\obj\Debug\followMe.dll
 C:\Users\Vincent.Norris\Source\Repos\followMe\followMe\obj\Debug\followMe.pdb
+C:\Users\Vincent.Norris\Source\Repos\followMe\followMe\bin\Org.Mentalis.Security.Cryptography.dll
+C:\Users\Vincent.Norris\Source\Repos\followMe\followMe\bin\Mono.Math.dll
