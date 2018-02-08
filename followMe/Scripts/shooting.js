@@ -1,4 +1,4 @@
-﻿$("#game").on('pagebeforeshow ready', function () {
+﻿$(document).ready(function () {
 
     var shots = [];
     if ($("#isGame").val() != "no") {

@@ -1,4 +1,4 @@
-﻿$("#game").on('pagebeforeshow ready', function () {
+﻿$(document).ready(function () {
 
     followMe.jumpSound = function () {
         if (localStorage.getItem("effectsMute") == "false") {

@@ -1,4 +1,4 @@
-﻿$("#game").on('pagebeforeshow ready', function () {
+﻿$(document).ready(function () {
 
     followMe.shot = function (options) {
         var defaultValues =
@@ -663,7 +663,7 @@
                     followMe.onlineWeaponIs = identifier + ", " + top + ", " + (-96 * (weaponDefinition.identifierToSee - 1)) + ", " + followMe.imageDefintion.weapon;
                 }
             }
-
+            
             $("#" + identifier).css("background", "url('/Images/spriteSheet.png')" + (-96 * (weaponDefinition.identifierToSee - 1)) +
                     "px " + followMe.imageDefintion.weapon).css("top", top + "px").css("position", "absolute").css("width", "96px")
                     .css("height", "48px");
@@ -679,9 +679,10 @@
             var theID = parseFloat(theWeapon.identifierToSee);
             var top = ((theID + 2) * 64)
 
+            
             $("#weapon_" + theID).css("background", "url('/Images/spriteSheet.png')" + parseFloat((-96 * (theID - 1))) +
                 "px " + followMe.imageDefintion.weapon).css("top", top + "px")
-                .parent().children().last().css("left", "128px").css("position", "absolute")
+                .parent().children().last().css("left", "128px")
                 .css("top", top + "px")
 
             if (theID == 1) {

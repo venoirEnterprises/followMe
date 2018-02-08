@@ -3,7 +3,7 @@
     function enemyDies(identified) {
         //alert(identified)
         if (localStorage.getItem("effectsMute") != "true") {
-            followMe.destroySoundDuplication(new Audio("../Sounds/Effects/enemy died.mp3"), "notification", true, false, false)
+            destroySoundDuplication(new Audio("../Sounds/Effects/enemy died.mp3"), "notification", true, false, false)
         }
         if (localStorage.getItem("lastEnemyDead") != identified && identified != undefined) {
             localStorage.setItem("killCount", parseFloat(localStorage.getItem("killCount")) + 1)
