@@ -106,11 +106,10 @@
 
     <script>
         $("#welcomeSubmit").click(function () {
-            var currentUsername = $("#username").val();
+            var currentUsername = $("#Username").val();
             if (currentUsername == "") {
-                currentUsername = $("#email").val()
+                currentUsername = $("#Email").val()
             }
-
             localStorage.setItem("username", currentUsername)
 
         })

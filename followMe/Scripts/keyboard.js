@@ -1,4 +1,4 @@
-﻿$("#game").on('pagebeforeshow ready', function () {
+﻿$(document).ready(function () {
     $("#collision").text(surrenderTime)
     followMe.canMove = true;
     followMe.functionNumber = 0;
@@ -81,8 +81,7 @@
     }
     var surrenderTime = 0;
     var stealthTime = 0;
-
-    $(document).on('pagebeforeshow', function () {
+    
         if ($("#isGame").val() != "no") {
 
             $(document).on("keydown", function (e) {
@@ -93,7 +92,6 @@
                 }
             });
         }
-    });
 
 
     followMe.moveUser = function (action) {

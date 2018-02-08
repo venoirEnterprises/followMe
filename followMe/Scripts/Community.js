@@ -252,7 +252,7 @@
 
                 if (type != undefined && howMany > 0 && followMe.url && followMe.url.search("/community/players") == -1) {
                     if (localStorage.getItem("effectsMute") != "true") {
-                        followMe.destroySoundDuplication(new Audio("../Sounds/Effects/notification.wav"), "notification", true, false, false)
+                        destroySoundDuplication(new Audio("../Sounds/Effects/notification.wav"), "notification", true, false, false)
                     }
                 }
 

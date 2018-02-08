@@ -21,7 +21,7 @@
     $("iFrame.main").css("zIndex", 500).css("height", "80%").css("width", "100%")
     if ($("iFrame#whatHappened").length > 0) {
         $("iFrame").parent().append("<a id='skipVideo'>Close</a>")
-        followMe.destroySoundDuplication(new Audio("../Sounds/gameTheme.mp3"), "whatHappened", true, false, false)
+        destroySoundDuplication(new Audio("../Sounds/gameTheme.mp3"), "whatHappened", true, false, false)
         $("iFrame").parent().css("width", "100%").css("height", "100%").css("zIndex", 500).css("backgroundColor", "white").css("position", "absolute");
     }
     else {
