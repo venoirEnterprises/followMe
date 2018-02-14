@@ -6,6 +6,23 @@
     followMe.teleports = [];
     followMe.enemies = [];
 
+    followMe.gameObject = function (options) {//generic local object must match server, and array filtering will apply to logic of followMe.surfaces e.g.
+        var defaultValues =
+            {
+                type: "",
+                _id: ""
+            }
+        $.extend(this, defaultValues, options);
+    }
+    followMe.gameObjects = [];
+
+    followMe.setTypeFilter = function (filter) {
+        followMe.currentObjType = filter;
+    }
+
+    //followMe.currentObjType is overridden above, then used for filtering
+    function filterGameObjectsByType(obj) { return obj.type === followMe.currentObjType }
+
     followMe.teleport = function (options) {
         var defaultValues =
             {
@@ -53,7 +70,7 @@
         return newmessage;
     }
 
-    followMe.levelServicesDefined.client.addImageFromServer = function (serveranimation, type, username, canAccess, numberSurfaces, totalLevelToDo, playerDone) {//last param specifically for teleports                
+    followMe.levelServicesDefined.client.addImageFromServer = function (serveranimation, type, username, canAccess, totalLevelToDo, playerDone, countGameObjects) {//last param specifically for teleports                
 
         if (username == localStorage.getItem("username")) {
             if (type == "Items") {
@@ -95,6 +112,30 @@
                 addDownloadKey(followMe.checkpoints[serveranimation.checkpoint]);
             }
             followMe.showCaveContents(false)
+        }
+
+        if (followMe.gameObjects.length === countGameObjects)//The final addition has taken place in addImage2
+        {
+            followMe.objectTypes = ["enemies", "surface", "background", "caves"]
+
+            for (i = 0; i <= followMe.objectTypes.length; i++) {
+                var myType = followMe.objectTypes[i];
+                followMe.setTypeFilter(myType);
+                switch (myType) {
+                    case "enemies":
+                        followMe.enemies2 = followMe.gameObjects.filter(filterGameObjectsByType);
+                        break;
+                    case "surface":
+                        followMe.surfaces2 = followMe.gameObjects.filter(filterGameObjectsByType);
+                        break;
+                    case "background":
+                        followMe.backgrounds2 = followMe.gameObjects.filter(filterGameObjectsByType);
+                        break;
+                    case "caves":
+                        followMe.caves2 = followMe.gameObjects.filter(filterGameObjectsByType);
+                        break;
+                }
+            }           
         }
     };
 
@@ -158,7 +199,11 @@
             + "-" + parseInt(parseInt((parseInt(object.x) * 64)) + (parseInt(object.widthX) * 64)) + "y"
             + parseInt(parseInt((parseInt(object.y) * 64)) + (parseInt(object.heightY) * 64))
 
-
+        //Feb 14th, generic object declaration to override specific objects, then just use array filter to create followMe.surfaces e.g.
+        followMe.gameObjects[followMe.gameObjects.length] = new followMe.gameObject({
+            type: type,
+            _id: object._id
+        });
 
         if (type == "surface" || object.fan == true) {
 
@@ -180,8 +225,6 @@
                 yend: object.yend,
                 surfaceAnimationCollection: object.surfaceAnimationCollection
             });
-
-
 
             followMe.surfaceID += 1;
 

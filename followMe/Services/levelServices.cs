@@ -1,8 +1,8 @@
 ﻿using followMe.Models;
 using Microsoft.AspNet.SignalR;
-using System.Linq;
-using MongoDB.Driver.Builders;
 using MongoDB.Driver;
+using MongoDB.Driver.Builders;
+using System.Linq;
 
 namespace followMe.Services
 {
@@ -40,7 +40,7 @@ namespace followMe.Services
         {
             bool usingHelp = false;
             string usernameForClient = username;
-            if(helpUsername != null)
+            if (helpUsername != null)
             {
                 username = helpUsername;
                 usingHelp = true;
@@ -58,14 +58,12 @@ namespace followMe.Services
             }
             if (level != "ImagesDefinition")
             {
-                var collection = db.GetCollection<image>(level);
-
                 var person = db.GetCollection<userDefined>("userDefined");
                 var theUser = person.FindOne(Query.EQ("username", username));
 
-                long howManySurfaces = collection.Find(Query.EQ("type", "surface")).Count();//To prevent duplicates from jQuery Mobile
+                var collection = db.GetCollection<image>(level);
 
-                foreach (var item in collection.FindAll())//;//test for server
+                foreach (var item in collection.FindAll().Where(m => m.showMinimumDifficulty <= theUser.difficulty).Where(m => m.hideMinimumDifficulty >= theUser.difficulty))
                 {
                     var canAccessTeleport = false;
                     canAccessTeleport = auth.hasAccessToLevel(username2, item.level, item.world);
@@ -77,13 +75,13 @@ namespace followMe.Services
                         totalPlayerDoneCount = comm.targetProgressCount(username2, false, item.level, item.world, "all");
                     }
 
-                    if ((theUser.difficulty >= item.showMinimumDifficulty || item.showMinimumDifficulty == 0 )&& ( theUser.difficulty <= item.hideMinimumDifficulty || item.hideMinimumDifficulty == 0))
+                    if ((theUser.difficulty >= item.showMinimumDifficulty || item.showMinimumDifficulty == 0) && (theUser.difficulty <= item.hideMinimumDifficulty || item.hideMinimumDifficulty == 0))
                     {
-                        Clients.All.addImageFromServer(item, item.type, usernameForClient, canAccessTeleport, howManySurfaces, totalLevelCount, totalPlayerDoneCount);//item.images.Find(x => x.animate));
+                        Clients.All.addImageFromServer(item, item.type, usernameForClient, canAccessTeleport, totalLevelCount, totalPlayerDoneCount, collection.Count());
                     }
 
                 }
-                
+
 
                 if (theUser.checkpoint == -1)
                 {
@@ -102,7 +100,7 @@ namespace followMe.Services
                     var startpoint = collection.Find(Query.Exists("checkpoint")).Where(
                         m => m.checkpoint == theUser.checkpoint).FirstOrDefault();
 
-                    if(startpoint == null)
+                    if (startpoint == null)
                     {
                         startpoint = collection.Find(Query.Exists("checkpoint")).Where(
                         m => m.checkpoint == 0).FirstOrDefault();
@@ -129,10 +127,10 @@ namespace followMe.Services
             var queryForLevel = levelname + "ImagesDefinition";
             var level = db.GetCollection<image>(queryForLevel);
             var collection = db.GetCollection<userDefined>("userDefined");
-            
+
             var userToChange = collection.FindOne(Query.EQ("username", username2));
-            
-            if(wasInvincible)//They've survived, awarded client side after this call
+
+            if (wasInvincible)//They've survived, awarded client side after this call
             {
                 userToChange.hasSurvived = wasInvincible;
             }
@@ -147,7 +145,7 @@ namespace followMe.Services
                 Query.EQ("identifier", levelUnlocked)
                 ));
 
-                
+
                 userToChange.checkpoint = 0;
                 userToChange.level = nextLevel.identifier;
                 userToChange.world = nextLevel.worldNumber;
@@ -159,7 +157,7 @@ namespace followMe.Services
                 comm.setFastestLevelTime(username2, levelname, timeToFinish);
 
                 Clients.All.newLevel(nextLevel.fullName, nextLevel.worldName, username, false);
-             
+
             }
 
             else
@@ -172,13 +170,13 @@ namespace followMe.Services
                 var startpoint = level.Find(Query.Exists("checkpoint")).Where(
                         m => m.checkpoint == index).FirstOrDefault();
 
-             
+
             }
         }
         public void redirectFromTeleport(string username, int worldNumber, string levelNumber, userDefined player)
         {
             deployment deploy = new deployment();
-            var db = deploy.getDB();           
+            var db = deploy.getDB();
             var levels = db.GetCollection<levelList>("levelList");
             var users = db.GetCollection<userDefined>("userDefined");
 
@@ -190,7 +188,7 @@ namespace followMe.Services
                 Query.EQ("worldNumber", worldNumber),
                 Query.EQ("identifier", levelNumber)
                 ));
-            
+
 
             comm.addPlayerProgress(user.changeStringDots(username, true), world.fullName, world.worldName);
             Clients.All.newLevel(world.fullName, world.worldName, username, true);
