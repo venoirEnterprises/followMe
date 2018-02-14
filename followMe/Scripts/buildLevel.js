@@ -109,33 +109,14 @@
 
             }
             if (type == "background" && serveranimation.inCave) {
-                addDownloadKey(followMe.checkpoints[serveranimation.checkpoint]);
+                addDownloadKey(followMe.checkpoints[serveranimation.checkpoint]);                
             }
             followMe.showCaveContents(false)
         }
 
         if (followMe.gameObjects.length === countGameObjects)//The final addition has taken place in addImage2
         {
-            followMe.objectTypes = ["enemies", "surface", "background", "caves"]
-
-            for (i = 0; i <= followMe.objectTypes.length; i++) {
-                var myType = followMe.objectTypes[i];
-                followMe.setTypeFilter(myType);
-                switch (myType) {
-                    case "enemies":
-                        followMe.enemies2 = followMe.gameObjects.filter(filterGameObjectsByType);
-                        break;
-                    case "surface":
-                        followMe.surfaces2 = followMe.gameObjects.filter(filterGameObjectsByType);
-                        break;
-                    case "background":
-                        followMe.backgrounds2 = followMe.gameObjects.filter(filterGameObjectsByType);
-                        break;
-                    case "caves":
-                        followMe.caves2 = followMe.gameObjects.filter(filterGameObjectsByType);
-                        break;
-                }
-            }           
+            followMe.testObj = serveranimation                        
         }
     };
 
@@ -144,7 +125,6 @@
     followMe.surface = function (options) {
         var defaultValues =
             {
-                identifier: 0,
                 miny: -1,
                 minx: -1,
                 widthX: -1,
@@ -219,7 +199,6 @@
                 maxx: (parseFloat(object.x) * 64) + (parseFloat(object.widthX) * 64),
                 maxy: (parseFloat(object.y) * 64) + (parseFloat(object.heightY) * 64),
                 fan: object.fan,
-                identifier: object.uniqueIdenitifer,
                 backToStartPoint: object.backToStartPoint,
                 xend: object.xend,
                 yend: object.yend,
@@ -500,12 +479,30 @@
 
             }
         }
+        followMe.setTypeFilter(type);
+        switch (type) {
+            case "enemies":
+                followMe.enemies2 = followMe.gameObjects.filter(filterGameObjectsByType);
+                break;
+            case "surface":
+                followMe.surfaces2 = followMe.gameObjects.filter(filterGameObjectsByType);
+                break;
+            case "background":
+                followMe.backgrounds2 = followMe.gameObjects.filter(filterGameObjectsByType);
+                break;
+            case "caves":
+                followMe.caves2 = followMe.gameObjects.filter(filterGameObjectsByType);
+                break;
+        }
+
         if (stop == false || type != "surface") {
             return imageDefined
         }
         else {
             return false;
         }
+
+        
     }
 
     followMe.enemy = function (options) {

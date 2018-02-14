@@ -93,6 +93,7 @@
                 surrender: object.surrender,
                 enter: object.enter,
                 special: object.special,
+                build : object.build,
                 rank: object.rank,
                 pace: xpStats.pace,
                 weaponHarmMultiplier: xpStats.weaponHarmMultiplier,

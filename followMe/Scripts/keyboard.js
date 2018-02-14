@@ -223,6 +223,10 @@
 
                             }
                             break;
+
+                        case followMe.players[1].build://feb 14th, start a building button, fully programmed
+                            alert("building");
+                            break;
                     }
             }
         }

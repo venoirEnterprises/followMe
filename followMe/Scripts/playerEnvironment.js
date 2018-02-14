@@ -141,7 +141,6 @@
             var surfaceMinX = surfaceObject.minx;
             var surfaceMaxX = surfaceObject.maxx;
             var surfaceY = surfaceObject.miny;
-            if (x == 25) { window.console.log(followMe.surfaces[25].miny + ", " + followMe.surfaces[25].maxy + "; " + parseInt(followMe.y("player")) + ", " + yDiff)}
 
             //var surfaceMaxY = x.substring(x.indexOf("y") + 1, x.length)
             if (playerX + 48 >= surfaceMinX && playerX <= surfaceMaxX && yDiff <= surfaceY
