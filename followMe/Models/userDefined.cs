@@ -35,6 +35,7 @@ namespace followMe.Models
         public int right { get; set; }
         public int enter { get; set; }
         public int special { get; set; }
+        public int build { get; set; }
         //KEYBOARD END
         public int rank { get; set; }//Hence XPPerRank and statsPerRank
         public int XP { get; set; }

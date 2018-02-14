@@ -71,6 +71,7 @@ $(document).ready(function () {
                 right: 68,
                 surrender: 83,
                 enter: 0,
+                build: 16,//shift
                 //KEYBOARD
                 maxLives: -1,
                 lives: -1,

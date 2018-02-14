@@ -223,11 +223,11 @@
 
                             }
                             break;
-
-                        case followMe.players[1].build://feb 14th, start a building button, fully programmed
-                            alert("building");
-                            break;
                     }
+                    break;
+                case followMe.players[1].build://feb 14th, start a building button, fully programmed
+                    window.console.log("building");
+                    break;
             }
         }
     }
@@ -259,5 +259,10 @@
     $("#designSpecial").keydown(function (e) {
         $("#special").text(getCode(e.keyCode))
         $("#userspecial").val(e.keyCode)
+    })
+
+    $("#designBuild").keydown(function (e) {
+        $("#build").text(getCode(e.keyCode))
+        $("#userbuild").val(e.keyCode)
     })
 });
