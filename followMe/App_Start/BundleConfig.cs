@@ -58,6 +58,10 @@ namespace followMe
                 "~/Scripts/Multiplayer.js",
                 "~/Scripts/Angular.js"
                 ));
+            bundles.Add(new ScriptBundle("~/bundles/typeScript").Include(
+                "~/Scripts/declareClasses.js",
+                "~/Scripts/test2.js"
+                ));
         }
     }
 }

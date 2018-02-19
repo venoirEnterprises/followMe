@@ -1,5 +1,8 @@
 ﻿//$("#game").on('pagebeforeshow ready', function () {
 $(document).ready(function () {
+
+    
+
     localStorage.setItem("currentCaveName", "")
     $("#playerXPMessage").hide();
     if (localStorage.getItem("lastEnemyDead") == null) {
@@ -43,6 +46,7 @@ $(document).ready(function () {
     followMe.userServicesDefined = $.connection.userMethods;
     followMe.authServicesDefined = $.connection.authServices;
     followMe.levelServicesDefined = $.connection.levelServices;
+   
 
     followMe.imageDefintion = {};
 

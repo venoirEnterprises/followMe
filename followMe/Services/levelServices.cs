@@ -13,6 +13,19 @@ namespace followMe.Services
         communityServices comm = new communityServices();
         deployment deploy = new deployment();
 
+        //temporary test script
+        public string sendMessage(string msg)
+        {
+            //log the incoming message here to confirm that its received
+
+            //send back same message with DateTime
+            msg = "Server: " + msg;
+            Clients.All.messageReceived(msg);
+            return msg;
+        }
+
+
+
         public levelList redirectToWorld(int worldName, string levelName, string username)
         {
             var db = deploy.getDB();

@@ -568,7 +568,7 @@
 
         }
         $.connection.hub.start("~/signalr").done(function () {
-            if ($("#isGame").val() == "yes") {
+            if ($("#isGame").val() == "yes") {  
                 //alert()
                 followMe.communityServices.server.checkLevelAttendanceForHelp(
                     $("#welcome").text(),
@@ -587,6 +587,9 @@
                     localStorage.getItem("username"),
                     followMe.helpUsername
                 );
+                
+
+                followMe.levelServicesDefined.server.sendMessage("test");
             }
         });
     }

@@ -298,6 +298,7 @@
     <None Include="Properties\PublishProfiles\venoirFollowMe - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\venoirFollowMe.pubxml" />
     <Content Include="README.md" />
+    <Content Include="Scripts\declareClasses.js.map" />
     <None Include="Scripts\jquery-1.6.4-vsdoc.js" />
     <Content Include="Scripts\Abilities.js" />
     <Content Include="Scripts\Angular.js" />
@@ -306,6 +307,7 @@
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\buildLevel.js" />
     <Content Include="Scripts\Community.js" />
+    <Content Include="Scripts\declareClasses.js" />
     <Content Include="Scripts\display.js" />
     <Content Include="Scripts\enemies.js" />
     <Content Include="Scripts\jquery-1.6.4.js" />
@@ -335,7 +337,9 @@
     <Content Include="Scripts\playerHealth.js" />
     <Content Include="Scripts\shooting.js" />
     <Content Include="Scripts\sounds.js" />
+    <Content Include="Scripts\test.js" />
     <Content Include="Scripts\testscript.js" />
+    <Content Include="Scripts\websocketTest.js" />
     <Content Include="Sounds\Effects\enemy died.mp3" />
     <Content Include="Sounds\Effects\Jump.mp3" />
     <Content Include="Sounds\Effects\notification.wav" />
@@ -368,6 +372,9 @@
     <Content Include="Views\Community\competitions.cshtml" />
     <Content Include="Views\Connect\Help.cshtml" />
     <Content Include="Views\Connect\plan.cshtml" />
+    <Content Include="Scripts\tsconfig.json" />
+    <Content Include="Scripts\test.js.map" />
+    <Content Include="Scripts\websocketTest.js.map" />
     <None Include="Views\EndingTheBeginning\theEnemiesAreComing.cshtml" />
     <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
@@ -390,6 +397,10 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
+  </ItemGroup>
+  <ItemGroup>
+    <TypeScriptCompile Include="Scripts\declareClasses.ts" />
+    <TypeScriptCompile Include="Scripts\websocketTest.ts" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
