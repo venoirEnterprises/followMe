@@ -1,3 +1,7 @@
+# Commands
+After nugetting typescript, run tsc -w to watch all modified typescript files to convert over to JS. Add the resulting js files to bundleConfig.js
+mongod defaults to port 27001
+
 # General
 FollowMe - communicate with and save the enemies all around you. Shooting is bad. A game engine built from scratch in jQuery, .NET with mongoDB | CSV loading. Full of all the features you'd expect, including online play. Please see readme for setup instructions on how to run the game locally. It is built to look like an 8bit platformer, but with so many more features
 
