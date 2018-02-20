@@ -9,29 +9,30 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 var PassiveGameObject = /** @class */ (function () {
-    function PassiveGameObject(caveName, hideMinimumDifficulty, showMinimumDifficulty, widthX, heightY, //defaulted end, expected value
-    inCave) {
-        if (caveName === void 0) { caveName = ""; }
+    function PassiveGameObject(hideMinimumDifficulty, showMinimumDifficulty, widthX, heightY) {
         if (hideMinimumDifficulty === void 0) { hideMinimumDifficulty = 0; }
         if (showMinimumDifficulty === void 0) { showMinimumDifficulty = 0; }
         if (widthX === void 0) { widthX = 64; }
         if (heightY === void 0) { heightY = 64; }
-        if (inCave === void 0) { inCave = caveName.length > 0 ? true : false; }
-        this.caveName = caveName;
         this.hideMinimumDifficulty = hideMinimumDifficulty;
         this.showMinimumDifficulty = showMinimumDifficulty;
         this.widthX = widthX;
         this.heightY = heightY;
-        this.inCave = inCave;
+        this._id = "";
         this.x = 0;
         this.y = 0;
         this.type = "";
+        this.caveName = "";
+        this.inCave = false;
     }
+    PassiveGameObject.prototype.set_id = function (id) {
+        this._id = id;
+    };
     PassiveGameObject.prototype.setType = function (type) {
         this.type = type;
     };
     PassiveGameObject.prototype.giveType = function () {
-        console.log(this.type + " is my type");
+        console.log(this.type + "  is my type");
     };
     PassiveGameObject.prototype.setX = function (thisValue) {
         this.x = thisValue * 64;
@@ -39,23 +40,20 @@ var PassiveGameObject = /** @class */ (function () {
     PassiveGameObject.prototype.setY = function (thisValue) {
         this.y = thisValue * 64;
     };
-    PassiveGameObject.prototype.giveCoords = function () {
-        console.log(this.x + ", " + this.y);
+    PassiveGameObject.prototype.setCaveDetails = function (caveName) {
+        this.caveName = caveName;
+        this.inCave = this.caveName.length > 0 ? true : false;
     };
     PassiveGameObject.prototype.getCaveDetails = function () {
-        console.log(this.caveName.length > 0 ? this.caveName : "[no cave]" + ", in cave? " + this.inCave);
+        console.log(this.caveName.length > 0 ? this.caveName + ", in cave? " + this.inCave : "[no cave]");
     };
     return PassiveGameObject;
 }());
 var Weapon = /** @class */ (function (_super) {
     __extends(Weapon, _super);
-    function Weapon(_id, hurt, caveName) {
-        if (_id === void 0) { _id = ""; }
-        if (caveName === void 0) { caveName = ""; }
-        var _this = _super.call(this, caveName, 0, 0, 0, 0, false) || this;
-        _this._id = _id;
+    function Weapon(hurt) {
+        var _this = _super.call(this, 0, 0, 0, 0) || this;
         _this.hurt = hurt;
-        _this.caveName = caveName;
         return _this;
     }
     ;
@@ -68,14 +66,12 @@ var Weapon = /** @class */ (function (_super) {
 ;
 var AnimatedGameObject = /** @class */ (function (_super) {
     __extends(AnimatedGameObject, _super);
-    function AnimatedGameObject(_id, animate, startFrame, endFrame, spriteY) {
-        if (_id === void 0) { _id = ""; }
+    function AnimatedGameObject(animate, startFrame, endFrame, spriteY) {
         if (animate === void 0) { animate = false; }
         if (startFrame === void 0) { startFrame = 0; }
         if (endFrame === void 0) { endFrame = 0; }
         if (spriteY === void 0) { spriteY = 0; }
-        var _this = _super.call(this, _id) || this;
-        _this._id = _id;
+        var _this = _super.call(this) || this;
         _this.animate = animate;
         _this.startFrame = startFrame;
         _this.endFrame = endFrame;
@@ -87,14 +83,38 @@ var AnimatedGameObject = /** @class */ (function (_super) {
     };
     return AnimatedGameObject;
 }(PassiveGameObject));
-var weapon = new Weapon("id", 50, "");
+var AnimatedMovementGameObject = /** @class */ (function (_super) {
+    __extends(AnimatedMovementGameObject, _super);
+    function AnimatedMovementGameObject(animate, startFrame, endFrame, spriteY, xend, yend) {
+        if (animate === void 0) { animate = false; }
+        if (startFrame === void 0) { startFrame = 0; }
+        if (endFrame === void 0) { endFrame = 0; }
+        if (spriteY === void 0) { spriteY = 0; }
+        if (xend === void 0) { xend = 0; }
+        if (yend === void 0) { yend = 0; }
+        var _this = _super.call(this, animate, startFrame, endFrame, spriteY) || this;
+        _this.animate = animate;
+        _this.startFrame = startFrame;
+        _this.endFrame = endFrame;
+        _this.spriteY = spriteY;
+        _this.xend = xend;
+        _this.yend = yend;
+        return _this;
+    }
+    return AnimatedMovementGameObject;
+}(AnimatedGameObject));
+var weapon = new Weapon(50);
+weapon.set_id("id1");
+weapon.setCaveDetails("");
 weapon.setType();
 weapon.giveType();
 weapon.getCaveDetails();
-var weapon2 = new Weapon("id2", 100, "caveTest");
+var weapon2 = new Weapon(100);
+weapon2.set_id("id2");
+weapon2.setCaveDetails("caveTest");
 weapon2.setType();
 weapon2.getCaveDetails();
-var animate = new AnimatedGameObject("id3", false, 1, 2, 4);
+var animate = new AnimatedGameObject(false, 1, 2, 4);
 animate.setType("surface");
 animate.giveAnimate();
 //# sourceMappingURL=declareClasses.js.map
