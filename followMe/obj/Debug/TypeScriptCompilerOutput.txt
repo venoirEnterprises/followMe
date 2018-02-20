@@ -56,3 +56,5 @@ C:\Users\Vincent.Norris\Source\Repos\followMe\followMe\Scripts\declareClasses.js
 C:\Users\Vincent.Norris\Source\Repos\followMe\followMe\Scripts\declareClasses.js.map
 C:\Users\Vincent.Norris\Source\Repos\followMe\followMe\Scripts\websocketTest.js
 C:\Users\Vincent.Norris\Source\Repos\followMe\followMe\Scripts\websocketTest.js.map
+C:\Users\nvsib\Source\Repos\followMe\followMe\Scripts\declareClasses.js
+C:\Users\nvsib\Source\Repos\followMe\followMe\Scripts\declareClasses.js.map
