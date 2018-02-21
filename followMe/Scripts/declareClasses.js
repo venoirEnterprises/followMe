@@ -1,3 +1,8 @@
+/*
+index and uniqueIdentifier to be removed, in place of server-side _id
+xMove replaced by maxx
+yMove replaced my maxy
+*/
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -9,15 +14,11 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 var PassiveGameObject = /** @class */ (function () {
-    function PassiveGameObject(hideMinimumDifficulty, showMinimumDifficulty, widthX, heightY) {
-        if (hideMinimumDifficulty === void 0) { hideMinimumDifficulty = 0; }
-        if (showMinimumDifficulty === void 0) { showMinimumDifficulty = 0; }
-        if (widthX === void 0) { widthX = 64; }
-        if (heightY === void 0) { heightY = 64; }
-        this.hideMinimumDifficulty = hideMinimumDifficulty;
-        this.showMinimumDifficulty = showMinimumDifficulty;
-        this.widthX = widthX;
-        this.heightY = heightY;
+    function PassiveGameObject() {
+        this.widthX = 64;
+        this.heightY = 64;
+        this.hideMinimumDifficulty = 0;
+        this.showMinimumDifficulty = 0;
         this._id = "";
         this.x = 0;
         this.y = 0;
@@ -25,22 +26,22 @@ var PassiveGameObject = /** @class */ (function () {
         this.caveName = "";
         this.inCave = false;
     }
-    PassiveGameObject.prototype.set_id = function (id) {
-        this._id = id;
-    };
     PassiveGameObject.prototype.setType = function (type) {
         this.type = type;
     };
     PassiveGameObject.prototype.giveType = function () {
         console.log(this.type + "  is my type");
     };
-    PassiveGameObject.prototype.setX = function (thisValue) {
-        this.x = thisValue * 64;
+    PassiveGameObject.prototype.setWidthHeight = function (width, height) {
+        this.widthX = width;
+        this.heightY = height;
     };
-    PassiveGameObject.prototype.setY = function (thisValue) {
-        this.y = thisValue * 64;
-    };
-    PassiveGameObject.prototype.setCaveDetails = function (caveName) {
+    PassiveGameObject.prototype.setPassiveObjectProperties = function (_id, x, y, caveName, hideMinimumDifficulty, showMinimumDifficulty) {
+        this.hideMinimumDifficulty = hideMinimumDifficulty;
+        this.showMinimumDifficulty = showMinimumDifficulty;
+        this._id = _id;
+        this.x = x * 64;
+        this.y = y * 64;
         this.caveName = caveName;
         this.inCave = this.caveName.length > 0 ? true : false;
     };
@@ -51,9 +52,11 @@ var PassiveGameObject = /** @class */ (function () {
 }());
 var Weapon = /** @class */ (function (_super) {
     __extends(Weapon, _super);
-    function Weapon(hurt) {
-        var _this = _super.call(this, 0, 0, 0, 0) || this;
+    function Weapon(hurt, rate, weaponLevel) {
+        var _this = _super.call(this) || this;
         _this.hurt = hurt;
+        _this.rate = rate;
+        _this.weaponLevel = weaponLevel;
         return _this;
     }
     ;
@@ -83,38 +86,71 @@ var AnimatedGameObject = /** @class */ (function (_super) {
     };
     return AnimatedGameObject;
 }(PassiveGameObject));
+var Item = /** @class */ (function (_super) {
+    __extends(Item, _super);
+    function Item(message) {
+        var _this = _super.call(this) || this;
+        _this.message = message;
+        return _this;
+    }
+    Item.prototype.setType = function (type) {
+        if (type === void 0) { type = "Item"; }
+        _super.prototype.setType.call(this, type);
+    };
+    return Item;
+}(AnimatedGameObject));
 var AnimatedMovementGameObject = /** @class */ (function (_super) {
     __extends(AnimatedMovementGameObject, _super);
-    function AnimatedMovementGameObject(animate, startFrame, endFrame, spriteY, xend, yend) {
-        if (animate === void 0) { animate = false; }
-        if (startFrame === void 0) { startFrame = 0; }
-        if (endFrame === void 0) { endFrame = 0; }
-        if (spriteY === void 0) { spriteY = 0; }
+    function AnimatedMovementGameObject(xend, yend, backToStartPoint) {
         if (xend === void 0) { xend = 0; }
         if (yend === void 0) { yend = 0; }
-        var _this = _super.call(this, animate, startFrame, endFrame, spriteY) || this;
-        _this.animate = animate;
-        _this.startFrame = startFrame;
-        _this.endFrame = endFrame;
-        _this.spriteY = spriteY;
+        if (backToStartPoint === void 0) { backToStartPoint = 0; }
+        var _this = _super.call(this) || this;
         _this.xend = xend;
         _this.yend = yend;
+        _this.backToStartPoint = backToStartPoint;
         return _this;
     }
     return AnimatedMovementGameObject;
 }(AnimatedGameObject));
-var weapon = new Weapon(50);
-weapon.set_id("id1");
-weapon.setCaveDetails("");
-weapon.setType();
-weapon.giveType();
-weapon.getCaveDetails();
-var weapon2 = new Weapon(100);
-weapon2.set_id("id2");
-weapon2.setCaveDetails("caveTest");
-weapon2.setType();
-weapon2.getCaveDetails();
-var animate = new AnimatedGameObject(false, 1, 2, 4);
-animate.setType("surface");
-animate.giveAnimate();
+var AnimatedHurtingGameObjectWithHealth = /** @class */ (function (_super) {
+    __extends(AnimatedHurtingGameObjectWithHealth, _super);
+    function AnimatedHurtingGameObjectWithHealth(maxHealth) {
+        if (maxHealth === void 0) { maxHealth = 100; }
+        var _this = _super.call(this) || this;
+        _this.maxHealth = maxHealth;
+        return _this;
+    }
+    return AnimatedHurtingGameObjectWithHealth;
+}(AnimatedMovementGameObject));
+var Surface = /** @class */ (function (_super) {
+    __extends(Surface, _super);
+    function Surface(fan) {
+        var _this = _super.call(this) || this;
+        _this.fan = fan;
+        return _this;
+    }
+    Surface.prototype.setType = function (type) {
+        if (type === void 0) { type = "Surface"; }
+        _super.prototype.setType.call(this, type);
+    };
+    return Surface;
+}(AnimatedHurtingGameObjectWithHealth));
+var FollowMeDefinition = /** @class */ (function () {
+    function FollowMeDefinition(Weapons, Items, Surfaces) {
+        if (Weapons === void 0) { Weapons = new Array(); }
+        if (Items === void 0) { Items = new Array(); }
+        if (Surfaces === void 0) { Surfaces = new Array(); }
+        this.Weapons = Weapons;
+        this.Items = Items;
+        this.Surfaces = Surfaces;
+    }
+    FollowMeDefinition.prototype.addWeapon = function (weapon) { this.Weapons.push(weapon); };
+    FollowMeDefinition.prototype.addItem = function (item) { this.Items.push(item); };
+    FollowMeDefinition.prototype.addSurface = function (surface) { this.Surfaces.push(surface); };
+    FollowMeDefinition.prototype.getWeapons = function () { return this.Weapons; };
+    FollowMeDefinition.prototype.getItems = function () { return this.Items; };
+    FollowMeDefinition.prototype.getSurfaces = function () { return this.Surfaces; };
+    return FollowMeDefinition;
+}());
 //# sourceMappingURL=declareClasses.js.map

@@ -116,7 +116,8 @@
 
         if (followMe.gameObjects.length === countGameObjects)//The final addition has taken place in addImage2
         {
-            followMe.testObj = serveranimation                        
+            followMe.testObj = serveranimation         
+            window.console.log(getObjectsByType("surface"));
         }
     };
 
@@ -187,7 +188,7 @@
 
         if (type == "surface" || object.fan == true) {
 
-
+            addGameObject(object);
             iduse = "surface" + object.uniqueIdenitifer;
             followMe.surfaces[object.uniqueIdenitifer] = new followMe.surface({
                 miny: parseFloat(object.y) * 64,

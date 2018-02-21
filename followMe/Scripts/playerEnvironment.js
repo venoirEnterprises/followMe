@@ -682,7 +682,6 @@
             var theID = parseFloat(theWeapon.identifierToSee);
             var top = ((theID + 2) * 64)
 
-            
             $("#weapon_" + theID).css("background", "url('/Images/spriteSheet.png')" + parseFloat((-96 * (theID - 1))) +
                 "px " + followMe.imageDefintion.weapon).css("top", top + "px")
                 .parent().children().last().css("left", "128px")
