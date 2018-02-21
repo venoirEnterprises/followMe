@@ -31,32 +31,36 @@ function getObjectsByType(type) {
             return gameProperties.getWeapons();
         case "Item":
             return gameProperties.getItems();
+        case "Checkpoint":
+            return gameProperties.getCheckpoints();
     }
 }
 
 
-function addGameObject(Objncoming) {
+function addGameObject(ObjIncoming) {
 
-    switch (Objncoming.type)
+    switch (ObjIncoming.type)
     {
         case "surface":
-            let newSurface = new Surface(Objncoming.fan);
+            let newSurface = new Surface(ObjIncoming.fan, ObjIncoming.surfaceAnimationCollection);
             newSurface.setType();
-            newSurface.setPassiveObjectProperties(Objncoming._id, Objncoming.x, Objncoming.y, Objncoming.caveName, Objncoming.hideMinimumDifficulty, Objncoming.showMinimumDifficulty);
+            newSurface.setPassiveObjectProperties(ObjIncoming._id, ObjIncoming.x, ObjIncoming.y, ObjIncoming.caveName, ObjIncoming.hideMinimumDifficulty, ObjIncoming.showMinimumDifficulty);
             gameProperties.addSurface(newSurface);
             break;
         case "Item":
-            let newMessage = new Item(Objncoming.message);
+            let newMessage = new Item(ObjIncoming.message);
             newMessage.setType();
-            newMessage.setPassiveObjectProperties(Objncoming._id, Objncoming.x, Objncoming.y, Objncoming.caveName, Objncoming.hideMinimumDifficulty, Objncoming.showMinimumDifficulty);
+            newMessage.setPassiveObjectProperties(ObjIncoming._id, ObjIncoming.x, ObjIncoming.y, ObjIncoming.caveName, ObjIncoming.hideMinimumDifficulty, ObjIncoming.showMinimumDifficulty);
             break;
         case "Weapon":
-            let newWeapon = new Weapon(Objncoming.hurt, Objncoming.rate, Objncoming.weaponLevel);
+            let newWeapon = new Weapon(ObjIncoming.hurt, ObjIncoming.rate, ObjIncoming.weaponLevel);
             newWeapon.setType();
-            newWeapon.setPassiveObjectProperties(Objncoming._id, Objncoming.x, Objncoming.y, Objncoming.caveName, Objncoming.hideMinimumDifficulty, Objncoming.showMinimumDifficulty);
             break;
-    }
-    
+        case "Checkpoint":
+            let newCheckpoint = new Checkpoint(ObjIncoming.startpoint, ObjIncoming.checkpoint);
+            newCheckpoint.setPassiveObjectProperties(ObjIncoming._id, ObjIncoming.x, ObjIncoming.y, ObjIncoming.caveName, ObjIncoming.hideMinimumDifficulty, ObjIncoming.showMinimumDifficulty);
+            break;
+    }    
 }
 
 window.console.log(getObjectsByType("weapon"));
