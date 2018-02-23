@@ -104,7 +104,7 @@
             if ((serveranimation.xend > 0 || serveranimation.yend > 0) && serveranimation.type != "caves") {//&&( serveranimation.xend >0 || serveranimation.yend >0) ) {
                 //1.13.1.4 extension made, surfaces can now move too
                 //Method named changed from enemyIsAnimated, as surfaces etc. should be able to move too [dependent on difficulty in futures]
-                followMe.animateObject(serveranimation.uniqueIdenitifer, serveranimation.type)
+                followMe.animateObject(serveranimation._id, serveranimation.type)
 
 
             }
@@ -189,8 +189,8 @@
         if (type == "surface" || object.fan == true) {
 
             addGameObject(object);
-            iduse = "surface" + object.uniqueIdenitifer;
-            followMe.surfaces[object.uniqueIdenitifer] = new followMe.surface({
+            iduse = "surface" + object._id;            
+            followMe.surfaces[object._id] = new followMe.surface({
                 miny: parseFloat(object.y) * 64,
                 minx: parseFloat(object.x) * 64,
                 widthX: parseFloat(object.widthX) * 64,
@@ -271,9 +271,9 @@
         }
 
         if (type == "enemies") {
-            followMe.enemies[object.uniqueIdenitifer] = new followMe.enemy(
+            followMe.enemies[object._id] = new followMe.enemy(
                 {
-                    identifier: object.uniqueIdenitifer,
+                    identifier: object._id,
                     hurt: object.hurt,
                     maxHealth: object.maxHealth,
                     currentHealth: object.maxHealth,
@@ -285,7 +285,7 @@
                     backToStartPoint: object.backToStartPoint,
                     fly: object.fly
                 });
-            imageDefined.attr("id", object.uniqueIdenitifer);
+            imageDefined.attr("id", object._id);
             imageDefined.attr("alt", object.hurt);
             imageDefined.css("height", ((object.heightY * 64) + 8) + "px")
 
@@ -345,7 +345,7 @@
         else {
 
             //Enemies
-            if (object.index == 5) {
+            if (object.type === "enemies") {
                 imageDefined.css("backgroundPosition", (-64 * object.startFrame) + "px -192px")
             }
 
@@ -465,19 +465,6 @@
         if ($("#" + imageDefined.attr("id")).length > 0) {
             if (type != "surface" || object.fan == "1") {
                 $("#" + imageDefined.attr("id")).remove();
-            }
-            else {
-                //if (followMe.surfaceID > 1) {
-                //    //for (var i = 0; i < followMe.surfaceID; i++) {
-
-                //    //    if (followMe.surface[i].index == object.index) {
-                //    //        alert()
-                //    //        stop = true;
-                //    //    }
-
-                //    //}
-                //}
-
             }
         }
         followMe.setTypeFilter(type);

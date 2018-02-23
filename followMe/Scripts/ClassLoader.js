@@ -3,48 +3,59 @@ function typeScriptFile() {
     console.log("typeScripthit");
 }
 var gameProperties = new FollowMeDefinition();
-var weapon = new Weapon(50, 12, 1);
-weapon.setPassiveObjectProperties("id here", 5, 10, "", 0, 0);
-weapon.setType();
-gameProperties.addWeapon(weapon);
-var weapon2 = new Weapon(100, 0, 1);
-weapon2.setPassiveObjectProperties("id hurrah", 2, 25, "cave test", 2, 5);
-weapon2.setType();
-gameProperties.addWeapon(weapon2);
-var item = new Item("this is a message");
-item.setPassiveObjectProperties("item here", 17, 4, "", 0, 0);
-item.setType();
-gameProperties.addItem(item);
 function getObjectsByType(type) {
-    switch (type) {
-        case "surface":
+    switch (type.toUpperCase()) {
+        case "SURFACE":
             return gameProperties.getSurfaces();
-        case "weapon":
+        case "WEAPON":
             return gameProperties.getWeapons();
-        case "Item":
+        case "ITEM":
             return gameProperties.getItems();
+        case "CHECKPOINT":
+            return gameProperties.getCheckpoints();
+        case "TELEPORT":
+            return gameProperties.getTeleports();
+        case "CAVE":
+            return gameProperties.getCaves();
     }
 }
-function addGameObject(Objncoming) {
-    switch (Objncoming.type) {
+function addGameObject(ObjIncoming) {
+    switch (ObjIncoming.type) {
         case "surface":
-            var newSurface = new Surface(Objncoming.fan);
-            newSurface.setType();
-            newSurface.setPassiveObjectProperties(Objncoming._id, Objncoming.x, Objncoming.y, Objncoming.caveName, Objncoming.hideMinimumDifficulty, Objncoming.showMinimumDifficulty);
+            var newSurface = new Surface(ObjIncoming.fan, ObjIncoming.surfaceAnimationCollection);
+            newSurface.setPassiveObjectProperties(ObjIncoming._id, ObjIncoming.x, ObjIncoming.y, ObjIncoming.caveName, ObjIncoming.hideMinimumDifficulty, ObjIncoming.showMinimumDifficulty, ObjIncoming.spriteY);
+            newSurface.setAnimationProperties(ObjIncoming.animate, ObjIncoming.startFrame, ObjIncoming.endFrame);
             gameProperties.addSurface(newSurface);
             break;
         case "Item":
-            var newMessage = new Item(Objncoming.message);
-            newMessage.setType();
-            newMessage.setPassiveObjectProperties(Objncoming._id, Objncoming.x, Objncoming.y, Objncoming.caveName, Objncoming.hideMinimumDifficulty, Objncoming.showMinimumDifficulty);
+            var newItem = new Item(ObjIncoming.message);
+            newItem.setPassiveObjectProperties(ObjIncoming._id, ObjIncoming.x, ObjIncoming.y, ObjIncoming.caveName, ObjIncoming.hideMinimumDifficulty, ObjIncoming.showMinimumDifficulty, ObjIncoming.spriteY);
+            newItem.setAnimationProperties(ObjIncoming.animate, ObjIncoming.startFrame, ObjIncoming.endFrame);
+            gameProperties.addItem(newItem);
             break;
         case "Weapon":
-            var newWeapon = new Weapon(Objncoming.hurt, Objncoming.rate, Objncoming.weaponLevel);
-            newWeapon.setType();
-            newWeapon.setPassiveObjectProperties(Objncoming._id, Objncoming.x, Objncoming.y, Objncoming.caveName, Objncoming.hideMinimumDifficulty, Objncoming.showMinimumDifficulty);
+            var newWeapon = new Weapon(ObjIncoming.hurt, ObjIncoming.rate, ObjIncoming.weaponLevel);
+            newWeapon.setPassiveObjectProperties(ObjIncoming._id, ObjIncoming.x, ObjIncoming.y, ObjIncoming.caveName, ObjIncoming.hideMinimumDifficulty, ObjIncoming.showMinimumDifficulty, ObjIncoming.spriteY);
+            gameProperties.addWeapon(newWeapon);
+            break;
+        case "Checkpoint":
+            var newCheckpoint = new Checkpoint(ObjIncoming.startpoint, ObjIncoming.checkpoint, ObjIncoming.newLevel);
+            newCheckpoint.setPassiveObjectProperties(ObjIncoming._id, ObjIncoming.x, ObjIncoming.y, ObjIncoming.caveName, ObjIncoming.hideMinimumDifficulty, ObjIncoming.showMinimumDifficulty, ObjIncoming.spriteY);
+            newCheckpoint.setAnimationProperties(ObjIncoming.animate, ObjIncoming.startFrame, ObjIncoming.endFrame);
+            gameProperties.addCheckpoint(newCheckpoint);
+            break;
+        case "Teleport":
+            var newTeleport = new Teleport(ObjIncoming.world, ObjIncoming.level, ObjIncoming.whyLocked, ObjIncoming.teleportAllowed);
+            newTeleport.setPassiveObjectProperties(ObjIncoming._id, ObjIncoming.x, ObjIncoming.y, ObjIncoming.caveName, ObjIncoming.hideMinimumDifficulty, ObjIncoming.showMinimumDifficulty, ObjIncoming.spriteY);
+            newTeleport.setAnimationProperties(ObjIncoming.animate, ObjIncoming.startFrame, ObjIncoming.endFrame);
+            gameProperties.addTeleport(newTeleport);
+            break;
+        case "Cave":
+            var newCave = new Cave(ObjIncoming.entrance, ObjIncoming.caveWall, ObjIncoming.caveCeiling, ObjIncoming.xMove, ObjIncoming.yMove);
+            newCave.setPassiveObjectProperties(ObjIncoming._id, ObjIncoming.x, ObjIncoming.y, ObjIncoming.caveName, ObjIncoming.hideMinimumDifficulty, ObjIncoming.showMinimumDifficulty, ObjIncoming.spriteY);
+            gameProperties.addCave(newCave);
             break;
     }
 }
-window.console.log(getObjectsByType("weapon"));
-window.console.log(getObjectsByType("Item"));
+;
 //# sourceMappingURL=ClassLoader.js.map

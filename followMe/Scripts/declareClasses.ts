@@ -23,42 +23,38 @@ class Player extends GameObject {
 }
 
 abstract class PassiveGameObject extends GameObject {
-    constructor(                        
-    ) { super()}
+    constructor(
+    ) { super() }
 
-    private widthX:number = 64;
-    private heightY: number = 64;
-    private hideMinimumDifficulty: number = 0;
-    private showMinimumDifficulty: number = 0;    
-    private type:string = "";
-    private caveName: string = "";
-    private inCave: boolean = false;
-
-    setType(type: string) {
-        this.type = type;
-    }
+    public widthX: number = 64;
+    public heightY: number = 64;
+    public hideMinimumDifficulty: number = 0;
+    public showMinimumDifficulty: number = 0;
+    public type: string = "";
+    public caveName: string = "";
+    public inCave: boolean = false;
+    public spriteY: number = 0;
 
     giveType() {
         console.log(`${this.type}  is my type`);
     }
 
-    setWidthHeight(width, height)
-    {
-        this.widthX = width;
-        this.heightY = height;
+    setWidthHeight(width: number, height: number) {
+        this.widthX = width * 64;
+        this.heightY = height * 64;
     }
 
-    setPassiveObjectProperties(_id: string, x:number, y:number, caveName:string, hideMinimumDifficulty:number, showMinimumDifficulty:number)
-    {
+    setPassiveObjectProperties(_id: string, x: number, y: number, caveName: string, hideMinimumDifficulty: number, showMinimumDifficulty: number, spriteY: number) {
         this.hideMinimumDifficulty = hideMinimumDifficulty;
         this.showMinimumDifficulty = showMinimumDifficulty;
         this._id = _id;
         this.x = x * 64;
         this.y = y * 64;
+        this.spriteY = spriteY;
         this.caveName = caveName;
         this.inCave = this.caveName.length > 0 ? true : false;
     }
-    
+
     getCaveDetails() {
         console.log(this.caveName.length > 0 ? this.caveName + ", in cave? " + this.inCave : "[no cave]");
     }
@@ -72,10 +68,6 @@ class Enemy extends PassiveGameObject {
     ) {
         super()
     }
-
-    setType(type = "Enemy") {
-        super.setType(type);
-    }
 }
 
 class Weapon extends PassiveGameObject {
@@ -86,21 +78,36 @@ class Weapon extends PassiveGameObject {
     ) {
         super()
     };
-    setType(type = "weapon") {
-        super.setType(type);
-    }
 };
 
+class Cave extends PassiveGameObject {
+    constructor(
+        public entrance: boolean,
+        public caveWall: boolean,
+        public caveCeiling: boolean,
+        public xMove: number,//image manipulations
+        public yMove: number,
+    ) {
+        super()
+    };
+};
 
 abstract class AnimatedGameObject extends PassiveGameObject {
     constructor(
         public animate: boolean = false,
         public startFrame: number = 0,
-        public endFrame: number = 0,
-        public spriteY: number = 0,
+        public endFrame: number = 0,        
     ) { super() }
     giveAnimate() {
         console.log(this.animate);
+    }
+    setAnimationProperties(animate: boolean,startFrame: number,endFrame: number) {
+        if (animate)
+        {
+            this.animate = true;
+            this.startFrame = startFrame;
+            this.endFrame = endFrame;
+        }
     }
 }
 
@@ -108,20 +115,23 @@ class Item extends AnimatedGameObject {
     constructor(
         public message: string,
     ) { super() }
-    setType(type = "Item") {
-        super.setType(type);
-    }
 }
 
 class Checkpoint extends AnimatedGameObject {
     constructor(
         public startpoint: boolean = false,
         public checkpoint: number,
-        public newLevel: boolean = false,
+        public newLevel: string,//supposed to name the level
     ) { super() }
-    setType(type = "Checkpoint") {
-        super.setType(type);
-    }
+}
+
+class Teleport extends AnimatedGameObject {
+    constructor(
+        public world: string,
+        public level: string,
+        public whyLocked: string,
+        public teleportAllowed: boolean,
+    ) { super() }
 }
 
 
@@ -137,7 +147,7 @@ abstract class AnimatedMovementGameObject extends AnimatedGameObject {
 abstract class AnimatedHurtingGameObjectWithHealth extends AnimatedMovementGameObject {
     constructor(
         public maxHealth: number = 100,
-    ) {super() }
+    ) { super() }
 }
 
 class Surface extends AnimatedHurtingGameObjectWithHealth {
@@ -145,9 +155,6 @@ class Surface extends AnimatedHurtingGameObjectWithHealth {
         public fan: boolean,
         public surfaceAnimationCollection: string,
     ) { super() }
-    setType(type = "Surface") {
-        super.setType(type);
-    }
 }
 
 
@@ -158,18 +165,24 @@ class FollowMeDefinition {
         public Items: Array<Item> = new Array<Item>(),
         public Surfaces: Array<Surface> = new Array<Surface>(),
         public Checkpoints: Array<Checkpoint> = new Array<Checkpoint>(),
+        public Teleports: Array<Teleport> = new Array<Teleport>(),
+        public Caves: Array<Cave> = new Array<Cave>(),
         public Players: Array<Player> = new Array<Player>(),
     ) { }
     addWeapon(weapon) { this.Weapons.push(weapon); }
     addItem(item) { this.Items.push(item); }
     addSurface(surface) { this.Surfaces.push(surface); }
     addCheckpoint(checkpoint) { this.Checkpoints.push(checkpoint); }
+    addTeleport(teleport) { this.Teleports.push(teleport); }
+    addCave(cave) { this.Caves.push(cave); }
     addPlayer(player) { this.Players.push(player); }
 
     getWeapons() { return this.Weapons; }
     getItems() { return this.Items }
     getSurfaces() { return this.Surfaces; }
     getCheckpoints() { return this.Checkpoints; }
+    getTeleports() { return this.Teleports; }
+    getCaves() { return this.Caves; }
     getPlayer() { return this.Players.filter(m => m.local == true) }
     getOnlinePlayers() { return this.Players.filter(m => m.local == true) }
 }
