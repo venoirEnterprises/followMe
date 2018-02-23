@@ -167,7 +167,10 @@
             var id = this.id;
             var id2 = id.substring(id.indexOf("checkpoint") + 10)
             if (id2 == localStorage.getItem("checkpoint")) {
-                playerY = parseFloat(followMe.checkpoints[id2].y + 32) + "px";
+                //playerY = parseFloat(followMe.checkpoints[id2].y + 32) + "px";
+                playerY = parseFloat(getCheckpointByPlayerCheckpoint(id2).y + 32) + "px";
+                window.console.log(playerY);
+                window.console.log(getCheckpointByPlayerCheckpoint(id2));
                 localStorage.setItem("startY", playerY)
             }
         })
@@ -254,9 +257,8 @@
 
                 var objectToQuery = followMe.teleports[x];
 
-                if ($("#" + objectid).attr("class").search("checkpoint") != -1) {
-                    objectid = x.substring(x.indexOf("checkpoint") + 10)
-                    objectToQuery = followMe.checkpoints[objectid];
+                if (classCheck==".checkpoint") {
+                    objectToQuery = followMe.checkpoints[this.id.substring(10)];
                 }
 
                 if (classCheck == ".surface") {

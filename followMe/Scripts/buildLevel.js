@@ -1,4 +1,5 @@
 ﻿$(function () {
+    var countLocalObjects = 0;
     var numberx = 0;
     var numbery = 0;
     followMe.teleportPicture = -562;
@@ -6,24 +7,8 @@
     followMe.teleports = [];
     followMe.enemies = [];
 
-    followMe.gameObject = function (options) {//generic local object must match server, and array filtering will apply to logic of followMe.surfaces e.g.
-        var defaultValues =
-            {
-                type: "",
-                _id: ""
-            }
-        $.extend(this, defaultValues, options);
-    }
-    followMe.gameObjects = [];
 
-    followMe.setTypeFilter = function (filter) {
-        followMe.currentObjType = filter;
-    }
-
-    //followMe.currentObjType is overridden above, then used for filtering
-    function filterGameObjectsByType(obj) { return obj.type === followMe.currentObjType }
-
-    followMe.teleport = function (options) {
+   followMe.teleport = function (options) {
         var defaultValues =
             {
                 world: 0,
@@ -71,7 +56,8 @@
     }
 
     followMe.levelServicesDefined.client.addImageFromServer = function (serveranimation, type, username, canAccess, totalLevelToDo, playerDone, countGameObjects) {//last param specifically for teleports                
-
+        countLocalObjects += 1;
+        addGameObject(serveranimation);
         if (username == localStorage.getItem("username")) {
             if (type == "Items") {
                 $(followMe.addImage2("readitem", "item", serveranimation, canAccess)
@@ -114,10 +100,12 @@
             followMe.showCaveContents(false)
         }
 
-        if (followMe.gameObjects.length === countGameObjects)//The final addition has taken place in addImage2
+        if (countLocalObjects === countGameObjects)//The final addition has taken place in addImage2
         {
             followMe.testObj = serveranimation         
             window.console.log(getObjectsByType("surface"));
+            window.console.log(getObjectsByType("Enemies"));
+            window.console.log(getObjectsByType("checkpoint"))
         }
     };
 
@@ -176,19 +164,12 @@
 
         var startFrame = (-64 * object.startFrame) + "px 0px";
 
-        var iduse = (parseInt(object.x) * 64) + "_" + (parseInt(object.y) * 64)
-            + "-" + parseInt(parseInt((parseInt(object.x) * 64)) + (parseInt(object.widthX) * 64)) + "y"
-            + parseInt(parseInt((parseInt(object.y) * 64)) + (parseInt(object.heightY) * 64))
+        var iduse = object._id
 
         //Feb 14th, generic object declaration to override specific objects, then just use array filter to create followMe.surfaces e.g.
-        followMe.gameObjects[followMe.gameObjects.length] = new followMe.gameObject({
-            type: type,
-            _id: object._id
-        });
-
+        
         if (type == "surface" || object.fan == true) {
-
-            addGameObject(object);
+            
             iduse = "surface" + object._id;            
             followMe.surfaces[object._id] = new followMe.surface({
                 miny: parseFloat(object.y) * 64,
@@ -210,7 +191,7 @@
 
         }
 
-        if (type == "background") {
+        if (type == "checkpoint") {
 
             startFrame = (-64 * object.startFrame) + "px -64px";
 
@@ -220,20 +201,19 @@
             if (object.heightY == 0) {
                 object.heightY = 1
             }
-            followMe.checkpoints[object.checkpoint] = new followMe.checkpoint(
+            followMe.checkpoints[object._id] = new followMe.checkpoint(
                 {
-                    identifier: object.checkpoint,
                     x: x,
                     maxx: parseFloat(x + parseFloat(object.widthX * 64)),
                     y: y,
                     maxy: parseFloat(y + parseFloat(object.heightY * 64)),
-                    unityLevel: object.uniqueIdenitifer,
+                    unityLevel: 1,//for now, will be more dynamic in future
                     messageForKey: object.message,
                     caveName: object.caveName,
                     levelName: object.newLevel
                 });
 
-            iduse = "checkpoint" + object.checkpoint
+            iduse = "checkpoint" + object._id
 
 
         }
@@ -357,6 +337,7 @@
             }
 
             if (type == "caves") {
+
                 var imageX = -320
                 if (object.xMove != undefined && object.xMove != 0 && object.xMove < 4) {
                     imageX -= parseFloat(object.xMove * 32)
@@ -367,13 +348,12 @@
                     imageY -= parseFloat(object.yMove * 32)
                 }
 
-                imageDefined.css("backgroundPosition", imageX + "px " + imageY + "px").attr("id", "cave" + object.uniqueIdenitifer)
+                imageDefined.css("backgroundPosition", imageX + "px " + imageY + "px").attr("id", "cave" + object._id)
 
                 var y = parseFloat(object.y * 64);
                 var x = parseFloat(object.x * 64);
-
-
-                followMe.caves[parseFloat(object.uniqueIdenitifer)] = new followMe.cave({
+                
+                followMe.caves[object._id] = new followMe.cave({
                     caveName: object.caveName,
                     height: object.heightY * 64 + "px",
                     width: object.widthX * 64 + "px",
@@ -422,13 +402,13 @@
 
         //END
 
-        if (type == "background" && object.checkpoint == localStorage.getItem("checkpoint")
+        if (type == "checkpoint" && object.checkpoint == localStorage.getItem("checkpoint")
             || isUpdate == "startpoint") {
 
             startFrame = (-64 * (object.startFrame + 1)) + "px -64px";
             imageDefined.css("backgroundPosition", startFrame)
             //Purely for the one which is the user's checkpoint
-            imageDefined.attr("id", "checkpoint" + object.checkpoint);
+            imageDefined.attr("id", "checkpoint" + object._id);
         }
 
         if (object.animate == true) {
@@ -467,22 +447,7 @@
                 $("#" + imageDefined.attr("id")).remove();
             }
         }
-        followMe.setTypeFilter(type);
-        switch (type) {
-            case "enemies":
-                followMe.enemies2 = followMe.gameObjects.filter(filterGameObjectsByType);
-                break;
-            case "surface":
-                followMe.surfaces2 = followMe.gameObjects.filter(filterGameObjectsByType);
-                break;
-            case "background":
-                followMe.backgrounds2 = followMe.gameObjects.filter(filterGameObjectsByType);
-                break;
-            case "caves":
-                followMe.caves2 = followMe.gameObjects.filter(filterGameObjectsByType);
-                break;
-        }
-
+        
         if (stop == false || type != "surface") {
             return imageDefined
         }

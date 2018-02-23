@@ -10,6 +10,8 @@ function getObjectsByType(type: string) {
     switch (type.toUpperCase()) {
         case "SURFACE":
             return gameProperties.getSurfaces();
+        case "ENEMIES":
+            return gameProperties.getEnemies();
         case "WEAPON":
             return gameProperties.getWeapons();
         case "ITEM":
@@ -21,6 +23,10 @@ function getObjectsByType(type: string) {
         case "CAVE":
             return gameProperties.getCaves();
     }
+}
+
+function getCheckpointByPlayerCheckpoint(identifier: number) {
+    return gameProperties.getCheckpoints().filter(m => m.checkpoint == identifier)[0];
 }
 
 function addGameObject(ObjIncoming) {
@@ -44,8 +50,8 @@ function addGameObject(ObjIncoming) {
             newWeapon.setPassiveObjectProperties(ObjIncoming._id, ObjIncoming.x, ObjIncoming.y, ObjIncoming.caveName, ObjIncoming.hideMinimumDifficulty, ObjIncoming.showMinimumDifficulty, ObjIncoming.spriteY);
             gameProperties.addWeapon(newWeapon);
             break;
-        case "Checkpoint":
-            let newCheckpoint = new Checkpoint(ObjIncoming.startpoint, ObjIncoming.checkpoint, ObjIncoming.newLevel);
+        case "checkpoint":
+            let newCheckpoint = new Checkpoint(ObjIncoming.checkpoint, ObjIncoming.newLevel, 1, ObjIncoming.messageForKey, ObjIncoming.levelName);
             newCheckpoint.setPassiveObjectProperties(ObjIncoming._id, ObjIncoming.x, ObjIncoming.y, ObjIncoming.caveName, ObjIncoming.hideMinimumDifficulty, ObjIncoming.showMinimumDifficulty, ObjIncoming.spriteY);
             newCheckpoint.setAnimationProperties(ObjIncoming.animate, ObjIncoming.startFrame, ObjIncoming.endFrame);
             gameProperties.addCheckpoint(newCheckpoint);
@@ -61,5 +67,10 @@ function addGameObject(ObjIncoming) {
             newCave.setPassiveObjectProperties(ObjIncoming._id, ObjIncoming.x, ObjIncoming.y, ObjIncoming.caveName, ObjIncoming.hideMinimumDifficulty, ObjIncoming.showMinimumDifficulty, ObjIncoming.spriteY);
             gameProperties.addCave(newCave);
             break;
+        case "enemies":
+            let newEnemy = new Enemy(ObjIncoming.hurt, ObjIncoming.maxHealth, ObjIncoming.fly);
+            newEnemy.setPassiveObjectProperties(ObjIncoming._id, ObjIncoming.x, ObjIncoming.y, ObjIncoming.caveName, ObjIncoming.hideMinimumDifficulty, ObjIncoming.showMinimumDifficulty, ObjIncoming.spriteY);
+            gameProperties.addEnemy(newEnemy);
+
     }    
 };

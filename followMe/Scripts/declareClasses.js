@@ -3,12 +3,17 @@ index and uniqueIdentifier to be removed, in place of server-side _id
 xMove replaced by maxx
 yMove replaced my maxy
 */
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
-var GameObject = (function () {
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+var GameObject = /** @class */ (function () {
     function GameObject() {
         this._id = "";
         this.x = 0;
@@ -16,7 +21,7 @@ var GameObject = (function () {
     }
     return GameObject;
 }());
-var Player = (function (_super) {
+var Player = /** @class */ (function (_super) {
     __extends(Player, _super);
     function Player(health, maxHealth, lives, username, local) {
         var _this = _super.call(this) || this;
@@ -29,7 +34,7 @@ var Player = (function (_super) {
     }
     return Player;
 }(GameObject));
-var PassiveGameObject = (function (_super) {
+var PassiveGameObject = /** @class */ (function (_super) {
     __extends(PassiveGameObject, _super);
     function PassiveGameObject() {
         var _this = _super.call(this) || this;
@@ -57,7 +62,7 @@ var PassiveGameObject = (function (_super) {
         this.x = x * 64;
         this.y = y * 64;
         this.spriteY = spriteY;
-        this.caveName = caveName;
+        this.caveName = caveName || "";
         this.inCave = this.caveName.length > 0 ? true : false;
     };
     PassiveGameObject.prototype.getCaveDetails = function () {
@@ -65,7 +70,7 @@ var PassiveGameObject = (function (_super) {
     };
     return PassiveGameObject;
 }(GameObject));
-var Enemy = (function (_super) {
+var Enemy = /** @class */ (function (_super) {
     __extends(Enemy, _super);
     function Enemy(hurt, maxHealth, fly) {
         var _this = _super.call(this) || this;
@@ -76,7 +81,7 @@ var Enemy = (function (_super) {
     }
     return Enemy;
 }(PassiveGameObject));
-var Weapon = (function (_super) {
+var Weapon = /** @class */ (function (_super) {
     __extends(Weapon, _super);
     function Weapon(hurt, rate, weaponLevel) {
         var _this = _super.call(this) || this;
@@ -89,10 +94,10 @@ var Weapon = (function (_super) {
     return Weapon;
 }(PassiveGameObject));
 ;
-var Cave = (function (_super) {
+var Cave = /** @class */ (function (_super) {
     __extends(Cave, _super);
     function Cave(entrance, caveWall, caveCeiling, xMove, //image manipulations
-        yMove) {
+    yMove) {
         var _this = _super.call(this) || this;
         _this.entrance = entrance;
         _this.caveWall = caveWall;
@@ -105,7 +110,7 @@ var Cave = (function (_super) {
     return Cave;
 }(PassiveGameObject));
 ;
-var AnimatedGameObject = (function (_super) {
+var AnimatedGameObject = /** @class */ (function (_super) {
     __extends(AnimatedGameObject, _super);
     function AnimatedGameObject(animate, startFrame, endFrame) {
         if (animate === void 0) { animate = false; }
@@ -129,7 +134,7 @@ var AnimatedGameObject = (function (_super) {
     };
     return AnimatedGameObject;
 }(PassiveGameObject));
-var Item = (function (_super) {
+var Item = /** @class */ (function (_super) {
     __extends(Item, _super);
     function Item(message) {
         var _this = _super.call(this) || this;
@@ -138,19 +143,21 @@ var Item = (function (_super) {
     }
     return Item;
 }(AnimatedGameObject));
-var Checkpoint = (function (_super) {
+var Checkpoint = /** @class */ (function (_super) {
     __extends(Checkpoint, _super);
-    function Checkpoint(startpoint, checkpoint, newLevel) {
-        if (startpoint === void 0) { startpoint = false; }
+    function Checkpoint(checkpoint, newLevel, //supposed to name the level
+    unityLevel, messageForKey, levelName) {
         var _this = _super.call(this) || this;
-        _this.startpoint = startpoint;
         _this.checkpoint = checkpoint;
         _this.newLevel = newLevel;
+        _this.unityLevel = unityLevel;
+        _this.messageForKey = messageForKey;
+        _this.levelName = levelName;
         return _this;
     }
     return Checkpoint;
 }(AnimatedGameObject));
-var Teleport = (function (_super) {
+var Teleport = /** @class */ (function (_super) {
     __extends(Teleport, _super);
     function Teleport(world, level, whyLocked, teleportAllowed) {
         var _this = _super.call(this) || this;
@@ -162,7 +169,7 @@ var Teleport = (function (_super) {
     }
     return Teleport;
 }(AnimatedGameObject));
-var AnimatedMovementGameObject = (function (_super) {
+var AnimatedMovementGameObject = /** @class */ (function (_super) {
     __extends(AnimatedMovementGameObject, _super);
     function AnimatedMovementGameObject(xend, yend, backToStartPoint) {
         if (xend === void 0) { xend = 0; }
@@ -176,7 +183,7 @@ var AnimatedMovementGameObject = (function (_super) {
     }
     return AnimatedMovementGameObject;
 }(AnimatedGameObject));
-var AnimatedHurtingGameObjectWithHealth = (function (_super) {
+var AnimatedHurtingGameObjectWithHealth = /** @class */ (function (_super) {
     __extends(AnimatedHurtingGameObjectWithHealth, _super);
     function AnimatedHurtingGameObjectWithHealth(maxHealth) {
         if (maxHealth === void 0) { maxHealth = 100; }
@@ -186,7 +193,7 @@ var AnimatedHurtingGameObjectWithHealth = (function (_super) {
     }
     return AnimatedHurtingGameObjectWithHealth;
 }(AnimatedMovementGameObject));
-var Surface = (function (_super) {
+var Surface = /** @class */ (function (_super) {
     __extends(Surface, _super);
     function Surface(fan, surfaceAnimationCollection) {
         var _this = _super.call(this) || this;
@@ -196,8 +203,9 @@ var Surface = (function (_super) {
     }
     return Surface;
 }(AnimatedHurtingGameObjectWithHealth));
-var FollowMeDefinition = (function () {
-    function FollowMeDefinition(Weapons, Items, Surfaces, Checkpoints, Teleports, Caves, Players) {
+var FollowMeDefinition = /** @class */ (function () {
+    function FollowMeDefinition(Enemies, Weapons, Items, Surfaces, Checkpoints, Teleports, Caves, Players) {
+        if (Enemies === void 0) { Enemies = new Array(); }
         if (Weapons === void 0) { Weapons = new Array(); }
         if (Items === void 0) { Items = new Array(); }
         if (Surfaces === void 0) { Surfaces = new Array(); }
@@ -205,6 +213,7 @@ var FollowMeDefinition = (function () {
         if (Teleports === void 0) { Teleports = new Array(); }
         if (Caves === void 0) { Caves = new Array(); }
         if (Players === void 0) { Players = new Array(); }
+        this.Enemies = Enemies;
         this.Weapons = Weapons;
         this.Items = Items;
         this.Surfaces = Surfaces;
@@ -213,6 +222,7 @@ var FollowMeDefinition = (function () {
         this.Caves = Caves;
         this.Players = Players;
     }
+    FollowMeDefinition.prototype.addEnemy = function (enemy) { this.Enemies.push(enemy); };
     FollowMeDefinition.prototype.addWeapon = function (weapon) { this.Weapons.push(weapon); };
     FollowMeDefinition.prototype.addItem = function (item) { this.Items.push(item); };
     FollowMeDefinition.prototype.addSurface = function (surface) { this.Surfaces.push(surface); };
@@ -220,6 +230,7 @@ var FollowMeDefinition = (function () {
     FollowMeDefinition.prototype.addTeleport = function (teleport) { this.Teleports.push(teleport); };
     FollowMeDefinition.prototype.addCave = function (cave) { this.Caves.push(cave); };
     FollowMeDefinition.prototype.addPlayer = function (player) { this.Players.push(player); };
+    FollowMeDefinition.prototype.getEnemies = function () { return this.Enemies; };
     FollowMeDefinition.prototype.getWeapons = function () { return this.Weapons; };
     FollowMeDefinition.prototype.getItems = function () { return this.Items; };
     FollowMeDefinition.prototype.getSurfaces = function () { return this.Surfaces; };

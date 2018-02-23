@@ -51,7 +51,7 @@ abstract class PassiveGameObject extends GameObject {
         this.x = x * 64;
         this.y = y * 64;
         this.spriteY = spriteY;
-        this.caveName = caveName;
+        this.caveName = caveName || "";
         this.inCave = this.caveName.length > 0 ? true : false;
     }
 
@@ -119,9 +119,11 @@ class Item extends AnimatedGameObject {
 
 class Checkpoint extends AnimatedGameObject {
     constructor(
-        public startpoint: boolean = false,
         public checkpoint: number,
         public newLevel: string,//supposed to name the level
+        public unityLevel: number,
+        public messageForKey: string,
+        public levelName: string,
     ) { super() }
 }
 
@@ -161,6 +163,7 @@ class Surface extends AnimatedHurtingGameObjectWithHealth {
 
 class FollowMeDefinition {
     constructor(
+        public Enemies: Array<Enemy> = new Array<Enemy>(),
         public Weapons: Array<Weapon> = new Array<Weapon>(),
         public Items: Array<Item> = new Array<Item>(),
         public Surfaces: Array<Surface> = new Array<Surface>(),
@@ -169,18 +172,20 @@ class FollowMeDefinition {
         public Caves: Array<Cave> = new Array<Cave>(),
         public Players: Array<Player> = new Array<Player>(),
     ) { }
-    addWeapon(weapon) { this.Weapons.push(weapon); }
-    addItem(item) { this.Items.push(item); }
-    addSurface(surface) { this.Surfaces.push(surface); }
-    addCheckpoint(checkpoint) { this.Checkpoints.push(checkpoint); }
-    addTeleport(teleport) { this.Teleports.push(teleport); }
-    addCave(cave) { this.Caves.push(cave); }
-    addPlayer(player) { this.Players.push(player); }
+    addEnemy(enemy: Enemy) { this.Enemies.push(enemy); }
+    addWeapon(weapon: Weapon) { this.Weapons.push(weapon); }
+    addItem(item: Item) { this.Items.push(item); }
+    addSurface(surface: Surface) { this.Surfaces.push(surface); }
+    addCheckpoint(checkpoint: Checkpoint) { this.Checkpoints.push(checkpoint); }
+    addTeleport(teleport: Teleport) { this.Teleports.push(teleport); }
+    addCave(cave: Cave) { this.Caves.push(cave); }
+    addPlayer(player: Player) { this.Players.push(player); }
 
+    getEnemies() { return this.Enemies; }
     getWeapons() { return this.Weapons; }
     getItems() { return this.Items }
     getSurfaces() { return this.Surfaces; }
-    getCheckpoints() { return this.Checkpoints; }
+    getCheckpoints() { return this.Checkpoints; }    
     getTeleports() { return this.Teleports; }
     getCaves() { return this.Caves; }
     getPlayer() { return this.Players.filter(m => m.local == true) }
