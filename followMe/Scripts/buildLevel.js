@@ -144,13 +144,10 @@
 
         var startFrame = (-64 * object.startFrame) + "px 0px";
 
-        var iduse = object._id
+        var iduse = type + object._id
 
         //Feb 14th, generic object declaration to override specific objects, then just use array filter to create followMe.surfaces e.g.
         
-        if (type == "surface" || object.fan == true) {            
-            iduse = "surface" + object._id;            
-        }
 
         if (type == "checkpoint") {
 

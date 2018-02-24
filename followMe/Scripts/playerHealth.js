@@ -1,4 +1,4 @@
-﻿$("#game").on('pagebeforeshow ready', function () {
+﻿$(function () {
     var memServer = $.connection.userMethods;
     memServer.client.updateMemberLives = function (object, level, username) {
 
