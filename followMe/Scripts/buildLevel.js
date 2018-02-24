@@ -58,6 +58,9 @@
     followMe.levelServicesDefined.client.addImageFromServer = function (serveranimation, type, username, canAccess, totalLevelToDo, playerDone, countGameObjects) {//last param specifically for teleports                
         countLocalObjects += 1;
         addGameObject(serveranimation);
+        followMe.surfaces = getObjectsByType("surface");
+
+
         if (username == localStorage.getItem("username")) {
             if (type == "Items") {
                 $(followMe.addImage2("readitem", "item", serveranimation, canAccess)
@@ -102,34 +105,11 @@
 
         if (countLocalObjects === countGameObjects)//The final addition has taken place in addImage2
         {
-            followMe.testObj = serveranimation         
-            window.console.log(getObjectsByType("surface"));
-            window.console.log(getObjectsByType("Enemies"));
-            window.console.log(getObjectsByType("checkpoint"))
+            
         }
     };
 
     followMe.surfaces = [];
-
-    followMe.surface = function (options) {
-        var defaultValues =
-            {
-                miny: -1,
-                minx: -1,
-                widthX: -1,
-                heightY: -1,
-                startFrame: -1,
-                checkpoint: "",
-                maxx: -1,
-                maxy: -1,
-                backToStartPoint: false,
-                xend: 0,
-                yend: 0,
-                surfaceAnimationCollection: ""
-            }
-        $.extend(this, defaultValues, options);
-    };
-
     followMe.caves = [];
 
 
@@ -168,27 +148,8 @@
 
         //Feb 14th, generic object declaration to override specific objects, then just use array filter to create followMe.surfaces e.g.
         
-        if (type == "surface" || object.fan == true) {
-            
+        if (type == "surface" || object.fan == true) {            
             iduse = "surface" + object._id;            
-            followMe.surfaces[object._id] = new followMe.surface({
-                miny: parseFloat(object.y) * 64,
-                minx: parseFloat(object.x) * 64,
-                widthX: parseFloat(object.widthX) * 64,
-                heightY: parseFloat(object.heightY) * 64,
-                startFrame: object.startFrame,
-                checkpoint: object.checkpoint,
-                maxx: (parseFloat(object.x) * 64) + (parseFloat(object.widthX) * 64),
-                maxy: (parseFloat(object.y) * 64) + (parseFloat(object.heightY) * 64),
-                fan: object.fan,
-                backToStartPoint: object.backToStartPoint,
-                xend: object.xend,
-                yend: object.yend,
-                surfaceAnimationCollection: object.surfaceAnimationCollection
-            });
-
-            followMe.surfaceID += 1;
-
         }
 
         if (type == "checkpoint") {

@@ -60,16 +60,6 @@ abstract class PassiveGameObject extends GameObject {
     }
 }
 
-class Enemy extends PassiveGameObject {
-    constructor(
-        public hurt: number,
-        public maxHealth: number,
-        public fly: boolean,
-    ) {
-        super()
-    }
-}
-
 class Weapon extends PassiveGameObject {
     constructor(
         public hurt: number,
@@ -144,6 +134,22 @@ abstract class AnimatedMovementGameObject extends AnimatedGameObject {
         public yend: number = 0,
         public backToStartPoint: number = 0,
     ) { super() }
+    setMovementProperties(xend: number, yend: number, backToStartPoint: number)
+    {
+        this.xend = xend;
+        this.yend = yend;
+        this.backToStartPoint = backToStartPoint;
+    }
+}
+
+class Enemy extends AnimatedMovementGameObject {
+    constructor(
+        public hurt: number,
+        public maxHealth: number,
+        public fly: boolean,
+    ) {
+        super()
+    }
 }
 
 abstract class AnimatedHurtingGameObjectWithHealth extends AnimatedMovementGameObject {
@@ -157,6 +163,17 @@ class Surface extends AnimatedHurtingGameObjectWithHealth {
         public fan: boolean,
         public surfaceAnimationCollection: string,
     ) { super() }
+
+    setSurfaceCollisionProperties() {
+        this.minx = this.x;
+        this.miny = this.y;
+        this.maxx = this.x + this.widthX;
+        this.maxy = this.y + this.heightY;
+    }
+    private minx: number;
+    private miny: number;
+    private maxx: number;
+    private maxy: number;
 }
 
 
@@ -172,14 +189,14 @@ class FollowMeDefinition {
         public Caves: Array<Cave> = new Array<Cave>(),
         public Players: Array<Player> = new Array<Player>(),
     ) { }
-    addEnemy(enemy: Enemy) { this.Enemies.push(enemy); }
-    addWeapon(weapon: Weapon) { this.Weapons.push(weapon); }
-    addItem(item: Item) { this.Items.push(item); }
-    addSurface(surface: Surface) { this.Surfaces.push(surface); }
-    addCheckpoint(checkpoint: Checkpoint) { this.Checkpoints.push(checkpoint); }
-    addTeleport(teleport: Teleport) { this.Teleports.push(teleport); }
-    addCave(cave: Cave) { this.Caves.push(cave); }
-    addPlayer(player: Player) { this.Players.push(player); }
+    addEnemy(enemy: Enemy) { this.Enemies[enemy._id] = enemy; }
+    addWeapon(weapon: Weapon) { this.Weapons[weapon._id] = weapon }
+    addItem(item: Item) { this.Items[item._id] = item; }
+    addSurface(surface: Surface) { this.Surfaces[surface._id] = surface; }
+    addCheckpoint(checkpoint: Checkpoint) { this.Checkpoints[checkpoint._id] = checkpoint; }
+    addTeleport(teleport: Teleport) { this.Teleports[teleport._id] = teleport; }
+    addCave(cave: Cave) { this.Caves[cave._id] = cave; }
+    addPlayer(player: Player) { this.Players[player._id] = player; }
 
     getEnemies() { return this.Enemies; }
     getWeapons() { return this.Weapons; }

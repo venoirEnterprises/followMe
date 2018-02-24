@@ -70,17 +70,6 @@ var PassiveGameObject = /** @class */ (function (_super) {
     };
     return PassiveGameObject;
 }(GameObject));
-var Enemy = /** @class */ (function (_super) {
-    __extends(Enemy, _super);
-    function Enemy(hurt, maxHealth, fly) {
-        var _this = _super.call(this) || this;
-        _this.hurt = hurt;
-        _this.maxHealth = maxHealth;
-        _this.fly = fly;
-        return _this;
-    }
-    return Enemy;
-}(PassiveGameObject));
 var Weapon = /** @class */ (function (_super) {
     __extends(Weapon, _super);
     function Weapon(hurt, rate, weaponLevel) {
@@ -181,8 +170,24 @@ var AnimatedMovementGameObject = /** @class */ (function (_super) {
         _this.backToStartPoint = backToStartPoint;
         return _this;
     }
+    AnimatedMovementGameObject.prototype.setMovementProperties = function (xend, yend, backToStartPoint) {
+        this.xend = xend;
+        this.yend = yend;
+        this.backToStartPoint = backToStartPoint;
+    };
     return AnimatedMovementGameObject;
 }(AnimatedGameObject));
+var Enemy = /** @class */ (function (_super) {
+    __extends(Enemy, _super);
+    function Enemy(hurt, maxHealth, fly) {
+        var _this = _super.call(this) || this;
+        _this.hurt = hurt;
+        _this.maxHealth = maxHealth;
+        _this.fly = fly;
+        return _this;
+    }
+    return Enemy;
+}(AnimatedMovementGameObject));
 var AnimatedHurtingGameObjectWithHealth = /** @class */ (function (_super) {
     __extends(AnimatedHurtingGameObjectWithHealth, _super);
     function AnimatedHurtingGameObjectWithHealth(maxHealth) {
@@ -201,6 +206,12 @@ var Surface = /** @class */ (function (_super) {
         _this.surfaceAnimationCollection = surfaceAnimationCollection;
         return _this;
     }
+    Surface.prototype.setSurfaceCollisionProperties = function () {
+        this.minx = this.x;
+        this.miny = this.y;
+        this.maxx = this.x + this.widthX;
+        this.maxy = this.y + this.heightY;
+    };
     return Surface;
 }(AnimatedHurtingGameObjectWithHealth));
 var FollowMeDefinition = /** @class */ (function () {
@@ -222,14 +233,14 @@ var FollowMeDefinition = /** @class */ (function () {
         this.Caves = Caves;
         this.Players = Players;
     }
-    FollowMeDefinition.prototype.addEnemy = function (enemy) { this.Enemies.push(enemy); };
-    FollowMeDefinition.prototype.addWeapon = function (weapon) { this.Weapons.push(weapon); };
-    FollowMeDefinition.prototype.addItem = function (item) { this.Items.push(item); };
-    FollowMeDefinition.prototype.addSurface = function (surface) { this.Surfaces.push(surface); };
-    FollowMeDefinition.prototype.addCheckpoint = function (checkpoint) { this.Checkpoints.push(checkpoint); };
-    FollowMeDefinition.prototype.addTeleport = function (teleport) { this.Teleports.push(teleport); };
-    FollowMeDefinition.prototype.addCave = function (cave) { this.Caves.push(cave); };
-    FollowMeDefinition.prototype.addPlayer = function (player) { this.Players.push(player); };
+    FollowMeDefinition.prototype.addEnemy = function (enemy) { this.Enemies[enemy._id] = enemy; };
+    FollowMeDefinition.prototype.addWeapon = function (weapon) { this.Weapons[weapon._id] = weapon; };
+    FollowMeDefinition.prototype.addItem = function (item) { this.Items[item._id] = item; };
+    FollowMeDefinition.prototype.addSurface = function (surface) { this.Surfaces[surface._id] = surface; };
+    FollowMeDefinition.prototype.addCheckpoint = function (checkpoint) { this.Checkpoints[checkpoint._id] = checkpoint; };
+    FollowMeDefinition.prototype.addTeleport = function (teleport) { this.Teleports[teleport._id] = teleport; };
+    FollowMeDefinition.prototype.addCave = function (cave) { this.Caves[cave._id] = cave; };
+    FollowMeDefinition.prototype.addPlayer = function (player) { this.Players[player._id] = player; };
     FollowMeDefinition.prototype.getEnemies = function () { return this.Enemies; };
     FollowMeDefinition.prototype.getWeapons = function () { return this.Weapons; };
     FollowMeDefinition.prototype.getItems = function () { return this.Items; };

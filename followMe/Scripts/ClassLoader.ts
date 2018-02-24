@@ -37,6 +37,8 @@ function addGameObject(ObjIncoming) {
             let newSurface = new Surface(ObjIncoming.fan, ObjIncoming.surfaceAnimationCollection);
             newSurface.setPassiveObjectProperties(ObjIncoming._id, ObjIncoming.x, ObjIncoming.y, ObjIncoming.caveName, ObjIncoming.hideMinimumDifficulty, ObjIncoming.showMinimumDifficulty, ObjIncoming.spriteY);
             newSurface.setAnimationProperties(ObjIncoming.animate, ObjIncoming.startFrame, ObjIncoming.endFrame);
+            newSurface.setMovementProperties(ObjIncoming.xend, ObjIncoming.yend, ObjIncoming.backToStartPoint);
+            newSurface.setSurfaceCollisionProperties();
             gameProperties.addSurface(newSurface);
             break;
         case "Item":
@@ -70,7 +72,7 @@ function addGameObject(ObjIncoming) {
         case "enemies":
             let newEnemy = new Enemy(ObjIncoming.hurt, ObjIncoming.maxHealth, ObjIncoming.fly);
             newEnemy.setPassiveObjectProperties(ObjIncoming._id, ObjIncoming.x, ObjIncoming.y, ObjIncoming.caveName, ObjIncoming.hideMinimumDifficulty, ObjIncoming.showMinimumDifficulty, ObjIncoming.spriteY);
+            newEnemy.setMovementProperties(ObjIncoming.xend, ObjIncoming.yend, ObjIncoming.backToStartPoint);
             gameProperties.addEnemy(newEnemy);
-
     }    
 };
