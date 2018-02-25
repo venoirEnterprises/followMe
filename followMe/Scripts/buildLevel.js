@@ -8,7 +8,7 @@
     followMe.enemies = [];
 
 
-   followMe.teleport = function (options) {
+    followMe.teleport = function (options) {
         var defaultValues =
             {
                 world: 0,
@@ -58,6 +58,9 @@
     followMe.levelServicesDefined.client.addImageFromServer = function (serveranimation, type, username, canAccess, totalLevelToDo, playerDone, countGameObjects) {//last param specifically for teleports                
         countLocalObjects += 1;
         addGameObject(serveranimation);
+        if (type === "surface") {
+            createDisplayForInternalClass(serveranimation._id, type)
+        }
         followMe.surfaces = getObjectsByType("surface");
 
 
@@ -79,7 +82,7 @@
                 serveranimation,
                 canAccess
             )
-            if (whatToAdd !== false) {
+            if (whatToAdd !== false && type !== "surface") {
                 $(whatToAdd.appendTo($("#game")))
             }
             if (type === "Items") {
@@ -98,7 +101,7 @@
 
             }
             if (type === "background" && serveranimation.inCave) {
-                addDownloadKey(followMe.checkpoints[serveranimation.checkpoint]);                
+                addDownloadKey(followMe.checkpoints[serveranimation.checkpoint]);
             }
             followMe.showCaveContents(false)
         }
@@ -309,7 +312,7 @@
 
                 y = parseFloat(object.y * 64);
                 x = parseFloat(object.x * 64);
-                
+
                 followMe.caves[object._id] = new followMe.cave({
                     caveName: object.caveName,
                     height: object.heightY * 64 + "px",
@@ -404,7 +407,7 @@
                 $("#" + imageDefined.attr("id")).remove();
             }
         }
-        
+
         if (stop === false || type !== "surface") {
             return imageDefined
         }
@@ -412,7 +415,7 @@
             return false;
         }
 
-        
+
     }
 
     followMe.enemy = function (options) {
@@ -478,7 +481,7 @@
             window.console.log("help Request: " + followMe.helpRequest);
         }
         $.connection.hub.start("~/signalr").done(function () {
-            if ($("#isGame").val() === "yes") {  
+            if ($("#isGame").val() === "yes") {
                 //alert()
                 followMe.communityServices.server.checkLevelAttendanceForHelp(
                     $("#welcome").text(),
@@ -497,7 +500,7 @@
                     localStorage.getItem("username"),
                     followMe.helpUsername
                 );
-                
+
 
                 followMe.levelServicesDefined.server.sendMessage("test");
             }
@@ -672,5 +675,25 @@
                 top = newattribute2;
             }
         }
+    }
+
+    /* Detach a datepicker from its control.
+     * @param  ID   int - the ID of the element from the server, to grab its object
+     * @param type  string - the type of element to root the details from
+     */
+    function createDisplayForInternalClass(ID, type) {
+
+        var obj = getObjectsByType(type)[ID]
+        $("<aside>").css("backgroundImage", "url('/images/spriteSheet.png')")
+            .css("left", obj.x + "px")
+            .css("top", obj.y + "px")
+            .css("width", obj.widthX + "px")
+            .css("height", obj.heightY + "px")
+            .css("position", "absolute")
+            .css("marginLeft", "0px!important")
+            .css("backgroundPosition", obj.startFrame)
+            .attr("id", type + obj._id)
+            .attr("class", type)
+            .attr("alt", 0).appendTo($("#game"));
     }
 });

@@ -1,5 +1,5 @@
 type,x,y,widthX,heightY,animate,startFrame,startpoint,endFrame,spriteY,fan,message,caveName,inCave,showMinimumDifficulty,hideMinimumDifficulty,xend,yend,backToStartPoint,surfaceAnimationCollection
-surface,19,4,1,1,0,0,0,1,0,0,,,0,1,5,0,0,0,
+surface,19,4,2,1,0,0,0,1,0,0,,,0,1,5,0,0,0,
 surface,20,4,1,1,0,1,0,1,0,0,,,0,1,5,0,0,0,
 surface,21,4,1,1,0,4,0,1,0,0,,,0,1,5,0,0,0,
 surface,12,5,2,1,0,5,1,5,0,0,,,0,1,5,0,0,0,

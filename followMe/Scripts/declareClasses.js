@@ -48,19 +48,14 @@ var PassiveGameObject = /** @class */ (function (_super) {
         _this.spriteY = 0;
         return _this;
     }
-    PassiveGameObject.prototype.giveType = function () {
-        console.log(this.type + "  is my type");
-    };
-    PassiveGameObject.prototype.setWidthHeight = function (width, height) {
-        this.widthX = width * 64;
-        this.heightY = height * 64;
-    };
-    PassiveGameObject.prototype.setPassiveObjectProperties = function (_id, x, y, caveName, hideMinimumDifficulty, showMinimumDifficulty, spriteY) {
+    PassiveGameObject.prototype.setPassiveObjectProperties = function (_id, x, y, caveName, hideMinimumDifficulty, showMinimumDifficulty, spriteY, width, height) {
         this.hideMinimumDifficulty = hideMinimumDifficulty;
         this.showMinimumDifficulty = showMinimumDifficulty;
         this._id = _id;
         this.x = x * 64;
         this.y = y * 64;
+        this.widthX = width * 64;
+        this.heightY = height * 64;
         this.spriteY = spriteY;
         this.caveName = caveName || "";
         this.inCave = this.caveName.length > 0 ? true : false;
@@ -122,7 +117,6 @@ var AnimatedGameObject = /** @class */ (function (_super) {
                 break;
             case "surface":
                 this.startFrame = (-64 * startFrame) + "px 0px";
-                console.log(type);
                 break;
         }
         this.endFrame = endFrame;

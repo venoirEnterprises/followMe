@@ -35,21 +35,14 @@ abstract class PassiveGameObject extends GameObject {
     public inCave: boolean = false;
     public spriteY: number = 0;
 
-    giveType() {
-        console.log(`${this.type}  is my type`);
-    }
-
-    setWidthHeight(width: number, height: number) {
-        this.widthX = width * 64;
-        this.heightY = height * 64;
-    }
-
-    setPassiveObjectProperties(_id: string, x: number, y: number, caveName: string, hideMinimumDifficulty: number, showMinimumDifficulty: number, spriteY: number) {
+    setPassiveObjectProperties(_id: string, x: number, y: number, caveName: string, hideMinimumDifficulty: number, showMinimumDifficulty: number, spriteY: number, width:number, height: number) {
         this.hideMinimumDifficulty = hideMinimumDifficulty;
         this.showMinimumDifficulty = showMinimumDifficulty;
         this._id = _id;
         this.x = x * 64;
         this.y = y * 64;
+        this.widthX = width * 64;
+        this.heightY = height * 64;
         this.spriteY = spriteY;
         this.caveName = caveName || "";
         this.inCave = this.caveName.length > 0 ? true : false;
@@ -99,11 +92,10 @@ abstract class AnimatedGameObject extends PassiveGameObject {
                 break;
             case "surface":
                 this.startFrame = (-64 * startFrame) + "px 0px";
-                console.log(type);
                 break;
         }
         this.endFrame = endFrame;
-    }
+    }    
 }
 
 class Item extends AnimatedGameObject {
@@ -143,7 +135,7 @@ abstract class AnimatedMovementGameObject extends AnimatedGameObject {
         this.xend = xend;
         this.yend = yend;
         this.backToStartPoint = backToStartPoint;
-    }
+    }    
 }
 
 class Enemy extends AnimatedMovementGameObject {
