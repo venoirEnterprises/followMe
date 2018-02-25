@@ -19,7 +19,7 @@
 
     var url = window.location.href.toLocaleLowerCase();
     var homeurl = "../Welcome"
-    if (((url.match(/\//g) || []).length) == 5) {
+    if (((url.match(/\//g) || []).length) === 5) {
         homeurl = "../../../Welcome"
     }
     $("#typeContent").css("width", "80%")
@@ -28,20 +28,20 @@
     $("#dataCore_type").val("Ages")
     $("#typeContent").val("<hr/><section></section>")
     $("#dataCore_header").change(function () {
-        if ($("#dataCore_header").val() == "Novels") {
+        if ($("#dataCore_header").val() === "Novels") {
             $("#typeListNovel").show();
             $("#typeListContent").hide();
             $("#typeListIndex").hide();
             $("#dataCore_type").val("battalionsOfHorror")
         }
-        if ($("#dataCore_header").val() == "Index") {
+        if ($("#dataCore_header").val() === "Index") {
             $("#typeListNovel").hide();
             $("#typeListContent").hide();
             $("#typeListIndex").show();
             $("#dataCore_type").val("Index")
         }
-        if ($("#dataCore_header").val() != "Index" &&
-            $("#dataCore_header").val() != "Novels") {
+        if ($("#dataCore_header").val() !== "Index" &&
+            $("#dataCore_header").val() !== "Novels") {
             $("#typeListNovel").hide();
             $("#typeListContent").show();
             $("#typeListIndex").hide();
@@ -61,7 +61,7 @@
     //HTML additions
     $("#addDeclaredType").click(function () {
 
-        if ($("#addType").val() == "Section") {
+        if ($("#addType").val() === "Section") {
             type = type.substring(0, type.length - 10);
             type += "</section><hr/><section></section>"
             $("#typeContent").val(type);
@@ -69,7 +69,7 @@
         else {
             $("#done").show().attr("class", "").addClass($("#addType").val());
             $("#contentForEditing").attr("class", "").show();
-            if ($("#addType").val() == "Paragraph") {
+            if ($("#addType").val() === "Paragraph") {
                 $("#linkAdd").attr("class", "").show();
                 $("#imageAdd").attr("class", "").show();
                 $("#imageEditing").show();
@@ -96,7 +96,7 @@
         },
         function (data) {
 
-            if (data == false || data == "") {
+            if (data === false || data === "") {
                 $("#urlInvalid").attr("class", "").show();
             }
             else {

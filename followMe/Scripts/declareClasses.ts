@@ -85,19 +85,24 @@ class Cave extends PassiveGameObject {
 abstract class AnimatedGameObject extends PassiveGameObject {
     constructor(
         public animate: boolean = false,
-        public startFrame: number = 0,
-        public endFrame: number = 0,        
+        public startFrame: string = "",
+        public endFrame: number = 0,
     ) { super() }
     giveAnimate() {
         console.log(this.animate);
     }
-    setAnimationProperties(animate: boolean,startFrame: number,endFrame: number) {
-        if (animate)
-        {
-            this.animate = true;
-            this.startFrame = startFrame;
-            this.endFrame = endFrame;
+    setAnimationProperties(animate: boolean, startFrame: number, endFrame: number, type: string) {
+        this.animate = animate;
+        switch (type) {
+            case "checkpoint":
+                this.startFrame = (-64 * startFrame) + "px -64px";
+                break;
+            case "surface":
+                this.startFrame = (-64 * startFrame) + "px 0px";
+                console.log(type);
+                break;
         }
+        this.endFrame = endFrame;
     }
 }
 
@@ -134,8 +139,7 @@ abstract class AnimatedMovementGameObject extends AnimatedGameObject {
         public yend: number = 0,
         public backToStartPoint: number = 0,
     ) { super() }
-    setMovementProperties(xend: number, yend: number, backToStartPoint: number)
-    {
+    setMovementProperties(xend: number, yend: number, backToStartPoint: number) {
         this.xend = xend;
         this.yend = yend;
         this.backToStartPoint = backToStartPoint;
@@ -202,7 +206,7 @@ class FollowMeDefinition {
     getWeapons() { return this.Weapons; }
     getItems() { return this.Items }
     getSurfaces() { return this.Surfaces; }
-    getCheckpoints() { return this.Checkpoints; }    
+    getCheckpoints() { return this.Checkpoints; }
     getTeleports() { return this.Teleports; }
     getCaves() { return this.Caves; }
     getPlayer() { return this.Players.filter(m => m.local == true) }

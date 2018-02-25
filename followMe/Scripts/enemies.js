@@ -2,17 +2,17 @@
     localStorage.setItem("killCount", 0)
     function enemyDies(identified) {
         //alert(identified)
-        if (localStorage.getItem("effectsMute") != "true") {
+        if (localStorage.getItem("effectsMute") !== "true") {
             destroySoundDuplication(new Audio("../Sounds/Effects/enemy died.mp3"), "notification", true, false, false)
         }
-        if (localStorage.getItem("lastEnemyDead") != identified && identified != undefined) {
+        if (localStorage.getItem("lastEnemyDead") !== identified && identified !== undefined) {
             localStorage.setItem("killCount", parseFloat(localStorage.getItem("killCount")) + 1)
             followMe.updateXPFromAction("kill");
             localStorage.setItem("lastEnemyDead", identified)
 
             //followMe.communityServices.server.recordLevelAccomplishment(followMe.players[1].username, "enemy", identified, $("#welcome").text(), "EndingTheBeginning")
 
-            if (followMe.players[1].personType == 1) {
+            if (followMe.players[1].personType === 1) {
                 var object = followMe.players[1];
                 followMe.updatehealth(localStorage.getItem("username"), object.health + parseFloat(followMe.enemies[identified].maxHealth))
                 followMe.dangerMode();
@@ -26,7 +26,7 @@
         //if (local) {
 
 
-        if (hurtExternal != null || hurtExternal != undefined) {
+        if (hurtExternal !== null || hurtExternal !== undefined) {
             hurt = hurtExternal
         }
         else {
@@ -34,7 +34,7 @@
         }
         var health = followMe.enemies[enemyID].currentHealth;
 
-        if (localStorage.getItem("bulletEnemy") != shotIDhere + ": " + enemyID) {
+        if (localStorage.getItem("bulletEnemy") !== shotIDhere + ": " + enemyID) {
             localStorage.setItem("bulletEnemy",
                 shotIDhere + ": " + enemyID
                 )
@@ -55,7 +55,7 @@
         }
     }
     followMe.enemyHurt = function(location, id, object) {
-        if ($(".enemies#" + id).length != 0) {
+        if ($(".enemies#" + id).length !== 0) {
             var enemyleft = followMe.enemies[id].x
             var enemytop = followMe.enemies[id].y
 
@@ -69,14 +69,14 @@
             //alert(left + ", " + left2)
 
             var itemtoupdate = followMe.players[1]
-            if (left != "au" || top != "au") {
+            if (left !== "au" || top !== "au") {
                 if (left <= enemyleft && left2 >= enemyleft
                     && top <= enemytop && top2 >= enemytop
-                    && id != localStorage.getItem("enemyHit") && object.caveName == localStorage.getItem("currentCaveName") && followMe.players[1].usedStealth != 1
+                    && id !== localStorage.getItem("enemyHit") && object.caveName === localStorage.getItem("currentCaveName") && followMe.players[1].usedStealth !== 1
                     ) {
                     var newhealth = parseInt(itemtoupdate.health -= object.hurt)
                     //alert(object.hurt + ", " + itemtoupdate.health + ", " + newhealth)
-                    if (localStorage.getItem("enemyHit") != id) {
+                    if (localStorage.getItem("enemyHit") !== id) {
                         followMe.updatehealth(itemtoupdate.username, newhealth, true)
                         localStorage.setItem("enemyHit", id)
                     }
@@ -94,7 +94,7 @@
         var yDiff = followMe.y(player)
         var playerID = player.substring(".enemies".length + 1);
 
-        if (canfly == false) {
+        if (canfly === false) {
             $(".surface").each(function () {
                 counting += 1
                 var x = this.id.substring(7);
@@ -108,7 +108,7 @@
                     ) {
                     somethingBelow = true;
                     var movement = "left"
-                    if (code == 68) { movement = "right" }
+                    if (code === 68) { movement = "right" }
                     $("#" + player).css("top", parseFloat(surfaceY - 96))
                     //alert(player.substring(".enemies".length+1))
                     followMe.enemies[playerID].y = parseFloat(surfaceY - 96)

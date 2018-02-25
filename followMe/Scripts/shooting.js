@@ -1,7 +1,7 @@
 ﻿$(document).ready(function () {
 
     var shots = [];
-    if ($("#isGame").val() != "no") {
+    if ($("#isGame").val() !== "no") {
 
 
         followMe.shots = [];
@@ -38,7 +38,7 @@
 
                     followMe.hasCollided(parseFloat(moveEachTime * rate) * rate, object.x, object.y, ".surface", lookingFor)
 
-                    if (localStorage.currentCaveName != "") {
+                    if (localStorage.currentCaveName !== "") {
                         followMe.hasCollided(parseFloat(moveEachTime * rate) * rate, object.x, object.y, ".caves", lookingFor)
                     }
 
@@ -58,17 +58,15 @@
 
 
         followMe.fireTheShot = function (mouseObj, weaponClass) { 
-            if (followMe.players[1].personType == 3 && mouseObj.clientX + mouseObj.clientY == followMe.currentTap) {
-            }
-            else {
+            if (followMe.players[1].personType !== 3 && mouseObj.clientX + mouseObj.clientY !== followMe.currentTap) {
                 var shotID = 1;
                 followMe.countTap += 1;
                 followMe.currentTap = mouseObj.clientX + mouseObj.clientY
                 //alert(followMe.currentTap)
-                var weaponClass = followMe.weapon.classDefinition
+                weaponClass = followMe.weapon.classDefinition
 
 
-                if (localStorage.getItem("shotNumber") != null) {
+                if (localStorage.getItem("shotNumber") !== null) {
                     shotID = parseFloat(localStorage.getItem("shotNumber")) + 1;
                 }
                 localStorage.setItem("shotNumber", shotID);
@@ -132,7 +130,7 @@
                 var toShow = "Move To this";
                 $("#shot").remove();
 
-                if ($("#isGame").val() != "no") {
+                if ($("#isGame").val() !== "no") {
                     if ((moveEachTime < -.5 || (moveEachTime > 2.5))) {
                     }
 
@@ -157,10 +155,10 @@
 
                         var object = $("#weapon1").attr("class")
                         var abilityEnhancment = 1
-                        if (followMe.players[1].personType == "1") {
+                        if (followMe.players[1].personType === "1") {
                             abilityEnhancment = 1.5
                         }
-                        if (followMe.players[1].personType == "2") {
+                        if (followMe.players[1].personType === "2") {
                             abilityEnhancment = 0.75
                         }
                         var hurt = parseFloat(followMe.weapon.rate * (followMe.weapon.hurt * abilityEnhancment) * parseFloat(followMe.players[1].weaponHarmMultiplier));
@@ -178,7 +176,7 @@
                             })
 
                         //alert(hurt)
-                        if (followMe.weapon.rate == "0") {
+                        if (followMe.weapon.rate === "0") {
                             followMe.shots[shotID].hurt = (5 * parseFloat(followMe.weapon.hurt)
                             * parseFloat(followMe.players[1].weaponHarmMultiplier))
                         }

@@ -103,7 +103,7 @@ var AnimatedGameObject = /** @class */ (function (_super) {
     __extends(AnimatedGameObject, _super);
     function AnimatedGameObject(animate, startFrame, endFrame) {
         if (animate === void 0) { animate = false; }
-        if (startFrame === void 0) { startFrame = 0; }
+        if (startFrame === void 0) { startFrame = ""; }
         if (endFrame === void 0) { endFrame = 0; }
         var _this = _super.call(this) || this;
         _this.animate = animate;
@@ -114,12 +114,18 @@ var AnimatedGameObject = /** @class */ (function (_super) {
     AnimatedGameObject.prototype.giveAnimate = function () {
         console.log(this.animate);
     };
-    AnimatedGameObject.prototype.setAnimationProperties = function (animate, startFrame, endFrame) {
-        if (animate) {
-            this.animate = true;
-            this.startFrame = startFrame;
-            this.endFrame = endFrame;
+    AnimatedGameObject.prototype.setAnimationProperties = function (animate, startFrame, endFrame, type) {
+        this.animate = animate;
+        switch (type) {
+            case "checkpoint":
+                this.startFrame = (-64 * startFrame) + "px -64px";
+                break;
+            case "surface":
+                this.startFrame = (-64 * startFrame) + "px 0px";
+                console.log(type);
+                break;
         }
+        this.endFrame = endFrame;
     };
     return AnimatedGameObject;
 }(PassiveGameObject));

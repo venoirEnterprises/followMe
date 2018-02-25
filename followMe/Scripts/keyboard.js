@@ -7,7 +7,7 @@
 
 
     $(document).keyup(function (e) {
-        if (e.handled != true) {
+        if (e.handled !== true) {
             followMe.keyboard[e.keyCode] = false;
             e.handled = true;
         }
@@ -82,10 +82,10 @@
     var surrenderTime = 0;
     var stealthTime = 0;
     
-        if ($("#isGame").val() != "no") {
+        if ($("#isGame").val() !== "no") {
 
             $(document).on("keydown", function (e) {
-                if (e.handled != true) {
+                if (e.handled !== true) {
                     e.handled = true;
                     followMe.moveUser(e.keyCode)
                     followMe.keyboard[e.keyCode] = true;
@@ -102,21 +102,21 @@
         //should come from the person future wise
 
 
-        if (action == "left") {
+        if (action === "left") {
             action = followMe.players[1].left
         }
 
-        if (action == "right") {
+        if (action === "right") {
             action = followMe.players[1].right
         }
 
         var isStill = false;
-        if ((followMe.keyboard[followMe.players[1].right] == undefined || followMe.keyboard[followMe.players[1].right] == false) &&
-                            (followMe.keyboard[followMe.players[1].left] == undefined || followMe.keyboard[followMe.players[1].left] == false) &&
-                            (followMe.keyboard[followMe.players[1].up] == undefined || followMe.keyboard[followMe.players[1].up] == false)) {
+        if ((followMe.keyboard[followMe.players[1].right] === undefined || followMe.keyboard[followMe.players[1].right] === false) &&
+                            (followMe.keyboard[followMe.players[1].left] === undefined || followMe.keyboard[followMe.players[1].left] === false) &&
+                            (followMe.keyboard[followMe.players[1].up] === undefined || followMe.keyboard[followMe.players[1].up] === false)) {
             isStill = true;
         }
-        if (followMe.players[1] != undefined) {
+        if (followMe.players[1] !== undefined) {
 
             // allows you to hold keys
             switch (action) {
@@ -128,7 +128,7 @@
                     followMe.defineDrop(followMe.players[1].left, followMe.x("player"), "left", "player")
                     followMe.hasCollided("", followMe.x("player"), followMe.y("player"), '.checkpoint', "player")
                     followMe.hasCollided(followMe.players[1].left, followMe.x("player"), followMe.y("player"), '.caves', "player")
-                    if (followMe.keyboard[followMe.players[1].special] == false && followMe.players[1].personType == "3") {
+                    if (followMe.keyboard[followMe.players[1].special] === false && followMe.players[1].personType === "3") {
                         followMe.changeImageDesign("stealth")
 
                     }
@@ -143,13 +143,13 @@
                     followMe.x("player", followMe.x("player") + object.pace);
                     followMe.hasCollided("", followMe.x("player"), followMe.y("player"), '.checkpoint', "player")
                     followMe.hasCollided(followMe.players[1].right, followMe.x("player"), followMe.y("player"), '.caves', "player")
-                    if (followMe.keyboard[followMe.players[1].special] == false && followMe.players[1].personType == "3") {
+                    if (followMe.keyboard[followMe.players[1].special] === false && followMe.players[1].personType === "3") {
                         followMe.changeImageDesign("stealth")
                     }
                     followMe.showOtherPlayer(followMe.x("player"), followMe.y("player"), followMe.players[1].username)
                     break;
                 case followMe.players[1].surrender:
-                    if (followMe.url.search("connect/levelselect") == -1) {
+                    if (followMe.url.search("connect/levelselect") === -1) {
                         surrendering = true;
                         setInterval(function () {
                             if (surrendering) {
@@ -168,6 +168,7 @@
                             }
                         }, 500);
                     }
+                    break;
                 case followMe.players[1].up:
                     if (isStill) {
                         followMe.specialForPersonType("still", "tryUp")

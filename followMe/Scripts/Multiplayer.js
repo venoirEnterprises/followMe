@@ -8,7 +8,7 @@
             if (stealth === undefined) {
                 stealth = false;
             }
-            if (followMe.players[1].online || shot == true) {
+            if (followMe.players[1].online || shot === true) {
                 //if (shot)
                 //    {alert()}
                 followMe.multiplayer.server.showOtherPlayer(x, y, username, localStorage.getItem("currentCaveName"), stealth, followMe.helpRequest);
@@ -48,13 +48,13 @@
 
     followMe.multiplayer.client.showPlayers = function (x, y, userModel, xpDefinition, caveName, weaponDefined, stealth, helpString)
     {
-        if ($("#isGame").val() == "yes" && (userModel.username != followMe.players[1].username && userModel != undefined && followMe.players[1].online && followMe.helpRequest == helpString)) {//No need to render player to the player that just moved again.
+        if ($("#isGame").val() === "yes" && (userModel.username !== followMe.players[1].username && userModel !== undefined && followMe.players[1].online && followMe.helpRequest === helpString)) {//No need to render player to the player that just moved again.
             $.getJSON("/playerCommunity/checkFriendStatus",
                 {
                     me: localStorage.getItem("username"),
                     them: userModel.username
                 }, function (data) {
-                    if (followMe.players[1].username != userModel.username) {
+                    if (followMe.players[1].username !== userModel.username) {
                         followMe.otherPlayFriend = data;
                     }
                     else {
@@ -66,9 +66,9 @@
             var highestOtherPlayer = followMe.otherPlayers.length + 1;
             var numberToUse = highestOtherPlayer;
             var newUser = true;
-            if (followMe.helpRequest != null)
+            if (followMe.helpRequest !== null)
             {
-                if (followMe.players[1].username != followMe.helpUsername)
+                if (followMe.players[1].username !== followMe.helpUsername)
                 {
                     followMe.otherPlayername = followMe.helpUsername
                 }
@@ -91,16 +91,25 @@
 
                 //$("#game #otherPlayerChat").hide();
             }
-            if (localStorage.getItem("currentCaveName") != caveName || stealth) {//Shouldn't show movement if they are in a different cave [including if outside when you're in a cave]
+            if (localStorage.getItem("currentCaveName") !== caveName || stealth) {//Shouldn't show movement if they are in a different cave [including if outside when you're in a cave]
                 $("#" + userModel.username + "name").remove();
                 $("#player" + userModel.username).remove();
                 $("onlineWeapon" + userModel.username).remove();
             }
-            if ((followMe.players[1].socialOnly == followMe.otherPlayFriend || followMe.players[1].socialOnly == userModel.socialOnly) && (followMe.players[1].rankOnline && userModel.rank == followMe.players[1].rank && followMe.players[1].rankOnline && followMe.helpRequest == null || followMe.players[1].rankOnline == false && userModel.rankOnline == false && followMe.helpRequest == null || followMe.helpRequest != null)) {
+            if ((followMe.players[1].socialOnly === followMe.otherPlayFriend ||
+                followMe.players[1].socialOnly === userModel.socialOnly) &&
+                (followMe.players[1].rankOnline &&
+                userModel.rank === followMe.players[1].rank &&
+                followMe.players[1].rankOnline &&
+                followMe.helpRequest === null ||
+                followMe.players[1].rankOnline === false &&
+                userModel.rankOnline == false &&
+                followMe.helpRequest === null ||
+                followMe.helpRequest !== null)) {
                 
                 for (var i = 1; i < followMe.otherPlayers.length; i++) {
                     otherPlayerObject = followMe.otherPlayers[i];
-                    if (otherPlayerObject != undefined && otherPlayerObject.username == userModel.username) {
+                    if (otherPlayerObject !== undefined && otherPlayerObject.username= == userModel.username) {
                         newUser = false
                         otherPlayerObject.x = x,
                         otherPlayerObject.y = y;
@@ -113,7 +122,7 @@
                         otherPlayerObject.weaponHarmMultiplier = xpDefinition.weaponHarmMultiplier;
                         otherPlayerObject.xp = userModel.XP;
                         numberToUse = i;
-                        if (userModel.personType != 1 && weaponDefined != null) {
+                        if (userModel.personType !== 1 && weaponDefined !== null) {
                             otherPlayerObject.weaponHurt = weaponDefined.hurt;
                             otherPlayerObject.weaponRate = weaponDefined.rate;
                         }
@@ -153,7 +162,7 @@
     
     followMe.multiplayer.client.sharedXP = function(username,helpRequest, newXP, xpReward, message)
     {
-        if(followMe.helpRequest == helpRequest && followMe.helpRequest != null)
+        if(followMe.helpRequest === helpRequest && followMe.helpRequest !== null)
         {
             //helpRequest should not be null, no need to loop through other players
             if (followMe.players[1].username == username) {
@@ -169,7 +178,7 @@
 
     followMe.multiplayer.client.onlineShotFired = function (shotID, down, moveEachTime, mouseX, mouseY, behind, weaponClass, username, caveName,shotObj) {
         var localPlayer = followMe.players[1]
-        if (localPlayer.username != username && localStorage.getItem("currentCaveName") == caveName) {
+        if (localPlayer.username !== username && localStorage.getItem("currentCaveName") == caveName) {
 
             shotID = followMe.shots.length + 1
 
