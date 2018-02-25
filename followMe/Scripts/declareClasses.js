@@ -42,13 +42,12 @@ var PassiveGameObject = /** @class */ (function (_super) {
         _this.heightY = 64;
         _this.hideMinimumDifficulty = 0;
         _this.showMinimumDifficulty = 0;
-        _this.type = "";
         _this.caveName = "";
         _this.inCave = false;
         _this.spriteY = 0;
         return _this;
     }
-    PassiveGameObject.prototype.setPassiveObjectProperties = function (_id, x, y, caveName, hideMinimumDifficulty, showMinimumDifficulty, spriteY, width, height) {
+    PassiveGameObject.prototype.setPassiveObjectProperties = function (type, _id, x, y, caveName, hideMinimumDifficulty, showMinimumDifficulty, spriteY, width, height) {
         this.hideMinimumDifficulty = hideMinimumDifficulty;
         this.showMinimumDifficulty = showMinimumDifficulty;
         this._id = _id;
@@ -56,6 +55,9 @@ var PassiveGameObject = /** @class */ (function (_super) {
         this.y = y * 64;
         this.widthX = width * 64;
         this.heightY = height * 64;
+        if (type === "enemies") {
+            this.heightY += 8;
+        }
         this.spriteY = spriteY;
         this.caveName = caveName || "";
         this.inCave = this.caveName.length > 0 ? true : false;
@@ -114,6 +116,9 @@ var AnimatedGameObject = /** @class */ (function (_super) {
         switch (type) {
             case "checkpoint":
                 this.startFrame = (-64 * startFrame) + "px -64px";
+                break;
+            case "enemies":
+                this.startFrame = (-64 * startFrame) + "px -192px";
                 break;
             case "surface":
                 this.startFrame = (-64 * startFrame) + "px 0px";
@@ -177,27 +182,32 @@ var AnimatedMovementGameObject = /** @class */ (function (_super) {
     };
     return AnimatedMovementGameObject;
 }(AnimatedGameObject));
+var AnimatedHurtingGameObjectWithHealth = /** @class */ (function (_super) {
+    __extends(AnimatedHurtingGameObjectWithHealth, _super);
+    function AnimatedHurtingGameObjectWithHealth(maxHealth, currentHealth) {
+        if (maxHealth === void 0) { maxHealth = 0; }
+        if (currentHealth === void 0) { currentHealth = 0; }
+        var _this = _super.call(this) || this;
+        _this.maxHealth = maxHealth;
+        _this.currentHealth = currentHealth;
+        return _this;
+    }
+    AnimatedHurtingGameObjectWithHealth.prototype.setHealth = function (maxHealth, currentHealth) {
+        this.maxHealth = maxHealth;
+        this.currentHealth = currentHealth;
+    };
+    return AnimatedHurtingGameObjectWithHealth;
+}(AnimatedMovementGameObject));
 var Enemy = /** @class */ (function (_super) {
     __extends(Enemy, _super);
-    function Enemy(hurt, maxHealth, fly) {
+    function Enemy(hurt, fly) {
         var _this = _super.call(this) || this;
         _this.hurt = hurt;
-        _this.maxHealth = maxHealth;
         _this.fly = fly;
         return _this;
     }
     return Enemy;
-}(AnimatedMovementGameObject));
-var AnimatedHurtingGameObjectWithHealth = /** @class */ (function (_super) {
-    __extends(AnimatedHurtingGameObjectWithHealth, _super);
-    function AnimatedHurtingGameObjectWithHealth(maxHealth) {
-        if (maxHealth === void 0) { maxHealth = 100; }
-        var _this = _super.call(this) || this;
-        _this.maxHealth = maxHealth;
-        return _this;
-    }
-    return AnimatedHurtingGameObjectWithHealth;
-}(AnimatedMovementGameObject));
+}(AnimatedHurtingGameObjectWithHealth));
 var Surface = /** @class */ (function (_super) {
     __extends(Surface, _super);
     function Surface(fan, surfaceAnimationCollection) {

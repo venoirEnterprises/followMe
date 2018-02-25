@@ -58,10 +58,11 @@
     followMe.levelServicesDefined.client.addImageFromServer = function (serveranimation, type, username, canAccess, totalLevelToDo, playerDone, countGameObjects) {//last param specifically for teleports                
         countLocalObjects += 1;
         addGameObject(serveranimation);
-        if (type === "surface") {
+        if (type === "surface" || type === "enemies") {
             createDisplayForInternalClass(serveranimation._id, type)
         }
         followMe.surfaces = getObjectsByType("surface");
+        followMe.enemies = getObjectsByType("enemies");
 
 
         if (username === localStorage.getItem("username")) {
@@ -76,13 +77,14 @@
                 $("range#" + serveranimation.level).remove();
                 $("<progress title ='Detail in Options and Achievements' id='" + serveranimation.level + "' max='" + totalLevelToDo + "' value='" + playerDone + "' style='left:" + parseInt(parseInt((parseInt(serveranimation.x) * 64)) + 64) + "px;top:" + parseInt(parseInt((parseInt(serveranimation.y) * 64)) + 32) + "px;position:absolute;' class='xp'>").appendTo($("#game"));
             }
-            var whatToAdd = followMe.addImage2(
-                false,
-                type,
-                serveranimation,
-                canAccess
-            )
-            if (whatToAdd !== false && type !== "surface") {
+            
+            if (whatToAdd !== false && type !== "surface" && type !== "enemies") {
+                var whatToAdd = followMe.addImage2(
+                    false,
+                    type,
+                    serveranimation,
+                    canAccess
+                )
                 $(whatToAdd.appendTo($("#game")))
             }
             if (type === "Items") {
@@ -210,45 +212,10 @@
             object.caveName = "";
         }
 
-        if (type === "enemies") {
-            followMe.enemies[object._id] = new followMe.enemy(
-                {
-                    identifier: object._id,
-                    hurt: object.hurt,
-                    maxHealth: object.maxHealth,
-                    currentHealth: object.maxHealth,
-                    x: object.x,
-                    y: object.y * 64,
-                    caveName: object.caveName,
-                    xend: object.xend,//flying animation start
-                    yend: object.yend,
-                    backToStartPoint: object.backToStartPoint,
-                    fly: object.fly
-                });
-            imageDefined.attr("id", object._id);
-            imageDefined.attr("alt", object.hurt);
-            imageDefined.css("height", ((object.heightY * 64) + 8) + "px")
-
-
-
-
-            imageDefined.append("<progress class='standard' max='" + object.maxHealth +
-                "' value='" + object.maxHealth + "' min='0' style=margin-top:" + (object.heightY * 64) +
-                "px;position:absolute;width:" + (object.widthX * 64) + "px!important" + "/>"
-            )
-
-        }
-
         //This is to deal with the fact that the original render thinks 0,0 is where to start
         //Due to default in followMe.Animation, as most likely object is surface
         //START
-        if (object.fan === true) {
-            //alert()
-            imageDefined.css("backgroundPosition", (-64 * object.startFrame) + "px " + followMe.imageDefintion.fan)
-            imageDefined.css("top", (parseFloat(object.y) - 2) * 64 + "px")
-            imageDefined.css("height", "192px")
-            imageDefined.attr("class", "surface fan")
-        }
+        
         if (type === "teleports") {
             y = parseFloat(object.y * 64);
             x = parseFloat(object.x * 64);
@@ -417,24 +384,6 @@
 
 
     }
-
-    followMe.enemy = function (options) {
-        var defaultValues =
-            {
-                identifier: 1,
-                hurt: 0,
-                maxHealth: 20,
-                currentHealth: 20,
-                x: 0,
-                y: 0,
-                caveName: "",
-                xend: 0,//flying animation start
-                yend: 0,
-                backToStartPoint: false,
-                fly: false//flying animation end
-            }
-        $.extend(this, defaultValues, options);
-    }
     followMe.animation = function (options) {
         var defaultValues =
             {
@@ -532,16 +481,20 @@
                 myMaxY = object.maxy;
                 myX = object.minx;
                 myMaxX = object.maxx;
-                iduse = objectName + iduse;
                 timeToMove = 500;
+                UIidUse = iduse;
                 break;
             case "enemies":
                 myY = object.y;
                 myX = object.x;
                 break;
         }
-        var top = $("." + objectName + "#" + iduse).css("top")
-        var left = $("." + objectName + "#" + iduse).css("left")
+        var top = $("." + objectName + "#" + objectName +  iduse).css("top")
+        var left = $("." + objectName + "#" + objectName +  iduse).css("left")
+        if (objectName === "enemies") {
+            console.log(left + ", " + top);
+            console.log(object);
+        }
         left = left.substring(0, left.length - 2)
         var left2 = left
         var code = 65;
@@ -594,7 +547,7 @@
                 newattribute = parseFloat(left) - 64 /** (i+1)*/ + "px"
             }
             var newattribute2 = newattribute.substring(0, newattribute.length - 2);
-            var identifier = "." + objectName + "#" + iduse;
+            var identifier = "." + objectName + "#"  + objectName +  iduse;
 
             var attributeToChange = "top";
             if (!isY) {
@@ -605,6 +558,7 @@
                 animationProperties = {}; animationProperties[attributeToChange] = "-=64px";
             }
 
+
             $(identifier).animate(animationProperties,
                 {
                     duration: timeToMove
@@ -613,17 +567,16 @@
                         switch (objectName) {
                             case "enemies":
                                 if (!isY) {
-                                    followMe.enemyDrop(code, fx.end, ".enemies#" + iduse, object.fly)
-                                    followMe.enemies[iduse].x = fx.end;
+                                    followMe.enemyDrop(code, fx.end, iduse, object.fly)
+                                    object.x = fx.end;
                                 }
                                 if (isY) {
-                                    followMe.enemies[iduse].y = fx.end;
+                                    object.y = fx.end;
                                 }
                                 followMe.enemyHurt(fx.end, iduse, object)
 
                                 break;
                             case "surface":
-
                                 object.miny = myY;
                                 var playerObj = followMe.players[1];
                                 if (!isY) {
@@ -651,7 +604,7 @@
                                     object.maxy = fx.end + 64;
                                 }
                                 if (playerObj.currentSurfaceID === iduse) {
-                                    iduse2 = ".surface#" + iduse
+                                    iduse2 = iduse
                                     var realTop = $(iduse2).css("top");//will need to get the current x as it animates, so the player moves along
                                     var realLeft = $(iduse2).css("left");
                                     if (!isY) {
@@ -684,7 +637,7 @@
     function createDisplayForInternalClass(ID, type) {
 
         var obj = getObjectsByType(type)[ID]
-        $("<aside>").css("backgroundImage", "url('/images/spriteSheet.png')")
+        var imageDefined = $("<aside>").css("backgroundImage", "url('/images/spriteSheet.png')")
             .css("left", obj.x + "px")
             .css("top", obj.y + "px")
             .css("width", obj.widthX + "px")
@@ -693,7 +646,22 @@
             .css("marginLeft", "0px!important")
             .css("backgroundPosition", obj.startFrame)
             .attr("id", type + obj._id)
-            .attr("class", type)
-            .attr("alt", 0).appendTo($("#game"));
-    }
+            .attr("class", type);
+
+        if (type === "enemies") {
+            imageDefined.append("<progress class='standard' max='" + obj.maxHealth +
+                "' value='" + obj.maxHealth + "' min='0' style=margin-top:" + obj.heightY +
+                "px;position:absolute;width:" + obj.widthX + "px!important" + "/>");
+        }
+        if (obj.fan === true) {
+            //alert()
+            imageDefined.css("backgroundPosition", (-64 * obj.startFrame) + "px " + followMe.imageDefintion.fan)
+            imageDefined.css("top", (parseFloat(obj.y) - 2) * 64 + "px")
+            imageDefined.css("height", "192px")
+            imageDefined.attr("class", "surface fan")
+        }
+
+        imageDefined.appendTo($("#game"))
+    };
+
 });

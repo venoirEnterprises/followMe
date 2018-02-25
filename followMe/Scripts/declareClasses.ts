@@ -30,12 +30,11 @@ abstract class PassiveGameObject extends GameObject {
     public heightY: number = 64;
     public hideMinimumDifficulty: number = 0;
     public showMinimumDifficulty: number = 0;
-    public type: string = "";
     public caveName: string = "";
     public inCave: boolean = false;
     public spriteY: number = 0;
 
-    setPassiveObjectProperties(_id: string, x: number, y: number, caveName: string, hideMinimumDifficulty: number, showMinimumDifficulty: number, spriteY: number, width:number, height: number) {
+    setPassiveObjectProperties(type: string, _id: string, x: number, y: number, caveName: string, hideMinimumDifficulty: number, showMinimumDifficulty: number, spriteY: number, width:number, height: number) {
         this.hideMinimumDifficulty = hideMinimumDifficulty;
         this.showMinimumDifficulty = showMinimumDifficulty;
         this._id = _id;
@@ -43,6 +42,10 @@ abstract class PassiveGameObject extends GameObject {
         this.y = y * 64;
         this.widthX = width * 64;
         this.heightY = height * 64;
+        if (type === "enemies")
+        {
+            this.heightY += 8;
+        }
         this.spriteY = spriteY;
         this.caveName = caveName || "";
         this.inCave = this.caveName.length > 0 ? true : false;
@@ -89,6 +92,9 @@ abstract class AnimatedGameObject extends PassiveGameObject {
         switch (type) {
             case "checkpoint":
                 this.startFrame = (-64 * startFrame) + "px -64px";
+                break;
+            case "enemies":
+                this.startFrame = (-64 * startFrame) + "px -192px";
                 break;
             case "surface":
                 this.startFrame = (-64 * startFrame) + "px 0px";
@@ -138,20 +144,25 @@ abstract class AnimatedMovementGameObject extends AnimatedGameObject {
     }    
 }
 
-class Enemy extends AnimatedMovementGameObject {
+abstract class AnimatedHurtingGameObjectWithHealth extends AnimatedMovementGameObject {
+    constructor(
+        public maxHealth: number = 0,
+        public currentHealth: number = 0,
+    ) { super() }
+    setHealth( maxHealth, currentHealth)
+    {
+        this.maxHealth = maxHealth;
+        this.currentHealth = currentHealth;
+    }
+}
+
+class Enemy extends AnimatedHurtingGameObjectWithHealth {
     constructor(
         public hurt: number,
-        public maxHealth: number,
         public fly: boolean,
     ) {
         super()
     }
-}
-
-abstract class AnimatedHurtingGameObjectWithHealth extends AnimatedMovementGameObject {
-    constructor(
-        public maxHealth: number = 100,
-    ) { super() }
 }
 
 class Surface extends AnimatedHurtingGameObjectWithHealth {
