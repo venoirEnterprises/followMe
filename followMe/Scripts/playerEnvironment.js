@@ -364,7 +364,6 @@
 
                 
                 if (matchType != "no match") {
-                    if (classCheck == ".enemies") { window.console.log(matchType, playerid) }
 
                     if (classCheck == ".teleports" && followMe.teleports[x].teleportAllowed) {
                         if (confirm("Are you sure you want to travel to the " +
@@ -389,7 +388,7 @@
                         if ((classCheck == ".enemies" && playerid != localStorage.getItem("bulletFired"))
                         ) {
                             $("#" + playerid).remove();
-                            followMe.hurtEnemy(x, playerid, local)
+                            followMe.hurtEnemy(x, playerid)
                             if (followMe.helpRequest != null) {
                                 followMe.communityServices.server.sharePartnerEnemyHurt(
                                     followMe.players[1].username,
@@ -400,7 +399,7 @@
                                     x
                                     );
                             }
-                            localStorage.setItem("bulletFired", playerid)
+                            localStorage.setItem("bulletFired", playerid, true)
                         }
                         if (classCheck == ".caves" && (objectToQuery.isWall || objectToQuery.isCeiling) && objectToQuery.caveName == localStorage.getItem("currentCaveName")) {
                             $("#" + playerid).remove();

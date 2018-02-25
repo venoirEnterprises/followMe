@@ -23,7 +23,7 @@
 
         }
 
-        if ($("#isCommunity").val() !== "" && followMe.url.search("/community") =!= -1) {
+        if ($("#isCommunity").val() !== "" && followMe.url.search("/community") !== -1) {
             var competitionLevels = "";
             $.getJSON("/playerCommunity/getMyLevels", {
                 username: localStorage.getItem("username"),

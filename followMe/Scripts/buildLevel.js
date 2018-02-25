@@ -614,10 +614,10 @@
                             case "enemies":
                                 if (!isY) {
                                     followMe.enemyDrop(code, fx.end, ".enemies#" + iduse, object.fly)
-                                    object.x = fx.end;
+                                    followMe.enemies[iduse].x = fx.end;
                                 }
                                 if (isY) {
-                                    object.y = fx.end;
+                                    followMe.enemies[iduse].y = fx.end;
                                 }
                                 followMe.enemyHurt(fx.end, iduse, object)
 

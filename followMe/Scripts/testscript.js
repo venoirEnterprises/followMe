@@ -62,6 +62,14 @@ $(document).ready(function () {
         window.console.log($("#difficultySet").val())
     });
 
+    followMe.removeFromArray = function (array, element) {
+        const index = array.indexOf(element);
+
+        if (index !== -1) {
+            array.splice(index, 1);
+        }
+    }
+
     followMe.player = function (options) {
         var defaultValues =
             {

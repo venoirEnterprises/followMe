@@ -49,8 +49,9 @@
                         
                     }
 
-                    if (object.y > 4500) {
+                    if ((object.x - followMe.x("player") > 1280) || (followMe.x("player") - object.x > 1280)) {
                         $(id).remove();
+                        followMe.removeFromArray(followMe.shots, object)
                     }
                 //}
             }
@@ -184,7 +185,9 @@
                         followMe.shootOnline(shotID, down, moveEachTime, mouseX, mouseY, behind, weaponClass, followMe.players[1].username, followMe.shots[shotID])
 
                         setInterval(function () {
-                            followMe.moveTheShot(shotID, down, moveEachTime, mouseX, mouseY, behind, false, followMe.shots[shotID])
+                            if (followMe.shots[shotID] !== undefined) {
+                                followMe.moveTheShot(shotID, down, moveEachTime, mouseX, mouseY, behind, false, followMe.shots[shotID])
+                            }
                         }, 25)
                     }
                 }

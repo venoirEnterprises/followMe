@@ -22,28 +22,24 @@
 
     followMe.hurtEnemy = function (enemyID, shotID, local, hurtExternal) {
         var shotIDhere = shotID.substring(4);
-        var hurt = 0;
         //if (local) {
+        var hurt = followMe.weapon.hurt;
 
-
-        if (hurtExternal !== null || hurtExternal !== undefined) {
+        if (local === false) {
             hurt = hurtExternal
         }
-        else {
-            hurt = followMe.shots[shotIDhere].hurt;
-        }
         var health = followMe.enemies[enemyID].currentHealth;
+        console.log("enemy of ID: " + enemyID + ", " + health)
 
-        if (localStorage.getItem("bulletEnemy") !== shotIDhere + ": " + enemyID) {
+        if (localStorage.getItem("bulletEnemy") !== shotIDhere + ": " + enemyID) {            
             localStorage.setItem("bulletEnemy",
                 shotIDhere + ": " + enemyID
-                )
+            )
             if (health - hurt < 1 || health < 1) {
 
                 enemyDies(enemyID)
                 $(".enemies#" + enemyID).remove();
                 $(".shots#" + shotID).remove();
-                followMe.shots[shotID] = {};
             }
             if (health - hurt > 1) {
 

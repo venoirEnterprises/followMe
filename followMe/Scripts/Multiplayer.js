@@ -109,7 +109,7 @@
                 
                 for (var i = 1; i < followMe.otherPlayers.length; i++) {
                     otherPlayerObject = followMe.otherPlayers[i];
-                    if (otherPlayerObject !== undefined && otherPlayerObject.username= == userModel.username) {
+                    if (otherPlayerObject !== undefined && otherPlayerObject.username === userModel.username) {
                         newUser = false
                         otherPlayerObject.x = x,
                         otherPlayerObject.y = y;
