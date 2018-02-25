@@ -88,12 +88,12 @@
         var counting = 0
         var playerX = direction
         var yDiff = followMe.y(player)
-        var playerID = player.substring(".enemies".length + 1);
+        var playerID = player;
 
         if (canfly === false) {
             $(".surface").each(function () {
                 counting += 1
-                var x = this.id.substring(7);
+                var x = this.id;
                 var surfaceObject = followMe.surfaces[x]
                 var min = null;
                 var surfaceMinX = surfaceObject.minx

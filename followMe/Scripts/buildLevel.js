@@ -482,15 +482,14 @@
                 myX = object.minx;
                 myMaxX = object.maxx;
                 timeToMove = 500;
-                UIidUse = iduse;
                 break;
             case "enemies":
                 myY = object.y;
                 myX = object.x;
                 break;
         }
-        var top = $("." + objectName + "#" + objectName +  iduse).css("top")
-        var left = $("." + objectName + "#" + objectName +  iduse).css("left")
+        var top = $("." + objectName + "#" + iduse).css("top")
+        var left = $("." + objectName + "#" + iduse).css("left")
         if (objectName === "enemies") {
             console.log(left + ", " + top);
             console.log(object);
@@ -542,13 +541,12 @@
     //27/01/18 code centralised for object animation looping, called above
     function moveObjectOnLoop(valueToLoop, top, left, object, iduse, objectName, timeToMove, code, myX, myY, isY, reverse) {
         for (var i = 0; i < valueToLoop; i++) {
-            var newattribute = parseFloat(left) + 64 /** (i+1)*/ + "px"
+            var newattribute = parseFloat(left) + 64 /** (i+1)*/ + "px";
             if (reverse) {
                 newattribute = parseFloat(left) - 64 /** (i+1)*/ + "px"
             }
             var newattribute2 = newattribute.substring(0, newattribute.length - 2);
-            var identifier = "." + objectName + "#"  + objectName +  iduse;
-
+            var identifier = "." + objectName + "#" +  iduse;           
             var attributeToChange = "top";
             if (!isY) {
                 attributeToChange = "left";
@@ -566,12 +564,13 @@
                     step: function (now, fx) {
                         switch (objectName) {
                             case "enemies":
+                                
                                 if (!isY) {
-                                    followMe.enemyDrop(code, fx.end, iduse, object.fly)
-                                    object.x = fx.end;
+                                    followMe.enemyDrop(code, fx.end, iduse, object.fly)                               
+                                    followMe.enemies[iduse].x = fx.end;
                                 }
                                 if (isY) {
-                                    object.y = fx.end;
+                                    followMe.enemies[iduse].y = fx.end;
                                 }
                                 followMe.enemyHurt(fx.end, iduse, object)
 
@@ -645,7 +644,7 @@
             .css("position", "absolute")
             .css("marginLeft", "0px!important")
             .css("backgroundPosition", obj.startFrame)
-            .attr("id", type + obj._id)
+            .attr("id", obj._id)
             .attr("class", type);
 
         if (type === "enemies") {
