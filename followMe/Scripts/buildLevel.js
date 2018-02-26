@@ -95,6 +95,9 @@
                     $("." + type + ":last").attr("id"))
                     .appendTo($("#game"));
             }
+
+            physicalDisplayAnimationForGameObject(serveranimation,serveranimation._id)
+
             if ((serveranimation.xend > 0 || serveranimation.yend > 0) && serveranimation.type !== "caves") {//&&( serveranimation.xend >0 || serveranimation.yend >0) ) {
                 //1.13.1.4 extension made, surfaces can now move too
                 //Method named changed from enemyIsAnimated, as surfaces etc. should be able to move too [dependent on difficulty in futures]
@@ -138,18 +141,12 @@
     };
 
 
-    followMe.surfaceID = 0;
     followMe.addImage2 = function (isUpdate, type, object, hasAccess) {
         //64px restriction of size dividing        
         //hasAccess for teleport lock show
-        var message = "";
-        var classToUse = type;
-        var alt = 0;
-        var stop = false;
 
         var startFrame = (-64 * object.startFrame) + "px 0px";
 
-        var iduse = type + object._id
 
         //Feb 14th, generic object declaration to override specific objects, then just use array filter to create followMe.surfaces e.g.
 
@@ -205,8 +202,7 @@
             .css("marginLeft", "0px!important")
             .css("backgroundPosition", startFrame)
             .attr("id", iduse)
-            .attr("class", classToUse)
-            .attr("alt", alt);
+            .attr("class", type);
 
         if (object.caveName === null) {
             object.caveName = "";
@@ -250,12 +246,6 @@
             }
         }
         else {
-
-            //Enemies
-            if (object.type === "enemies") {
-                imageDefined.css("backgroundPosition", (-64 * object.startFrame) + "px -192px")
-            }
-
             if (object.message !== null && type === "ITems") {
                 imageDefined.css("backgroundPosition", (-64 * object.startFrame) + "px -384px")
             }
@@ -338,29 +328,7 @@
             imageDefined.attr("id", "checkpoint" + object._id);
         }
 
-        if (object.animate === true) {
-            var frameCount = parseFloat(object.endFrame) - parseFloat(object.startFrame)
-            if (parseFloat(object.checkpoint) === 0) { rateDefined = 200 }
-            var animationDefined = new followMe.animation(
-                {
-
-                    url: "/images/spriteSheet.png", numberOfFrames: frameCount,
-                    currentFrame: object.startFrame, startFrame: object.startFrame, spriteY: object.spriteY * 64
-                });
-
-
-
-            setInterval(function () {
-
-                animationDefined.currentFrame += 1
-                if (animationDefined.currentFrame - animationDefined.startFrame > animationDefined.numberOfFrames) {
-                    animationDefined.currentFrame = animationDefined.startFrame
-                }
-                setFrame(iduse, animationDefined);
-
-                setSpeed(iduse, animationDefined, animationDefined.pace + 1);
-            }, animationDefined.rate)
-        }
+        
         if (isUpdate === "gameover") {
             window.console.log("game over");
         }
@@ -490,10 +458,6 @@
         }
         var top = $("." + objectName + "#" + iduse).css("top")
         var left = $("." + objectName + "#" + iduse).css("left")
-        if (objectName === "enemies") {
-            console.log(left + ", " + top);
-            console.log(object);
-        }
         left = left.substring(0, left.length - 2)
         var left2 = left
         var code = 65;
@@ -662,5 +626,28 @@
 
         imageDefined.appendTo($("#game"))
     };
+
+    function physicalDisplayAnimationForGameObject(obj, iduse)
+    {
+        if (obj.animate === true) {
+            var frameCount = parseFloat(obj.endFrame) - parseFloat(obj.startFrame)
+            if (parseFloat(obj.checkpoint) === 0) { rateDefined = 200 }
+            var animationDefined = new followMe.animation(
+                {
+
+                    url: "/images/spriteSheet.png", numberOfFrames: frameCount,
+                    currentFrame: obj.startFrame, startFrame: obj.startFrame, spriteY: obj.spriteY * 64
+                });
+            setInterval(function () {
+                animationDefined.currentFrame += 1
+                if (animationDefined.currentFrame - animationDefined.startFrame > animationDefined.numberOfFrames) {
+                    animationDefined.currentFrame = animationDefined.startFrame
+                }
+                setFrame(iduse, animationDefined);
+
+                setSpeed(iduse, animationDefined, animationDefined.pace + 1);
+            }, animationDefined.rate)
+        }
+    }
 
 });
