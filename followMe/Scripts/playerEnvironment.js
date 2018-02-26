@@ -258,7 +258,7 @@
                 var objectToQuery = followMe.teleports[x];
 
                 if (classCheck==".checkpoint") {
-                    objectToQuery = followMe.checkpoints[this.id];
+                    objectToQuery = followMe.checkpoints[x];
                 }
 
                 if (classCheck == ".surface") {
@@ -297,12 +297,12 @@
                     miny = objectToQuery.y;
                     maxy = objectToQuery.maxy
                 }
+                if (classCheck == ".teleports") {
 
-
-
+                    objectToQuery = followMe.teleports[x];
+                }
                 if (classCheck == ".teleports" || classCheck == ".checkpoint") {
-                    objectToQuery = followMe.checkpoints[x];
-                    console.log(x);
+                    
                     minx = objectToQuery.x;
                     maxx = objectToQuery.maxx;
                     miny = objectToQuery.y;
@@ -459,10 +459,9 @@
                         continuing = false;
                     }
                     if (classCheck == ".checkpoint"
-                        && x.substring(x.indexOf("checkpoint") + 10) != localStorage.getItem("checkpoint")
+                        && x != localStorage.getItem("checkpoint")
                         ) {
-                        //alert("checkpoint@ " + x + " should have collided on: "
-                        //+ minx + "+ " + maxx + "--ys," + miny + "+ " + maxy + " which is " + matchType + ". It's movement being" + movement)
+                        console.log(x);
                         followMe.checkpointSubmit(x, miny, movement)
                         continuing = false;
                     }

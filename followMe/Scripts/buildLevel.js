@@ -58,11 +58,12 @@
     followMe.levelServicesDefined.client.addImageFromServer = function (serveranimation, type, username, canAccess, totalLevelToDo, playerDone, countGameObjects) {//last param specifically for teleports                
         countLocalObjects += 1;
         addGameObject(serveranimation);
-        if (type === "surface" || type === "enemies") {
+        if (type === "surface" || type === "enemies" || type =="checkpoint") {
             createDisplayForInternalClass(serveranimation._id, type)
         }
         followMe.surfaces = getObjectsByType("surface");
         followMe.enemies = getObjectsByType("enemies");
+        followMe.checkpoints = getObjectsByType("checkpoint");
 
 
         if (username === localStorage.getItem("username")) {
@@ -78,7 +79,7 @@
                 $("<progress title ='Detail in Options and Achievements' id='" + serveranimation.level + "' max='" + totalLevelToDo + "' value='" + playerDone + "' style='left:" + parseInt(parseInt((parseInt(serveranimation.x) * 64)) + 64) + "px;top:" + parseInt(parseInt((parseInt(serveranimation.y) * 64)) + 32) + "px;position:absolute;' class='xp'>").appendTo($("#game"));
             }
             
-            if (whatToAdd !== false && type !== "surface" && type !== "enemies") {
+            if (whatToAdd !== false && type !== "surface" && type !== "enemies" && type !== "checkpoint") {
                 var whatToAdd = followMe.addImage2(
                     false,
                     type,
@@ -160,17 +161,6 @@
             if (object.heightY === 0) {
                 object.heightY = 1
             }
-            followMe.checkpoints[object._id] = new followMe.checkpoint(
-                {
-                    x: x,
-                    maxx: parseFloat(x + parseFloat(object.widthX * 64)),
-                    y: y,
-                    maxy: parseFloat(y + parseFloat(object.heightY * 64)),
-                    unityLevel: 1,//for now, will be more dynamic in future
-                    messageForKey: object.message,
-                    caveName: object.caveName,
-                    levelName: object.newLevel
-                });
 
             iduse = object._id
 
@@ -201,7 +191,7 @@
             .css("position", "absolute")
             .css("marginLeft", "0px!important")
             .css("backgroundPosition", startFrame)
-            .attr("id", iduse)
+            .attr("id", object._id)
             .attr("class", type);
 
         if (object.caveName === null) {
@@ -606,10 +596,18 @@
             .attr("id", obj._id)
             .attr("class", type);
 
-        if (type === "enemies") {
-            imageDefined.append("<progress class='standard' max='" + obj.maxHealth +
-                "' value='" + obj.maxHealth + "' min='0' style=margin-top:" + obj.heightY +
-                "px;position:absolute;width:" + obj.widthX + "px!important" + "/>");
+
+        switch (type)
+        {
+            case "enemies":
+                imageDefined.append("<progress class='standard' max='" + obj.maxHealth +
+                    "' value='" + obj.maxHealth + "' min='0' style=margin-top:" + obj.heightY +
+                    "px;position:absolute;width:" + obj.widthX + "px!important" + "/>");
+                break;
+            case "checkpoint":
+                imageDefined.attr("alt", obj.checkpoint);
+                console.log(obj.checkpoint);
+                break;
         }
         if (obj.fan === true) {
             //alert()

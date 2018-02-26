@@ -115,7 +115,6 @@ $(document).ready(function () {
         $.extend(this, defaultValues, options);
     };
 
-    followMe.checkpoints = []
 
     $("#player1health").parent().hide()
     $("#player2health").parent().hide()
