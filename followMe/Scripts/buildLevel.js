@@ -172,7 +172,7 @@
                     levelName: object.newLevel
                 });
 
-            iduse = "checkpoint" + object._id
+            iduse = object._id
 
 
         }
@@ -287,10 +287,7 @@
             }
             if (type === "background" && (object.checkpoint !== "" || object.newLevel !== null)
             ) {
-
-
                 imageDefined.addClass("checkpoint")
-                imageDefined.attr("alt", object.checkpoint)
                 imageDefined.css("backgroundPosition", (-64 * object.startFrame) + "px -64px")
 
                 //if (object.inCave) {
@@ -324,8 +321,6 @@
 
             startFrame = (-64 * (object.startFrame + 1)) + "px -64px";
             imageDefined.css("backgroundPosition", startFrame)
-            //Purely for the one which is the user's checkpoint
-            imageDefined.attr("id", "checkpoint" + object._id);
         }
 
         

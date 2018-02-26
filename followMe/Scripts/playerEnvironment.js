@@ -134,7 +134,7 @@
         }
         followMe.hasCollided(movement, x, yDiff, ".surface")
         $(".surface").each(function () {
-            var x = this.id.substring(7)
+            var x = this.id;
             var surfaceObject = followMe.surfaces[x];
             //if (surfaceObject == undefined)
             //    {alert(this.id + ", " + x)}
@@ -258,11 +258,11 @@
                 var objectToQuery = followMe.teleports[x];
 
                 if (classCheck==".checkpoint") {
-                    objectToQuery = followMe.checkpoints[this.id.substring(10)];
+                    objectToQuery = followMe.checkpoints[this.id];
                 }
 
                 if (classCheck == ".surface") {
-                    objectToQuery = followMe.surfaces[x.substring(7)]
+                    objectToQuery = followMe.surfaces[x]
                     minx = objectToQuery.minx;
                     maxx = objectToQuery.maxx;
                     miny = objectToQuery.miny;
@@ -288,15 +288,21 @@
                 }
 
                 if (classCheck == ".caves") {
-                    objectToQuery = followMe.caves[x.substring(4)]
+                    objectToQuery = followMe.caves[x]
                     playerrightx = playerleftx
                     playertopy = yDefined;
                     playerbottomy = yDefined;
+                    minx = objectToQuery.x;
+                    maxx = objectToQuery.maxx;
+                    miny = objectToQuery.y;
+                    maxy = objectToQuery.maxy
                 }
 
 
 
-                if (classCheck == ".teleports" || classCheck == ".checkpoint" || classCheck == ".caves") {
+                if (classCheck == ".teleports" || classCheck == ".checkpoint") {
+                    objectToQuery = followMe.checkpoints[x];
+                    console.log(x);
                     minx = objectToQuery.x;
                     maxx = objectToQuery.maxx;
                     miny = objectToQuery.y;
