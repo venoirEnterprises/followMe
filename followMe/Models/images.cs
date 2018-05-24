@@ -27,7 +27,6 @@ namespace followMe.Models
         [BsonId]
         public ObjectId _id { get; set; }
         public bool fan { get; set; }
-        public float index { get; set; }
         public float x { get; set; }
         public float y { get; set; }
         public float widthX { get; set; }
@@ -47,7 +46,6 @@ namespace followMe.Models
         public bool fly { get; set; }
         public float spriteY { get; set; }
         public int maxHealth { get; set; }
-        public int uniqueIdenitifer { get; set; }
         public int world { get; set; }
         public string level { get; set; }
         public string type { get; set; }

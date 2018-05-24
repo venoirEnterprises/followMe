@@ -1,8 +1,11 @@
 ﻿//$("#game").on('pagebeforeshow ready', function () {
 $(document).ready(function () {
+
+    
+
     localStorage.setItem("currentCaveName", "")
     $("#playerXPMessage").hide();
-    if (localStorage.getItem("lastEnemyDead") == null) {
+    if (localStorage.getItem("lastEnemyDead") === null) {
         localStorage.setItem("lastEnemyDead", 0)
     }
     localStorage.setItem("enemyHit", "testhere")
@@ -26,7 +29,7 @@ $(document).ready(function () {
     followMe.helpRequest = null;
     followMe.helpUsername = null;
     $("#otherPlayerChat").draggable()
-    if (followMe.url.search("tohelp") != -1) {
+    if (followMe.url.search("tohelp") !== -1) {
         followMe.helpRequest = followMe.url2.substring(followMe.url2.search("toHelp") + 8);
         $("#commNotificationAlert").hide();
         followMe.helpUsername = followMe.helpRequest.substring(0, followMe.helpRequest.indexOf(":"))
@@ -43,6 +46,7 @@ $(document).ready(function () {
     followMe.userServicesDefined = $.connection.userMethods;
     followMe.authServicesDefined = $.connection.authServices;
     followMe.levelServicesDefined = $.connection.levelServices;
+   
 
     followMe.imageDefintion = {};
 
@@ -58,10 +62,17 @@ $(document).ready(function () {
         window.console.log($("#difficultySet").val())
     });
 
+    followMe.removeFromArray = function (array, element) {
+        const index = array.indexOf(element);
+
+        if (index !== -1) {
+            array.splice(index, 1);
+        }
+    }
+
     followMe.player = function (options) {
         var defaultValues =
             {
-                maxHealth: -1,
                 head: 0,
                 chest: 0,
                 legs: 0,
@@ -71,6 +82,7 @@ $(document).ready(function () {
                 right: 68,
                 surrender: 83,
                 enter: 0,
+                build: 16,//shift
                 //KEYBOARD
                 maxLives: -1,
                 lives: -1,
@@ -103,7 +115,6 @@ $(document).ready(function () {
         $.extend(this, defaultValues, options);
     };
 
-    followMe.checkpoints = []
 
     $("#player1health").parent().hide()
     $("#player2health").parent().hide()
@@ -122,7 +133,7 @@ $(document).ready(function () {
     var lengthSlash = ((url.match(/\//g) || []).length);
     $("#player2").hide();
 
-    if (url.search("Welcome") == -1 && lengthSlash > 3) {
+    if (url.search("Welcome") === -1 && lengthSlash > 3) {
         $.connection.hub.start("~/signalr").done(function () {
             followMe.memServer.server.getWeapons();
 
@@ -131,19 +142,19 @@ $(document).ready(function () {
     }
 
     var isGame = $("#isGame").val();
-    if (isGame == "no" || isGame == "") {
+    if (isGame === "no" || isGame === "") {
         localStorage.setItem("multi", false)
         $("footer").hide()
     }
     $("#multiplayer").click(function () {
         $("#secondname").toggle("size");
         localStorage.setItem("multi", $("#multiplayer").prop("checked"))
-        if ($("#multiplayer").prop("checked") == false)
+        if ($("#multiplayer").prop("checked") === false)
         { localStorage.setItem("secondUsername", "n/a") }
     });
 
 
-    if (isGame == "yes") {
+    if (isGame === "yes") {
         $("#weapon1").show()
         //if (localStorage.getItem("multi"))
         //{
@@ -163,10 +174,10 @@ $(document).ready(function () {
     }
 
     followMe.x = function (divId, position) {
-        if ($("#isGame").val() == "yes") {
+        if ($("#isGame").val() === "yes") {
             if (position) {
                 followMe.players[1].x = position;
-                if (divId.search("player") != -1) {
+                if (divId.search("player") !== -1) {
                     $("#weapon1").css("left", position - 96)
                 }
                 $("#" + divId).css("left", position);
@@ -180,10 +191,10 @@ $(document).ready(function () {
         }
     }
     followMe.y = function (divId, position, rate) {
-        if ($("#isGame").val() == "yes") {
+        if ($("#isGame").val() === "yes") {
             if (position) {
                 followMe.players[1].y = position;
-                if (divId.search("player") != -1) {
+                if (divId.search("player") !== -1) {
                     $("#weapon1").css("top", position - 10)
                     $("#weapon1").animate({ "top": position - 10 }, rate / 4)
                 }
@@ -192,7 +203,7 @@ $(document).ready(function () {
                 $("#weapon1").css("top", position - 10)
             }
 
-            if (rate == "fan") {
+            if (rate === "fan") {
                 followMe.y("player", followMe.y("player") - 384)
                 followMe.defineDrop("", followMe.x("player"), "", "player")
             }
@@ -206,12 +217,12 @@ $(document).ready(function () {
         var move = "";
 
 
-        if (direction == "right") {
+        if (direction === "right") {
             //DOUBLE JUMP
             speedToUse[1] = followMe.x("player") + speed / 2
             speedToUse[2] = followMe.x(divId) + speed
         }
-        if (direction == "left") {
+        if (direction === "left") {
             //DOUBLE JUMP
             speedToUse[1] = followMe.x("player") - speed / 2
             speedToUse[2] = followMe.x(divId) - speed
@@ -231,9 +242,9 @@ $(document).ready(function () {
     var newPos = followMe.x("player");
 
     followMe.levelServicesDefined.client.newLevel = function (level, world, username, fromSelection) {
-        if (username == localStorage.getItem("username")) {
-            if (fromSelection == false) {//They're in a level here..
-                if (followMe.players[1].hasSurvived == 1) {
+        if (username === localStorage.getItem("username")) {
+            if (fromSelection === false) {//They're in a level here..
+                if (followMe.players[1].hasSurvived === 1) {
                     followMe.updateXPFromAction("live");
                 }
                 if (confirm("You did it! Do you want to go to the next level?")) {
@@ -265,14 +276,14 @@ $(document).ready(function () {
     $("#firstdesign").attr("href", "/Connect/Design/" + localStorage.getItem("username"))
     $("#firstdesign").hide();
     $("#seconddesign").hide()
-    if (localStorage.getItem("multi") == "true") {
+    if (localStorage.getItem("multi") === "true") {
         $("#seconddesign").attr("href", "/Connect/Design/" + localStorage.getItem("secondusername"))
         $("#seconddesign").show()
     }
     //.css("backgroundPosition", "0px, 0px")
 
 
-    if (url.search("/Connect/Design/") != -1 || $("#isGame").val() != "yes") {
+    if (url.search("/Connect/Design/") !== -1 || $("#isGame").val() !== "yes") {
         $("#firstdesign").hide()
         $("#seconddesign").hide()
         $("#player").hide()
@@ -280,7 +291,7 @@ $(document).ready(function () {
     }
 
 
-    if ($("#isGame").val() == "yes" && url.search("/Connect/Design/") == -1) {
+    if ($("#isGame").val() === "yes" && url.search("/Connect/Design/") === -1) {
         $("#firstdesign").show();
     }
 

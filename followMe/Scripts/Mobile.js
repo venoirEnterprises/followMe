@@ -79,7 +79,7 @@
 
     $.event.special.tap.tapholdThreshold = 5000;
 
-    if ($("#isGame").val() == "yes" && followMe.url.search("levelselect")) {
+    if ($("#isGame").val() === "yes" && followMe.url.search("levelselect")) {
         $(document).off("tap").on("tap", function (e) {
             followMe.fireTheShot(e)                        
         })
@@ -111,7 +111,7 @@
         window.addEventListener('deviceorientation', function (eventData) {
             $("#collision").text("tilting? " + eventData.alpha)
             //- is right, + is left
-            if (followMe.players[1] != undefined) {
+            if (followMe.players[1] !== undefined) {
                 var checkMove = eventData.alpha
                 var canProcess = false;
                 var direction = ""

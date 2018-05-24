@@ -85,9 +85,6 @@ C:\Users\nvsib\Source\Repos\followMe\followMe\bin\followMe.dll.config
 C:\Users\nvsib\Source\Repos\followMe\followMe\bin\followMe.dll
 C:\Users\nvsib\Source\Repos\followMe\followMe\bin\followMe.pdb
 C:\Users\nvsib\Source\Repos\followMe\followMe\bin\Newtonsoft.Json.dll
-C:\Users\nvsib\Source\Repos\followMe\followMe\bin\Antlr3.Runtime.pdb
-C:\Users\nvsib\Source\Repos\followMe\followMe\bin\DotNetOpenAuth.AspNet.xml
-C:\Users\nvsib\Source\Repos\followMe\followMe\bin\DotNetOpenAuth.Core.xml
 C:\Users\nvsib\Source\Repos\followMe\followMe\bin\Newtonsoft.Json.xml
 C:\Users\nvsib\Source\Repos\followMe\followMe\obj\Debug\followMe.csprojResolveAssemblyReference.cache
 C:\Users\nvsib\Source\Repos\followMe\followMe\obj\Debug\followMe.dll
@@ -95,6 +92,7 @@ C:\Users\nvsib\Source\Repos\followMe\followMe\obj\Debug\followMe.pdb
 C:\Users\Vincent.Norris\Source\Repos\followMe\followMe\bin\followMe.dll.config
 C:\Users\Vincent.Norris\Source\Repos\followMe\followMe\bin\followMe.dll
 C:\Users\Vincent.Norris\Source\Repos\followMe\followMe\bin\followMe.pdb
+C:\Users\Vincent.Norris\Source\Repos\followMe\followMe\bin\Newtonsoft.Json.dll
 C:\Users\Vincent.Norris\Source\Repos\followMe\followMe\bin\Newtonsoft.Json.xml
 C:\Users\Vincent.Norris\Source\Repos\followMe\followMe\obj\Debug\followMe.csprojResolveAssemblyReference.cache
 C:\Users\Vincent.Norris\Source\Repos\followMe\followMe\obj\Debug\followMe.dll

@@ -1,13 +1,13 @@
 ﻿$(document).ready(function () {
 
     followMe.jumpSound = function () {
-        if (localStorage.getItem("effectsMute") == "false") {
+        if (localStorage.getItem("effectsMute") === "false") {
             followMe.destroySoundDuplication(new Audio("../Sounds/Effects/jump.mp3"), "jump", true, false, false)
         }
     }
     followMe.shotSound = function (identifier) {
 
-        if (localStorage.getItem("effectsMute") == "false") {
+        if (localStorage.getItem("effectsMute") === "false") {
             followMe.destroySoundDuplication(new Audio("../Sounds/Effects/Weapon" + identifier + ".mp3"), "shoot", true, false, false)
         }
     }
@@ -18,20 +18,20 @@
         soundName += ","//Make it a false list
 
         //Checks in case this is a first load to a level
-        if (localStorage.getItem("volume") == null) {
+        if (localStorage.getItem("volume") === null) {
             localStorage.setItem("volume", 1);
         }
-        if (localStorage.getItem("effectsMute") == null) {
+        if (localStorage.getItem("effectsMute") === null) {
             localStorage.setItem("effectsMute", true);
         }
 
-        if (actionBased == true)//a click or other action causes the sound
+        if (actionBased === true)//a click or other action causes the sound
             //The duplication can happen here, one sound effect doesn't have to be finished for the other "pew-pew" to start per sa
         {
             controlSound(soundItself, killSound)
         }
         else {//scenery or bosses, including the background which is not directly going to "cancel" through an action, it loops until cancelled
-            if ($.inArray(soundName, followMe.playingSounds) == -1)
+            if ($.inArray(soundName, followMe.playingSounds) === -1)
                 //The sound hasn't already been logged, let's continue and play it
             {
                 controlSound(soundItself, killSound);
@@ -67,10 +67,10 @@
 
 
 
-    if (localStorage.getItem("effectsMute") == "true") {
+    if (localStorage.getItem("effectsMute") === "true") {
         $("#effectsMute").prop("checked", "")
     }
-    if (localStorage.getItem("effectsMute") == "false") {
+    if (localStorage.getItem("effectsMute") === "false") {
         $("#effectsMute").prop("checked", "true")
     }
 
@@ -80,7 +80,7 @@
 $(document).ready(function () {
     $("#effectsMute").on("click", function () {
         window.console.log(localStorage.getItem("effectsMute"))
-        if (localStorage.getItem("effectsMute") == "true") {
+        if (localStorage.getItem("effectsMute") === "true") {
             localStorage.setItem("effectsMute", "false")
         }
         else {
@@ -101,11 +101,8 @@ $(document).ready(function () {
 
 
     function backgroundMute(shouldWe, load) {
-        if ($("#isGame").val() != "no") {
-            if (load == false) {
-                
-            }
-            if (shouldWe == "true" || null) {
+        if ($("#isGame").val() !== "no") {
+            if (shouldWe === "true" || null) {
                 followMe.soundTest.volume = 0;
             }
             else {

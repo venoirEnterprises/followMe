@@ -3,8 +3,8 @@
         $("#furtherDetails #sounds div.ui-checkbox input").off().on("click", function () {
             var idToSet = this.id
 
-            if (idToSet == "setIsOnline") {
-                if ($("#onlineDetails").attr("class") == "inline") {
+            if (idToSet === "setIsOnline") {
+                if ($("#onlineDetails").attr("class") === "inline") {
                     $("#onlineDetails").attr("class", "");
                 }
                 else {
@@ -23,7 +23,7 @@
 
         }
 
-        if ($("#isCommunity").val() != "" && followMe.url.search("/community") != -1) {
+        if ($("#isCommunity").val() !== "" && followMe.url.search("/community") !== -1) {
             var competitionLevels = "";
             $.getJSON("/playerCommunity/getMyLevels", {
                 username: localStorage.getItem("username"),
@@ -31,7 +31,7 @@
             }, function (data) {
                 $.each(data, function (item, data) {
                     {
-                        if (item == 0) {
+                        if (item === 0) {
                             competitionLevels = "<option value='0'>" + data + "</option>";
                         }
                         else {
@@ -51,10 +51,10 @@
         followMe.showPlayerStats = function (object, primary)//, id)--multiplayer support
         {
             var identifierToUpdate = "Player"
-            if (primary == false) {
+            if (primary === false) {
                 identifierToUpdate = object.username
             }
-            if ((object.maxHealth != undefined && object.health != undefined && object.lives != undefined && object.maxHealth >= object.health) || primary == false) {
+            if ((object.maxHealth !== undefined && object.health !== undefined && object.lives !== undefined && object.maxHealth >= object.health) || primary === false) {
                 $("#health" + identifierToUpdate).attr("max", object.maxHealth)
                 $("#health" + identifierToUpdate).val(object.health)
                 $("#lives" + identifierToUpdate).attr("max", object.maxLives)
