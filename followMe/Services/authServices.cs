@@ -72,9 +72,9 @@ namespace followMe.Services
             var database = deploy.getDB();
             var collection = database.GetCollection<userDefined>("userDefined");
 
-            int left = 65; int right = 68; int up = 87; int surrender = 83; int enter = 13;
-                //see keyboard.js
-                
+            int left = 65; int right = 68; int up = 87; int surrender = 83; int enter = 13; int build = 16;
+            //see keyboard.js
+
             var userToAdd = new QueryDocument("username", username);
             userToAdd["level"] = "1st";
             userToAdd["world"] = 1;
@@ -92,6 +92,7 @@ namespace followMe.Services
             userToAdd["up"] = up;
             userToAdd["surrender"] = surrender;
             userToAdd["enter"] = enter;
+            userToAdd["build"] = build;
             //keyboard
             userToAdd["rank"] = 1;
             userToAdd["XP"] = 0;

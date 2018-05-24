@@ -39,6 +39,10 @@ namespace followMe
                         "~/Content/themes/base/jquery.ui.tabs.css",
                         "~/Content/themes/base/jquery.ui.datepicker.css",
                         "~/Content/themes/base/jquery.ui.theme.css"));
+            bundles.Add(new ScriptBundle("~/bundles/typeScript").Include(
+                "~/Scripts/declareClasses.js",
+                "~/Scripts/classLoader.js"
+                ));
             bundles.Add(new ScriptBundle("~/bundles/myScripts").Include(
                 //"~/Scripts/jquery.mobile-1.4.5.js",
                 "~/Scripts/testscript.js",

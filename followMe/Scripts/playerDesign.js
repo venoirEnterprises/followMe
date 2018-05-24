@@ -7,7 +7,7 @@
     $("a").attr("class", "link")
     $("input").attr("class", "link")
     $("button").attr("class", "link")
-    if ($("#isGame").val() == "no") {
+    if ($("#isGame").val() === "no") {
         $("#player").hide();
     }
     $("#player").hide()
@@ -62,7 +62,7 @@
         $("#otherDetails button").show();
         $("#" + identifier + "Button").hide();
         $("aside#" + identifier).show();
-        if (identifier == "sounds") {
+        if (identifier === "sounds") {
             followMe.hideCommunity();
         }
     });
@@ -71,10 +71,10 @@
 
     followMe.memServer.client.displaydesign = function (isPrimary, head, chest, legs, object, username, xpStats, maxXP, countNotifications) {
 
-        if (username == localStorage.getItem("username")) {
+        if (username === localStorage.getItem("username")) {
             //Hit every level, let's build the user here!
             var identifier = 1;
-            if (isPrimary == false) {
+            if (isPrimary === false) {
                 identifier = 2;
             }
             followMe.players[identifier] = new followMe.player({
@@ -85,7 +85,6 @@
                 health: object.health,//remaining
                 maxHealth: object.maxHealth,
                 lives: object.lives,
-                lives: object.lives,
                 //keyboard
                 up: object.up,
                 left: object.left,
@@ -93,6 +92,7 @@
                 surrender: object.surrender,
                 enter: object.enter,
                 special: object.special,
+                build : object.build,
                 rank: object.rank,
                 pace: xpStats.pace,
                 weaponHarmMultiplier: xpStats.weaponHarmMultiplier,
@@ -125,7 +125,7 @@
             else {
                 $(".commPlayer").hide();
                 //URL redirection
-                if (followMe.url.search("/community/") != -1) {
+                if (followMe.url.search("/community/") !== -1) {
                     window.location.assign("/Connect/LevelSelect")
                 }
                 //URL end
@@ -144,7 +144,7 @@
             //and show it off.
             $("#xpPlayer").val(object.XP).attr("max", maxXP);
             followMe.showPlayerStats(object, true)
-            if (followMe.players[1].personType != 1) {
+            if (followMe.players[1].personType !== 1) {
                 $("#specialAbilityProgram").show()
             }
 
@@ -164,7 +164,7 @@
             $("#personTypeSelected").val(object.personType);
             followMe.recordPlayTime();
 
-            if (followMe.url.search("/connect/options") != -1) {
+            if (followMe.url.search("/connect/options") !== -1) {
                 followMe.communityServices.server.overalProgress(followMe.players[1].username)
             }
             followMe.communityServices.server.levelUniqueProgress(followMe.players[1].username, $("#welcome").text())
@@ -177,7 +177,7 @@
 
     followMe.hideCommunity = function () {
         var isUserOnline = $("#setIsOnline").prop("checked")
-        if (isUserOnline == false) {
+        if (isUserOnline === false) {
             $("#onlineDetails").attr("class", "");
         }
         else {
@@ -186,7 +186,7 @@
     }
 
     followMe.setPlayerDesign = function (main, object, community) {
-        if (object != undefined) {
+        if (object !== undefined) {
             if (main) {
                 //should be simplified
                 $("#setIsOnline").prop("checked", object.online);
@@ -219,7 +219,7 @@
                 $("#legs1").css("background", "url('/Images/spriteSheet.png')" + object.legs * -48 + followMe.userDesign3)
             }
             else {//new player x, y etc set
-                if (community == undefined) {
+                if (community === undefined) {
 
                     var identifier = "player" + object.username;
 
@@ -275,15 +275,15 @@
             var message = "";
             var classAdd = "";
 
-            if (followMe.specialAchieveArray[this.id] == undefined) {
+            if (followMe.specialAchieveArray[this.id] === undefined) {
                 //alert(this.id)
             }
             else {
                 message = followMe.specialAchieveArray[this.id].message;
             }
 
-            if (followMe.specialAchieveArray[this.id] != undefined &&
-                followMe.specialAchieveArray[this.id].type == "done") {
+            if (followMe.specialAchieveArray[this.id] !== undefined &&
+                followMe.specialAchieveArray[this.id].type === "done") {
                 defaultID = 192;
                 classAdd = "done"
             }

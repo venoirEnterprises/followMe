@@ -134,14 +134,13 @@
         }
         followMe.hasCollided(movement, x, yDiff, ".surface")
         $(".surface").each(function () {
-            var x = this.id.substring(7)
+            var x = this.id;
             var surfaceObject = followMe.surfaces[x];
             //if (surfaceObject == undefined)
             //    {alert(this.id + ", " + x)}
             var surfaceMinX = surfaceObject.minx;
             var surfaceMaxX = surfaceObject.maxx;
             var surfaceY = surfaceObject.miny;
-            if (x == 25) { window.console.log(followMe.surfaces[25].miny + ", " + followMe.surfaces[25].maxy + "; " + parseInt(followMe.y("player")) + ", " + yDiff)}
 
             //var surfaceMaxY = x.substring(x.indexOf("y") + 1, x.length)
             if (playerX + 48 >= surfaceMinX && playerX <= surfaceMaxX && yDiff <= surfaceY
@@ -168,7 +167,10 @@
             var id = this.id;
             var id2 = id.substring(id.indexOf("checkpoint") + 10)
             if (id2 == localStorage.getItem("checkpoint")) {
-                playerY = parseFloat(followMe.checkpoints[id2].y + 32) + "px";
+                //playerY = parseFloat(followMe.checkpoints[id2].y + 32) + "px";
+                playerY = parseFloat(getCheckpointByPlayerCheckpoint(id2).y + 32) + "px";
+                window.console.log(playerY);
+                window.console.log(getCheckpointByPlayerCheckpoint(id2));
                 localStorage.setItem("startY", playerY)
             }
         })
@@ -255,13 +257,12 @@
 
                 var objectToQuery = followMe.teleports[x];
 
-                if ($("#" + objectid).attr("class").search("checkpoint") != -1) {
-                    objectid = x.substring(x.indexOf("checkpoint") + 10)
-                    objectToQuery = followMe.checkpoints[objectid];
+                if (classCheck==".checkpoint") {
+                    objectToQuery = followMe.checkpoints[x];
                 }
 
                 if (classCheck == ".surface") {
-                    objectToQuery = followMe.surfaces[x.substring(7)]
+                    objectToQuery = followMe.surfaces[x]
                     minx = objectToQuery.minx;
                     maxx = objectToQuery.maxx;
                     miny = objectToQuery.miny;
@@ -287,15 +288,21 @@
                 }
 
                 if (classCheck == ".caves") {
-                    objectToQuery = followMe.caves[x.substring(4)]
+                    objectToQuery = followMe.caves[x]
                     playerrightx = playerleftx
                     playertopy = yDefined;
                     playerbottomy = yDefined;
+                    minx = objectToQuery.x;
+                    maxx = objectToQuery.maxx;
+                    miny = objectToQuery.y;
+                    maxy = objectToQuery.maxy
                 }
+                if (classCheck == ".teleports") {
 
-
-
-                if (classCheck == ".teleports" || classCheck == ".checkpoint" || classCheck == ".caves") {
+                    objectToQuery = followMe.teleports[x];
+                }
+                if (classCheck == ".teleports" || classCheck == ".checkpoint") {
+                    
                     minx = objectToQuery.x;
                     maxx = objectToQuery.maxx;
                     miny = objectToQuery.y;
@@ -363,7 +370,6 @@
 
                 
                 if (matchType != "no match") {
-                    if (classCheck == ".enemies") { window.console.log(matchType, playerid) }
 
                     if (classCheck == ".teleports" && followMe.teleports[x].teleportAllowed) {
                         if (confirm("Are you sure you want to travel to the " +
@@ -388,7 +394,7 @@
                         if ((classCheck == ".enemies" && playerid != localStorage.getItem("bulletFired"))
                         ) {
                             $("#" + playerid).remove();
-                            followMe.hurtEnemy(x, playerid, local)
+                            followMe.hurtEnemy(x, playerid)
                             if (followMe.helpRequest != null) {
                                 followMe.communityServices.server.sharePartnerEnemyHurt(
                                     followMe.players[1].username,
@@ -399,7 +405,7 @@
                                     x
                                     );
                             }
-                            localStorage.setItem("bulletFired", playerid)
+                            localStorage.setItem("bulletFired", playerid, true)
                         }
                         if (classCheck == ".caves" && (objectToQuery.isWall || objectToQuery.isCeiling) && objectToQuery.caveName == localStorage.getItem("currentCaveName")) {
                             $("#" + playerid).remove();
@@ -453,10 +459,9 @@
                         continuing = false;
                     }
                     if (classCheck == ".checkpoint"
-                        && x.substring(x.indexOf("checkpoint") + 10) != localStorage.getItem("checkpoint")
+                        && x != localStorage.getItem("checkpoint")
                         ) {
-                        //alert("checkpoint@ " + x + " should have collided on: "
-                        //+ minx + "+ " + maxx + "--ys," + miny + "+ " + maxy + " which is " + matchType + ". It's movement being" + movement)
+                        console.log(x);
                         followMe.checkpointSubmit(x, miny, movement)
                         continuing = false;
                     }
@@ -683,7 +688,6 @@
             var theID = parseFloat(theWeapon.identifierToSee);
             var top = ((theID + 2) * 64)
 
-            
             $("#weapon_" + theID).css("background", "url('/Images/spriteSheet.png')" + parseFloat((-96 * (theID - 1))) +
                 "px " + followMe.imageDefintion.weapon).css("top", top + "px")
                 .parent().children().last().css("left", "128px")

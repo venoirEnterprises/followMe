@@ -14,6 +14,7 @@
     @Html.HiddenFor(m => m.up, new { @id = "userup" })
     @Html.HiddenFor(m => m.surrender, new { @id = "usersurrender" })
     @Html.HiddenFor(m => m.special, new { @id = "userspecial" })
+    @Html.HiddenFor(m => m.build, new { @id = "userbuild" })
     @Html.HiddenFor(m => m.isVenoir, new { @id = "IsVenoirGet" })
     @Html.HiddenFor(m => m.online, new { @id = "IsOnlineGet" })
     @Html.HiddenFor(m => m.email, new { @id = "useremail" })
@@ -124,6 +125,14 @@
                     </td>
                     <td>
                         <input type="text" id="designSpecial" /><b id="special"></b>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Build [starts creating a new game object]
+                    </td>
+                    <td>
+                        <input type="text" id="designBuild" /><b id="build"></b>
                     </td>
                 </tr>
             </table>

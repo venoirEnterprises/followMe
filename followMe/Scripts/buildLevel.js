@@ -1,10 +1,12 @@
 ﻿$(function () {
+    var countLocalObjects = 0;
     var numberx = 0;
     var numbery = 0;
     followMe.teleportPicture = -562;
     localStorage.setItem("fanHit", "00000")
     followMe.teleports = [];
     followMe.enemies = [];
+
 
     followMe.teleport = function (options) {
         var defaultValues =
@@ -53,30 +55,40 @@
         return newmessage;
     }
 
-    followMe.levelServicesDefined.client.addImageFromServer = function (serveranimation, type, username, canAccess, numberSurfaces, totalLevelToDo, playerDone) {//last param specifically for teleports                
+    followMe.levelServicesDefined.client.addImageFromServer = function (serveranimation, type, username, canAccess, totalLevelToDo, playerDone, countGameObjects) {//last param specifically for teleports                
+        countLocalObjects += 1;
+        addGameObject(serveranimation);
+        if (type === "surface" || type === "enemies" || type =="checkpoint") {
+            createDisplayForInternalClass(serveranimation._id, type)
+        }
+        followMe.surfaces = getObjectsByType("surface");
+        followMe.enemies = getObjectsByType("enemies");
+        followMe.checkpoints = getObjectsByType("checkpoint");
 
-        if (username == localStorage.getItem("username")) {
-            if (type == "Items") {
+
+        if (username === localStorage.getItem("username")) {
+            if (type === "Items") {
                 $(followMe.addImage2("readitem", "item", serveranimation, canAccess)
                     .appendTo($("#game")))
             }
 
 
-            if (type == "teleports") {
+            if (type === "teleports") {
                 //alert("Total for level: " + totalLevelToDo + ", " + serveranimation.level + ", player has done: " + playerDone)
                 $("range#" + serveranimation.level).remove();
                 $("<progress title ='Detail in Options and Achievements' id='" + serveranimation.level + "' max='" + totalLevelToDo + "' value='" + playerDone + "' style='left:" + parseInt(parseInt((parseInt(serveranimation.x) * 64)) + 64) + "px;top:" + parseInt(parseInt((parseInt(serveranimation.y) * 64)) + 32) + "px;position:absolute;' class='xp'>").appendTo($("#game"));
             }
-            var whatToAdd = followMe.addImage2(
-                false,
-                type,
-                serveranimation,
-                canAccess
-            )
-            if (whatToAdd != false) {
+            
+            if (whatToAdd !== false && type !== "surface" && type !== "enemies" && type !== "checkpoint") {
+                var whatToAdd = followMe.addImage2(
+                    false,
+                    type,
+                    serveranimation,
+                    canAccess
+                )
                 $(whatToAdd.appendTo($("#game")))
             }
-            if (type == "Items") {
+            if (type === "Items") {
                 addItemMessage(
                     serveranimation.message,
                     serveranimation.x,
@@ -84,42 +96,29 @@
                     $("." + type + ":last").attr("id"))
                     .appendTo($("#game"));
             }
-            if ((serveranimation.xend > 0 || serveranimation.yend > 0) && serveranimation.type != "caves") {//&&( serveranimation.xend >0 || serveranimation.yend >0) ) {
+
+            physicalDisplayAnimationForGameObject(serveranimation,serveranimation._id)
+
+            if ((serveranimation.xend > 0 || serveranimation.yend > 0) && serveranimation.type !== "caves") {//&&( serveranimation.xend >0 || serveranimation.yend >0) ) {
                 //1.13.1.4 extension made, surfaces can now move too
                 //Method named changed from enemyIsAnimated, as surfaces etc. should be able to move too [dependent on difficulty in futures]
-                followMe.animateObject(serveranimation.uniqueIdenitifer, serveranimation.type)
+                followMe.animateObject(serveranimation._id, serveranimation.type)
 
 
             }
-            if (type == "background" && serveranimation.inCave) {
+            if (type === "background" && serveranimation.inCave) {
                 addDownloadKey(followMe.checkpoints[serveranimation.checkpoint]);
             }
             followMe.showCaveContents(false)
         }
+
+        if (countLocalObjects === countGameObjects)//The final addition has taken place in addImage2
+        {
+            window.console.log("this is where the preloading UI would end")
+        }
     };
 
     followMe.surfaces = [];
-
-    followMe.surface = function (options) {
-        var defaultValues =
-            {
-                identifier: 0,
-                miny: -1,
-                minx: -1,
-                widthX: -1,
-                heightY: -1,
-                startFrame: -1,
-                checkpoint: "",
-                maxx: -1,
-                maxy: -1,
-                backToStartPoint: false,
-                xend: 0,
-                yend: 0,
-                surfaceAnimationCollection: ""
-            }
-        $.extend(this, defaultValues, options);
-    };
-
     followMe.caves = [];
 
 
@@ -143,87 +142,40 @@
     };
 
 
-    followMe.surfaceID = 0;
     followMe.addImage2 = function (isUpdate, type, object, hasAccess) {
         //64px restriction of size dividing        
         //hasAccess for teleport lock show
-        var message = "";
-        var classToUse = type;
-        var alt = 0;
-        var stop = false;
 
         var startFrame = (-64 * object.startFrame) + "px 0px";
 
-        var iduse = (parseInt(object.x) * 64) + "_" + (parseInt(object.y) * 64)
-            + "-" + parseInt(parseInt((parseInt(object.x) * 64)) + (parseInt(object.widthX) * 64)) + "y"
-            + parseInt(parseInt((parseInt(object.y) * 64)) + (parseInt(object.heightY) * 64))
 
+        //Feb 14th, generic object declaration to override specific objects, then just use array filter to create followMe.surfaces e.g.
 
-
-        if (type == "surface" || object.fan == true) {
-
-
-            iduse = "surface" + object.uniqueIdenitifer;
-            followMe.surfaces[object.uniqueIdenitifer] = new followMe.surface({
-                miny: parseFloat(object.y) * 64,
-                minx: parseFloat(object.x) * 64,
-                widthX: parseFloat(object.widthX) * 64,
-                heightY: parseFloat(object.heightY) * 64,
-                startFrame: object.startFrame,
-                checkpoint: object.checkpoint,
-                maxx: (parseFloat(object.x) * 64) + (parseFloat(object.widthX) * 64),
-                maxy: (parseFloat(object.y) * 64) + (parseFloat(object.heightY) * 64),
-                fan: object.fan,
-                identifier: object.uniqueIdenitifer,
-                backToStartPoint: object.backToStartPoint,
-                xend: object.xend,
-                yend: object.yend,
-                surfaceAnimationCollection: object.surfaceAnimationCollection
-            });
-
-
-
-            followMe.surfaceID += 1;
-
-        }
-
-        if (type == "background") {
+        if (type === "checkpoint") {
 
             startFrame = (-64 * object.startFrame) + "px -64px";
 
 
             var y = parseFloat(object.y * 64);
             var x = parseFloat(object.x * 64);
-            if (object.heightY == 0) {
+            if (object.heightY === 0) {
                 object.heightY = 1
             }
-            followMe.checkpoints[object.checkpoint] = new followMe.checkpoint(
-                {
-                    identifier: object.checkpoint,
-                    x: x,
-                    maxx: parseFloat(x + parseFloat(object.widthX * 64)),
-                    y: y,
-                    maxy: parseFloat(y + parseFloat(object.heightY * 64)),
-                    unityLevel: object.uniqueIdenitifer,
-                    messageForKey: object.message,
-                    caveName: object.caveName,
-                    levelName: object.newLevel
-                });
 
-            iduse = "checkpoint" + object.checkpoint
+            iduse = object._id
 
 
         }
 
 
-        if (type == "checkpoint") {
+        if (type === "checkpoint") {
             type = "background";
 
 
         }
         var url = "url('/images/spriteSheet.png')"
 
-        if (isUpdate == "readitem") {
+        if (isUpdate === "readitem") {
             startFrame = "0px 0px";
             url = "url('/images/spriteSheet.png')";
             classToUse = object.message + " " + "items"
@@ -239,56 +191,20 @@
             .css("position", "absolute")
             .css("marginLeft", "0px!important")
             .css("backgroundPosition", startFrame)
-            .attr("id", iduse)
-            .attr("class", classToUse)
-            .attr("alt", alt);
+            .attr("id", object._id)
+            .attr("class", type);
 
-        if (object.caveName == null) {
+        if (object.caveName === null) {
             object.caveName = "";
-        }
-
-        if (type == "enemies") {
-            followMe.enemies[object.uniqueIdenitifer] = new followMe.enemy(
-                {
-                    identifier: object.uniqueIdenitifer,
-                    hurt: object.hurt,
-                    maxHealth: object.maxHealth,
-                    currentHealth: object.maxHealth,
-                    x: object.x,
-                    y: object.y * 64,
-                    caveName: object.caveName,
-                    xend: object.xend,//flying animation start
-                    yend: object.yend,
-                    backToStartPoint: object.backToStartPoint,
-                    fly: object.fly
-                });
-            imageDefined.attr("id", object.uniqueIdenitifer);
-            imageDefined.attr("alt", object.hurt);
-            imageDefined.css("height", ((object.heightY * 64) + 8) + "px")
-
-
-
-
-            imageDefined.append("<progress class='standard' max='" + object.maxHealth +
-                "' value='" + object.maxHealth + "' min='0' style=margin-top:" + (object.heightY * 64) +
-                "px;position:absolute;width:" + (object.widthX * 64) + "px!important" + "/>"
-            )
-
         }
 
         //This is to deal with the fact that the original render thinks 0,0 is where to start
         //Due to default in followMe.Animation, as most likely object is surface
         //START
-        if (object.fan == true) {
-            //alert()
-            imageDefined.css("backgroundPosition", (-64 * object.startFrame) + "px " + followMe.imageDefintion.fan)
-            imageDefined.css("top", (parseFloat(object.y) - 2) * 64 + "px")
-            imageDefined.css("height", "192px")
-            imageDefined.attr("class", "surface fan")
-        }
-        if (type == "teleports") {
-            var y = parseFloat(object.y * 64);
-            var x = parseFloat(object.x * 64);
+        
+        if (type === "teleports") {
+            y = parseFloat(object.y * 64);
+            x = parseFloat(object.x * 64);
             imageDefined.css("backgroundPosition", (-64 * object.startFrame) + "px " + followMe.teleportPicture + "px")
             var identifier = object.level.substring(0, 1) + object.world
             imageDefined.attr("id", identifier);
@@ -305,7 +221,7 @@
             });
             var teleportId = followMe.teleports[identifier];
             iduse = identifier
-            if (hasAccess == false) {
+            if (hasAccess === false) {
                 var teleportBlocked = $("<aside>")
                     .attr("id", (parseFloat(teleportId.x) - 64) + "_" + (parseFloat(teleportId.y) - 64)
                     + "-" + parseFloat(teleportId.maxx - 64) + "y"
@@ -320,37 +236,31 @@
             }
         }
         else {
-
-            //Enemies
-            if (object.index == 5) {
-                imageDefined.css("backgroundPosition", (-64 * object.startFrame) + "px -192px")
-            }
-
-            if (object.message != null && type == "ITems") {
+            if (object.message !== null && type === "ITems") {
                 imageDefined.css("backgroundPosition", (-64 * object.startFrame) + "px -384px")
             }
-            if (isUpdate == "readitem") {
+            if (isUpdate === "readitem") {
                 imageDefined.css("backgroundPosition", "-128px -884px")
             }
 
-            if (type == "caves") {
+            if (type === "caves") {
+
                 var imageX = -320
-                if (object.xMove != undefined && object.xMove != 0 && object.xMove < 4) {
+                if (object.xMove !== undefined && object.xMove !== 0 && object.xMove < 4) {
                     imageX -= parseFloat(object.xMove * 32)
                 }
 
                 var imageY = -560
-                if (object.yMove != undefined && object.yMove != 0 && object.yMove < 5) {
+                if (object.yMove !== undefined && object.yMove !== 0 && object.yMove < 5) {
                     imageY -= parseFloat(object.yMove * 32)
                 }
 
-                imageDefined.css("backgroundPosition", imageX + "px " + imageY + "px").attr("id", "cave" + object.uniqueIdenitifer)
+                imageDefined.css("backgroundPosition", imageX + "px " + imageY + "px").attr("id", "cave" + object._id)
 
-                var y = parseFloat(object.y * 64);
-                var x = parseFloat(object.x * 64);
+                y = parseFloat(object.y * 64);
+                x = parseFloat(object.x * 64);
 
-
-                followMe.caves[parseFloat(object.uniqueIdenitifer)] = new followMe.cave({
+                followMe.caves[object._id] = new followMe.cave({
                     caveName: object.caveName,
                     height: object.heightY * 64 + "px",
                     width: object.widthX * 64 + "px",
@@ -365,12 +275,9 @@
                     isCeiling: object.caveCeiling
                 });
             }
-            if (object.checkpoint != "" || type == "background" || object.newLevel != null
+            if (type === "background" && (object.checkpoint !== "" || object.newLevel !== null)
             ) {
-
-
                 imageDefined.addClass("checkpoint")
-                imageDefined.attr("alt", object.checkpoint)
                 imageDefined.css("backgroundPosition", (-64 * object.startFrame) + "px -64px")
 
                 //if (object.inCave) {
@@ -386,11 +293,11 @@
             imageDefined.addClass("caveName" + object.caveName)
         }
 
-        if (type == "caves") {
+        if (type === "caves") {
             imageDefined.addClass("isCave " + object.caveName)
         }
 
-        if ((object.inCave == false || object.inCave == undefined) && type != "caves") {
+        if ((object.inCave === false || object.inCave === undefined) && type !== "caves") {
             imageDefined.addClass("outsideCave")
             imageDefined.addClass("caveName")
 
@@ -399,88 +306,36 @@
 
         //END
 
-        if (type == "background" && object.checkpoint == localStorage.getItem("checkpoint")
-            || isUpdate == "startpoint") {
+        if (type === "checkpoint" && object.checkpoint === localStorage.getItem("checkpoint")
+            || isUpdate === "startpoint") {
 
             startFrame = (-64 * (object.startFrame + 1)) + "px -64px";
             imageDefined.css("backgroundPosition", startFrame)
-            //Purely for the one which is the user's checkpoint
-            imageDefined.attr("id", "checkpoint" + object.checkpoint);
         }
 
-        if (object.animate == true) {
-            var frameCount = parseFloat(object.endFrame) - parseFloat(object.startFrame)
-            if (parseFloat(object.checkpoint) == 0) { rateDefined = 200 }
-            var animationDefined = new followMe.animation(
-                {
-
-                    url: "/images/spriteSheet.png", numberOfFrames: frameCount,
-                    currentFrame: object.startFrame, startFrame: object.startFrame, spriteY: object.spriteY * 64
-                });
-
-
-
-            setInterval(function () {
-
-                animationDefined.currentFrame += 1
-                if (animationDefined.currentFrame - animationDefined.startFrame > animationDefined.numberOfFrames) {
-                    animationDefined.currentFrame = animationDefined.startFrame
-                }
-                setFrame(iduse, animationDefined);
-
-                setSpeed(iduse, animationDefined, animationDefined.pace + 1);
-            }, animationDefined.rate)
+        
+        if (isUpdate === "gameover") {
+            window.console.log("game over");
         }
-        if (isUpdate == "gameover") {
-
-        }
-        if (object.inCave && type == "background") {
+        if (object.inCave && type === "background") {
 
 
             //alert (imageDefined.css("backgroundPosition") + ", " + imageDefined.attr("id"))
         }
         if ($("#" + imageDefined.attr("id")).length > 0) {
-            if (type != "surface" || object.fan == "1") {
+            if (type !== "surface" || object.fan === "1") {
                 $("#" + imageDefined.attr("id")).remove();
             }
-            else {
-                //if (followMe.surfaceID > 1) {
-                //    //for (var i = 0; i < followMe.surfaceID; i++) {
-
-                //    //    if (followMe.surface[i].index == object.index) {
-                //    //        alert()
-                //    //        stop = true;
-                //    //    }
-
-                //    //}
-                //}
-
-            }
         }
-        if (stop == false || type != "surface") {
+
+        if (stop === false || type !== "surface") {
             return imageDefined
         }
         else {
             return false;
         }
-    }
 
-    followMe.enemy = function (options) {
-        var defaultValues =
-            {
-                identifier: 1,
-                hurt: 0,
-                maxHealth: 20,
-                currentHealth: 20,
-                x: 0,
-                y: 0,
-                caveName: "",
-                xend: 0,//flying animation start
-                yend: 0,
-                backToStartPoint: false,
-                fly: false//flying animation end
-            }
-        $.extend(this, defaultValues, options);
+
     }
     followMe.animation = function (options) {
         var defaultValues =
@@ -497,7 +352,7 @@
         }
     };
     followMe.addSprite = function (parentId, divId, options) {
-        var options = $.extend({
+        options = $.extend({
             x: 0, y: 0, width: 64, height: 64
         }, options);
     }
@@ -515,7 +370,7 @@
             url: '/Images/spriteSheet.png', numberOfFrames: 2, rate: 700
 
         });
-    if ($("#isGame").val() != "no") {
+    if ($("#isGame").val() !== "no") {
         setInterval(function () {
             var x = 1
             setFrame("spriteAlert", firstSprite);
@@ -524,18 +379,18 @@
 
         }, firstSprite.rate);
 
-        if (followMe.helpRequest != null) {
-
+        if (followMe.helpRequest !== null) {
+            window.console.log("help Request: " + followMe.helpRequest);
         }
         $.connection.hub.start("~/signalr").done(function () {
-            if ($("#isGame").val() == "yes") {
+            if ($("#isGame").val() === "yes") {
                 //alert()
                 followMe.communityServices.server.checkLevelAttendanceForHelp(
                     $("#welcome").text(),
                     localStorage.getItem("username"),
                     true//For helper
                 );
-                if (followMe.helpRequest != null) {//You're helping, let's tell the person that asked
+                if (followMe.helpRequest !== null) {//You're helping, let's tell the person that asked
                     followMe.communityServices.server.checkLevelAttendanceForHelp(
                         $("#welcome").text(),
                         followMe.helpUsername,
@@ -547,6 +402,9 @@
                     localStorage.getItem("username"),
                     followMe.helpUsername
                 );
+
+
+                followMe.levelServicesDefined.server.sendMessage("test");
             }
         });
     }
@@ -576,7 +434,6 @@
                 myMaxY = object.maxy;
                 myX = object.minx;
                 myMaxX = object.maxx;
-                iduse = objectName + iduse;
                 timeToMove = 500;
                 break;
             case "enemies":
@@ -601,13 +458,13 @@
                 if (object.xend > 0) {
                     moveObjectOnLoop(object.xend, top, left, object, iduse, objectName, timeToMove, code, myX, myY, false, false);
                 }
-                if (object.yend > 0 && (object.fly || objectName != "enemies")) {
+                if (object.yend > 0 && (object.fly || objectName !== "enemies")) {
                     moveObjectOnLoop(object.yend, top, left, object, iduse, objectName, timeToMove, code, myX, myY, true, false);
                 }
                 if (object.xend > 0) {
                     moveObjectOnLoop(object.xend, top, left, object, iduse, objectName, timeToMove, code, myX, myY, false, true);
                 }
-                if (object.yend > 0 && (object.fly || objectName != "enemies")) {
+                if (object.yend > 0 && (object.fly || objectName !== "enemies")) {
                     moveObjectOnLoop(object.yend, top, left, object, iduse, objectName, timeToMove, code, myX, myY, true, true);
                 }
             }, 1000)
@@ -618,7 +475,7 @@
             if (object.xend > 0) {
                 moveObjectOnLoop(object.xend, top, left, object, iduse, objectName, timeToMove, code, myX, myY, false, false);
             }
-            if (object.yend > 0 && (object.fly || objectName != "enemies")) {
+            if (object.yend > 0 && (object.fly || objectName !== "enemies")) {
                 moveObjectOnLoop(object.yend, top, left, object, iduse, objectName, timeToMove, code, myX, myY, true, false);
             }
         }
@@ -633,13 +490,12 @@
     //27/01/18 code centralised for object animation looping, called above
     function moveObjectOnLoop(valueToLoop, top, left, object, iduse, objectName, timeToMove, code, myX, myY, isY, reverse) {
         for (var i = 0; i < valueToLoop; i++) {
-            var newattribute = parseFloat(left) + 64 /** (i+1)*/ + "px"
+            var newattribute = parseFloat(left) + 64 /** (i+1)*/ + "px";
             if (reverse) {
                 newattribute = parseFloat(left) - 64 /** (i+1)*/ + "px"
             }
             var newattribute2 = newattribute.substring(0, newattribute.length - 2);
-            var identifier = "." + objectName + "#" + iduse;
-
+            var identifier = "." + objectName + "#" +  iduse;           
             var attributeToChange = "top";
             if (!isY) {
                 attributeToChange = "left";
@@ -649,6 +505,7 @@
                 animationProperties = {}; animationProperties[attributeToChange] = "-=64px";
             }
 
+
             $(identifier).animate(animationProperties,
                 {
                     duration: timeToMove
@@ -656,18 +513,18 @@
                     step: function (now, fx) {
                         switch (objectName) {
                             case "enemies":
+                                
                                 if (!isY) {
-                                    followMe.enemyDrop(code, fx.end, ".enemies#" + iduse, object.fly)
-                                    object.x = fx.end;
+                                    followMe.enemyDrop(code, fx.end, iduse, object.fly)                               
+                                    followMe.enemies[iduse].x = fx.end;
                                 }
                                 if (isY) {
-                                    object.y = fx.end;
+                                    followMe.enemies[iduse].y = fx.end;
                                 }
                                 followMe.enemyHurt(fx.end, iduse, object)
 
                                 break;
                             case "surface":
-
                                 object.miny = myY;
                                 var playerObj = followMe.players[1];
                                 if (!isY) {
@@ -694,8 +551,8 @@
                                     object.miny = fx.end
                                     object.maxy = fx.end + 64;
                                 }
-                                if (playerObj.currentSurfaceID == iduse) {
-                                    iduse2 = ".surface#" + iduse
+                                if (playerObj.currentSurfaceID === iduse) {
+                                    iduse2 = iduse
                                     var realTop = $(iduse2).css("top");//will need to get the current x as it animates, so the player moves along
                                     var realLeft = $(iduse2).css("left");
                                     if (!isY) {
@@ -720,4 +577,70 @@
             }
         }
     }
+
+    /* Detach a datepicker from its control.
+     * @param  ID   int - the ID of the element from the server, to grab its object
+     * @param type  string - the type of element to root the details from
+     */
+    function createDisplayForInternalClass(ID, type) {
+
+        var obj = getObjectsByType(type)[ID]
+        var imageDefined = $("<aside>").css("backgroundImage", "url('/images/spriteSheet.png')")
+            .css("left", obj.x + "px")
+            .css("top", obj.y + "px")
+            .css("width", obj.widthX + "px")
+            .css("height", obj.heightY + "px")
+            .css("position", "absolute")
+            .css("marginLeft", "0px!important")
+            .css("backgroundPosition", obj.startFrame)
+            .attr("id", obj._id)
+            .attr("class", type);
+
+
+        switch (type)
+        {
+            case "enemies":
+                imageDefined.append("<progress class='standard' max='" + obj.maxHealth +
+                    "' value='" + obj.maxHealth + "' min='0' style=margin-top:" + obj.heightY +
+                    "px;position:absolute;width:" + obj.widthX + "px!important" + "/>");
+                break;
+            case "checkpoint":
+                imageDefined.attr("alt", obj.checkpoint);
+                console.log(obj.checkpoint);
+                break;
+        }
+        if (obj.fan === true) {
+            //alert()
+            imageDefined.css("backgroundPosition", (-64 * obj.startFrame) + "px " + followMe.imageDefintion.fan)
+            imageDefined.css("top", (parseFloat(obj.y) - 2) * 64 + "px")
+            imageDefined.css("height", "192px")
+            imageDefined.attr("class", "surface fan")
+        }
+
+        imageDefined.appendTo($("#game"))
+    };
+
+    function physicalDisplayAnimationForGameObject(obj, iduse)
+    {
+        if (obj.animate === true) {
+            var frameCount = parseFloat(obj.endFrame) - parseFloat(obj.startFrame)
+            if (parseFloat(obj.checkpoint) === 0) { rateDefined = 200 }
+            var animationDefined = new followMe.animation(
+                {
+
+                    url: "/images/spriteSheet.png", numberOfFrames: frameCount,
+                    currentFrame: obj.startFrame, startFrame: obj.startFrame, spriteY: obj.spriteY * 64
+                });
+            setInterval(function () {
+                animationDefined.currentFrame += 1
+                if (animationDefined.currentFrame - animationDefined.startFrame > animationDefined.numberOfFrames) {
+                    animationDefined.currentFrame = animationDefined.startFrame
+                }
+                setFrame(iduse, animationDefined);
+
+                setSpeed(iduse, animationDefined, animationDefined.pace + 1);
+            }, animationDefined.rate)
+        }
+    }
+
 });

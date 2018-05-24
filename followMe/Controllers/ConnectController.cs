@@ -45,6 +45,7 @@ namespace followMe.Controllers
             if (model.left > 0) { userToQuery.left = model.left; }
             if (model.enter > 0) { userToQuery.enter = model.enter; }
             if (model.special > 0) { userToQuery.special = model.special; }
+            if (model.build > 0) { userToQuery.build = model.build; }
 
             if (model.difficulty > 0)
             {
