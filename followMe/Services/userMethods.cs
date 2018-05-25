@@ -328,5 +328,24 @@ namespace followMe.Services
             return returnThis;
 
         }
+
+        public void updateUserSettings(userDefined myModel, string username)
+        {
+            bool hasErrored = false;
+            try
+            {
+                var db = deploy.getDB();
+                db.GetCollection<userDefined>("userDefined").Save(myModel);
+            }
+            catch
+            {
+                hasErrored = true;
+                Clients.All.returnSettingsSave("failure:username");
+            }
+            if (!hasErrored)
+            {
+                Clients.All.returnSettingsSave("success:username");
+            }
+        }
     }
 }
