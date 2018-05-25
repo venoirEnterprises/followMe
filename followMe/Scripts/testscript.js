@@ -166,11 +166,6 @@ $(document).ready(function () {
         });
         followMe.imagesToPreload = [];
         //add an image tp the list of preload
-
-        followMe.userServicesDefined.client.getmDB = function (name, title) {
-            $("#mDB").append($("<p id=" + name + ">" + name + " : " + title + "</p>"))
-            $("#namelist").append($("<option>" + name + "</option>"))
-        }
     }
 
     followMe.x = function (divId, position) {

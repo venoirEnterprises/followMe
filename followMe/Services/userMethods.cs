@@ -4,27 +4,24 @@ using MongoDB.Driver;
 using MongoDB.Driver.Builders;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Net;
-using System.Text;
 
 namespace followMe.Services
 {
     public class userMethods : Hub
     {
         multiplayerServices multi = new multiplayerServices();
-        deployment deploy = new deployment();       
+        deployment deploy = new deployment();
 
         public void updateAccessTime(string action, string username)
         {
             var db = deploy.getDB();
             var users = db.GetCollection<userDefined>("userDefined");
-                userDefined userToUpdate = users.FindOne(Query.EQ("username", username));
+            userDefined userToUpdate = users.FindOne(Query.EQ("username", username));
             switch (action)
             {
                 case "newAccess":
-                     userToUpdate.lastActive = DateTime.Now;
+                    userToUpdate.lastActive = DateTime.Now;
                     break;
                 case "exit":
                     userToUpdate.lastLoggedOut = DateTime.Now;
@@ -88,40 +85,7 @@ namespace followMe.Services
                 }
             }
         }
-        public string manipulateName(string existingName, string newname, string method, string username)
-        {
-            username = changeStringDots(username, false);
-            deployment deploy = new deployment();
-            var server = deploy.getMongoClient();
-            var mongo = server.GetServer();
-            var db = mongo.GetDatabase("followme");
-            var collection = db.GetCollection("stuff");
-            var usertoupdate = collection.FindOne(Query.EQ("name", existingName));
-            switch (method)
-            {
-                case "update":
-                    usertoupdate["name"] = newname;
-                    collection.Save(usertoupdate);
-                    Clients.All.userMethods(existingName, newname);
-                    break;
-                case "delete":
-                    collection.Remove(Query.EQ("name", existingName));
-                    //collection.Save(usertoupdate);
-                    Clients.All.userMethods(existingName, existingName, method);
-                    break;
-                case "insert":
-                    var nameInserted = new QueryDocument("name", existingName);
-                    nameInserted["title"] = "plumber";
-                    collection.Insert(nameInserted);
-                    collection.Save(nameInserted);
-                    Clients.All.userMethods(existingName, existingName, method);
-                    break;
-                default:
-                    Clients.All.userMethods(existingName, "Unknown");
-                    break;
-            }
-            return method;
-        }
+
         public void getUserStats(bool leader, string username, string levelName)
         {
             deployment deploy = new deployment();
@@ -147,7 +111,7 @@ namespace followMe.Services
                     {
                         if (levelName != "" && statsToQuery != null)
                         {
-                            item.numberToDo = getTypeOfObjectForLevel(db, levelName, "EndingTheBeginning", "bonuses");  //As of 1.12.5 there is no concept of worlds yet [would need regions too]                   
+                            item.numberToDo = getTypeOfObjectForLevel(levelName, "EndingTheBeginning", "bonuses");  //As of 1.12.5 there is no concept of worlds yet [would need regions too]                   
                         }
                         showPrizes = false;
                     }
@@ -267,7 +231,7 @@ namespace followMe.Services
         }
         public void updateXPLogForUser(string username, string XPStatsAction, string XPStatsType, string levelName)
         {
-            username = changeStringDots(username, false);            
+            username = changeStringDots(username, false);
             deployment deploy = new deployment();
             var db = deploy.getDB();
             var person = db.GetCollection<userDefined>("userDefined");
@@ -277,7 +241,7 @@ namespace followMe.Services
             var personStatToAdd = db.GetCollection<xpStatsUserLog>("xpStatsUserLog");
             var userLogForXP = personStatToAdd.FindOne(Query.And(Query.EQ("actionType", XPStatsAction + XPStatsType), Query.EQ("username", username)));
 
-            if (statToLog.oncePerLevel && (userLogForXP == null ||userLogForXP.nonSpecialDefinition != levelName))
+            if (statToLog.oncePerLevel && (userLogForXP == null || userLogForXP.nonSpecialDefinition != levelName))
             {
                 userLogForXP = null;// for now until world names, 
             }
@@ -332,13 +296,14 @@ namespace followMe.Services
 
                 }
             }
-                return returnString;
-            
+            return returnString;
+
         }
 
-        public int getTypeOfObjectForLevel(MongoDatabase db, string levelName, string worldName, string objectType)//as of 1.12.4 no "worlds"
+        public int getTypeOfObjectForLevel(string levelName, string worldName, string objectType)//as of 1.12.4 no "worlds"
         {
             int returnThis = 0;
+            var db = deploy.getDB();
             levelList levelDefinition = db.GetCollection<levelList>("levelList").FindOne(Query.And(Query.EQ("fullName", levelName), Query.EQ("worldName", worldName)));
             playerProgressInLevel playerProg = db.GetCollection<playerProgressInLevel>("playerProgressInLevel").FindOne(Query.And(Query.EQ("levelIdentifier", levelName), Query.EQ("worldName", worldName)));
 
@@ -360,8 +325,8 @@ namespace followMe.Services
                         break;
                 }
             }
-                return returnThis;
-            
+            return returnThis;
+
         }
     }
 }

@@ -61,11 +61,11 @@ namespace followMe.Services
 
             return false;
         }
-        public void setMplayer(bool multi)
-        {
-            var context = GlobalHost.ConnectionManager.GetHubContext<userMethods>();
-            context.Clients.All.setMultiplayer(multi);
-        }
+        //public void setMplayer(bool multi)
+        //{
+        //    var context = GlobalHost.ConnectionManager.GetHubContext<userMethods>();
+        //    context.Clients.All.setMultiplayer(multi);
+        //}
         public void registerUser(string username, MongoCollection loginLog, string password, bool second, string email, bool isVenoir, bool online)
         {
             deployment deploy = new deployment();
