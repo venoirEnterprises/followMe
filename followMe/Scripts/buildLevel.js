@@ -58,7 +58,7 @@
     followMe.levelServicesDefined.client.addImageFromServer = function (serveranimation, type, username, canAccess, totalLevelToDo, playerDone, countGameObjects) {//last param specifically for teleports                
         countLocalObjects += 1;
         addGameObject(serveranimation);
-        if (type === "surface" || type === "enemies" || type =="checkpoint") {
+        if (type === "surface" || type === "enemies" || type === "checkpoint") {
             createDisplayForInternalClass(serveranimation._id, type)
         }
         followMe.surfaces = getObjectsByType("surface",false);
@@ -402,7 +402,9 @@
                     localStorage.getItem("username"),
                     followMe.helpUsername
                 );
-
+                if (followMe.helpUsername !== null) {
+                    followMe.memServer.server.updateAccessTime(username, "newAccess")
+                }
 
                 followMe.levelServicesDefined.server.sendMessage("test");
             }

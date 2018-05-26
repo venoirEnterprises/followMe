@@ -136,7 +136,7 @@ $(document).ready(function () {
     if (url.search("Welcome") === -1 && lengthSlash > 3) {
         $.connection.hub.start("~/signalr").done(function () {
             followMe.memServer.server.getWeapons();
-
+            
             followMe.memServer.server.getUserStats(true, localStorage.getItem("username"), $("#welcome").text())
         });
     }

@@ -1,14 +1,12 @@
 ﻿using followMe.Models;
-using Microsoft.AspNet.SignalR;
 using MongoDB.Driver;
 using MongoDB.Driver.Builders;
 using System.Linq;
 
 namespace followMe.Services
 {
-    public class levelServices : Hub
+    public class levelServices : advancedServices
     {
-        userMethods user = new userMethods();
         authServices auth = new authServices();
         communityServices comm = new communityServices();
         deployment deploy = new deployment();
@@ -26,29 +24,6 @@ namespace followMe.Services
 
 
 
-        public levelList redirectToWorld(int worldName, string levelName, string username)
-        {
-            var db = deploy.getDB();
-            var levels = db.GetCollection<levelList>("levelList");
-            if (levelName == "" || levelName == null)//Come from JS
-            {
-                userDefined userToQuery = db.GetCollection<userDefined>("userDefined").FindOne(Query.EQ("username", username));
-                var world = levels.FindOne(Query.And(
-                    Query.EQ("worldNumber", userToQuery.world),
-                    Query.EQ("identifier", userToQuery.level)
-                    ));
-                return world;
-            }
-            else
-            {
-                var world = levels.FindOne(Query.And(
-                    Query.EQ("worldNumber", worldName),
-                    Query.EQ("identifier", levelName)
-                    ));
-                return world;
-            }
-        }
-
         public string getImages(string level, string username, string helpUsername)
         {
             bool usingHelp = false;
@@ -58,17 +33,12 @@ namespace followMe.Services
                 username = helpUsername;
                 usingHelp = true;
             }
-            var username2 = user.changeStringDots(username, false);
+            var username2 = changeStringDots(username, false);
             level = level + "ImagesDefinition";
-            deployment deploy = new deployment();
-            var server = deploy.getMongoClient();
+            var server = getMongoClient();
             var mongo = server.GetServer();
             var db = mongo.GetDatabase("followme");
 
-            if (usingHelp == false)
-            {
-                user.updateAccessTime("newAccess", username2);
-            }
             if (level != "ImagesDefinition")
             {
                 var person = db.GetCollection<userDefined>("userDefined");
@@ -131,9 +101,8 @@ namespace followMe.Services
         }
         public void updateCheckpoint(string username, int index, string levelname, int oldCheckpoint, string levelUnlocked, float timeToFinish, bool wasInvincible)
         {
-            var username2 = user.changeStringDots(username, false);
-            deployment deploy = new deployment();
-            var server = deploy.getMongoClient();
+            var username2 = changeStringDots(username, false);
+            var server = getMongoClient();
             var mongo = server.GetServer();
             var db = mongo.GetDatabase("followme");
 
@@ -188,12 +157,11 @@ namespace followMe.Services
         }
         public void redirectFromTeleport(string username, int worldNumber, string levelNumber, userDefined player)
         {
-            deployment deploy = new deployment();
-            var db = deploy.getDB();
+            var db = getDB();
             var levels = db.GetCollection<levelList>("levelList");
             var users = db.GetCollection<userDefined>("userDefined");
 
-            var userToUpdate = users.FindOneAs<userDefined>(Query.EQ("username", user.changeStringDots(username, true)));
+            var userToUpdate = users.FindOneAs<userDefined>(Query.EQ("username", changeStringDots(username, true)));
             userToUpdate.levelPlayTime = 0;
             users.Save(userToUpdate);
 
@@ -203,7 +171,7 @@ namespace followMe.Services
                 ));
 
 
-            comm.addPlayerProgress(user.changeStringDots(username, true), world.fullName, world.worldName);
+            comm.addPlayerProgress(changeStringDots(username, true), world.fullName, world.worldName);
             Clients.All.newLevel(world.fullName, world.worldName, username, true);
         }
     }

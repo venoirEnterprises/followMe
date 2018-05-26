@@ -1,5 +1,4 @@
 ﻿using followMe.Models;
-using Microsoft.AspNet.SignalR;
 using MongoDB.Driver;
 using MongoDB.Driver.Builders;
 using System;
@@ -8,15 +7,14 @@ using System.Linq;
 
 namespace followMe.Services
 {
-    public class userMethods : Hub
+    public class userMethods : advancedServices
     {
-        multiplayerServices multi = new multiplayerServices();
-        deployment deploy = new deployment();
-        levelServices level = new levelServices();
+        //multiplayerServices multi = new multiplayerServices();        
+        //levelServices level = new levelServices();
 
         public void updateAccessTime(string action, string username)
         {
-            var db = deploy.getDB();
+            var db = getDB();
             var users = db.GetCollection<userDefined>("userDefined");
             userDefined userToUpdate = users.FindOne(Query.EQ("username", username));
             switch (action)
@@ -35,7 +33,7 @@ namespace followMe.Services
         {
             username = changeStringDots(username, false);
             updateAccessTime("exit", username);
-            var server = deploy.getMongoClient();
+            var server = getMongoClient();
             var mongo = server.GetServer();
             var db = mongo.GetDatabase("followme");
             var users = db.GetCollection<userDefined>("userDefined");
@@ -50,8 +48,7 @@ namespace followMe.Services
         }
         public void getWeapons(string username)
         {
-            deployment deploy = new deployment();
-            var server = deploy.getMongoClient();
+            var server = getMongoClient();
             var mongo = server.GetServer();
             var db = mongo.GetDatabase("followme");
             //using (mongo.RequestStart(db))
@@ -67,8 +64,7 @@ namespace followMe.Services
         public void getWeapon(string username, bool online, bool community)
         {
             var username2 = changeStringDots(username, false);
-            deployment deploy = new deployment();
-            var server = deploy.getMongoClient();
+            var server = getMongoClient();
             var mongo = server.GetServer();
             var db = mongo.GetDatabase("followme");
             //using (mongo.RequestStart(db))
@@ -89,8 +85,7 @@ namespace followMe.Services
 
         public void getUserStats(bool leader, string username, string levelName)
         {
-            deployment deploy = new deployment();
-            var server = deploy.getMongoClient();
+            var server = getMongoClient();
             var mongo = server.GetServer();
             var db = mongo.GetDatabase("followme");
             var person = db.GetCollection<userDefined>("userDefined");
@@ -154,8 +149,7 @@ namespace followMe.Services
         public void updateHealth(string username, int newhealth, int oldHealth, bool dying, int maxLives)
         {
             username = changeStringDots(username, false);
-            deployment deploy = new deployment();
-            var db = deploy.getDB();
+            var db = getDB();
             var person = db.GetCollection<userDefined>("userDefined");
             var levelList = db.GetCollection<levelList>("levelList");
             var userToQuery = person.FindOne(Query.EQ("username", username));
@@ -185,8 +179,7 @@ namespace followMe.Services
         public void gameOver(string username, int lifeCount, int maxHealth)
         {
             username = changeStringDots(username, false);
-            deployment deploy = new deployment();
-            var db = deploy.getDB();
+            var db = getDB();
             var person = db.GetCollection<userDefined>("userDefined");
             var userToQuery = person.FindOne(Query.EQ("username", username));
             userToQuery.lives = lifeCount;
@@ -197,8 +190,7 @@ namespace followMe.Services
         public void surrender(string username)
         {
             username = changeStringDots(username, false);
-            deployment deploy = new deployment();
-            var db = deploy.getDB();
+            var db = getDB();
             var person = db.GetCollection<userDefined>("userDefined");
             var userToQuery = person.FindOne(Query.EQ("username", username));
             userToQuery.checkpoint = 0;
@@ -208,8 +200,7 @@ namespace followMe.Services
         public void updateXPorLevel(string username, int xp)
         {
             username = changeStringDots(username, false);
-            deployment deploy = new deployment();
-            var db = deploy.getDB();
+            var db = getDB();
             var person = db.GetCollection<userDefined>("userDefined");
             var userToQuery = person.FindOne(Query.EQ("username", username));
             var xptoRankAll = db.GetCollection<xpToRank>("xpToRank");
@@ -233,8 +224,7 @@ namespace followMe.Services
         public void updateXPLogForUser(string username, string XPStatsAction, string XPStatsType, string levelName)
         {
             username = changeStringDots(username, false);
-            deployment deploy = new deployment();
-            var db = deploy.getDB();
+            var db = getDB();
             var person = db.GetCollection<userDefined>("userDefined");
             var userToQuery = person.FindOne(Query.EQ("username", username));
             var statsForXPAll = db.GetCollection<statsForXP>("xpStats");
@@ -274,37 +264,12 @@ namespace followMe.Services
             }
         }
 
-        public string changeStringDots(string email, bool recover)
-        {
-            var returnString = "";
-            var checkForThis = ".";
-            var replaceCharacter = ",";
-            if (email != null)
-            {
-                for (int i = 0; i < email.Length; i++)
-                {
-                    var characterToCheck = email.Substring(i, 1);
-                    var newCharacter = "";
-                    if (characterToCheck == checkForThis)
-                    {
-                        newCharacter = replaceCharacter;
-                    }
-                    else
-                    {
-                        newCharacter = characterToCheck;
-                    }
-                    returnString += newCharacter;
 
-                }
-            }
-            return returnString;
-
-        }
 
         public int getTypeOfObjectForLevel(string levelName, string worldName, string objectType)//as of 1.12.4 no "worlds"
         {
             int returnThis = 0;
-            var db = deploy.getDB();
+            var db = getDB();
             levelList levelDefinition = db.GetCollection<levelList>("levelList").FindOne(Query.And(Query.EQ("fullName", levelName), Query.EQ("worldName", worldName)));
             playerProgressInLevel playerProg = db.GetCollection<playerProgressInLevel>("playerProgressInLevel").FindOne(Query.And(Query.EQ("levelIdentifier", levelName), Query.EQ("worldName", worldName)));
 
@@ -335,7 +300,7 @@ namespace followMe.Services
             bool hasErrored = false;
             try
             {
-                var db = deploy.getDB();
+                var db = getDB();
                 db.GetCollection<userDefined>("userDefined").Save(myModel);
             }
             catch
@@ -351,11 +316,11 @@ namespace followMe.Services
 
         public void navigateToGame(string username)
         {
-            var db = deploy.getDB();
+            var db = getDB();
             var levels = db.GetCollection<levelList>("levelList");
             var person = db.GetCollection<userDefined>("userDefined");
             var userToQuery = person.FindOne(Query.EQ("username", username));
-            levelList world = level.redirectToWorld(userToQuery.world, userToQuery.level, "");//username should just comefrom cient
+            levelList world = redirectToWorld(userToQuery.world, userToQuery.level, "");//username should just comefrom cient
             Clients.All.returnGameNavigation(world.fullName, world.worldName);
         }
     }

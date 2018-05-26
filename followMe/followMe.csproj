@@ -238,6 +238,7 @@
     <Compile Include="Models\progressModels.cs" />
     <Compile Include="Models\userDefined.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\advancedServices.cs" />
     <Compile Include="Services\authServices.cs" />
     <Compile Include="Services\communityServices.cs" />
     <Compile Include="Services\competingServices.cs" />
