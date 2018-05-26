@@ -3,8 +3,11 @@
         followMe.memServer.server.navigateToGame(localStorage.getItem("username"))
     })
 
-    followMe.memServer.client.returnGameNavigation = function (level, world)
+    followMe.memServer.client.returnGameNavigation = function (level, world, username)
     {
-        window.location.href = "/"+ world +"/" + level
+        if (localStorage.getItem("username") === username)
+        {
+            window.location.href = "/" + world + "/" + level
+        }        
     }
 })

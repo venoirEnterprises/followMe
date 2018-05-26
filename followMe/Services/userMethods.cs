@@ -321,7 +321,7 @@ namespace followMe.Services
             var person = db.GetCollection<userDefined>("userDefined");
             var userToQuery = person.FindOne(Query.EQ("username", username));
             levelList world = redirectToWorld(userToQuery.world, userToQuery.level, "");//username should just comefrom cient
-            Clients.All.returnGameNavigation(world.fullName, world.worldName);
+            Clients.All.returnGameNavigation(world.fullName, world.worldName, username);
         }
     }
 }
