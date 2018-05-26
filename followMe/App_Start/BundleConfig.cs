@@ -60,7 +60,9 @@ namespace followMe
                 "~/Scripts/keyboard.js",
                 "~/Scripts/Community.js",
                 "~/Scripts/Multiplayer.js",
-                "~/Scripts/Angular.js"
+                "~/Scripts/Angular.js",
+                "~/Scripts/pageDesign.js",
+                "~/Scripts/navigation.js"
                 ));
         }
     }

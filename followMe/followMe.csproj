@@ -371,6 +371,8 @@
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="Scripts\Multiplayer.js" />
+    <Content Include="Scripts\navigation.js" />
+    <Content Include="Scripts\pageDesign.js" />
     <Content Include="Scripts\playerDesign.js" />
     <Content Include="Scripts\playerDetails.js" />
     <Content Include="Scripts\playerEnvironment.js" />
@@ -405,8 +407,8 @@
     <Content Include="Views\Connect\Welcome.cshtml" />
     <Content Include="Views\Connect\design.cshtml" />
     <Content Include="Views\Connect\levelSelect.cshtml" />
-    <Content Include="Views\Connect\Options.cshtml" />
-    <Content Include="Views\Connect\achievementsAwards.cshtml" />
+    <Content Include="Views\Shared\_options.cshtml" />
+    <Content Include="Views\Connect\achievements.cshtml" />
     <Content Include="Scripts\jquery.mobile-1.4.5.min.map" />
     <Content Include="Views\Community\players.cshtml" />
     <Content Include="Views\Community\competitions.cshtml" />
@@ -414,6 +416,7 @@
     <Content Include="Views\Connect\plan.cshtml" />
     <Content Include="Scripts\tsconfig.json" />
     <Content Include="Scripts\userSettings.js.map" />
+    <Content Include="Views\Shared\_playerOptions.cshtml" />
     <None Include="Views\EndingTheBeginning\theEnemiesAreComing.cshtml" />
     <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />

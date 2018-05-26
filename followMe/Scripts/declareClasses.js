@@ -18,15 +18,25 @@ var GameObject = (function () {
 }());
 var Player = (function (_super) {
     __extends(Player, _super);
-    function Player(health, maxHealth, lives, username, local) {
+    function Player(health, maxHealth, lives, username, local, 
+        //community start
+        venoir, online, hasSurvived, difficulty) {
         var _this = _super.call(this) || this;
         _this.health = health;
         _this.maxHealth = maxHealth;
         _this.lives = lives;
         _this.username = username;
         _this.local = local;
+        _this.venoir = venoir;
+        _this.online = online;
+        _this.hasSurvived = hasSurvived;
+        _this.difficulty = difficulty;
         return _this;
     }
+    Player.prototype.setHealth = function (maxHealth, currentHealth) {
+        this.maxHealth = maxHealth;
+        this.health = currentHealth;
+    };
     return Player;
 }(GameObject));
 var PassiveGameObject = (function (_super) {

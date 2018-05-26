@@ -96,7 +96,7 @@ $(document).ready(function () {
                 weaponHarmMultiplier: 0.1,
                 jumpHeightMultiplier: 0.1,
                 personType: -1,
-                difficulty: -1,
+                difficulty: 1,//in case updating fails
                 currentSurfaceID : ""
             }
         $.extend(this, defaultValues, options);

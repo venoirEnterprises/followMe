@@ -40,7 +40,8 @@
                     <a href="~/Community/players" class="commPlayer">Community - Players  |  </a>
                     <a href="~/Community/competitions" class="commPlayer">Community - Competitions  |  </a>
                     <a href="" id="firstdesign">Design Leader  |  </a>
-                    <a href="~/Connect/options">Options and Achievements  |  </a>
+                    <a href="" id="optionsToggle">Options |</a>
+                    <a href="~/Connect/achievements">Achievements  |  </a>
                     <a href="~/Connect/Plan">Planning  |  </a>                    
                     <input type="submit" id="disconnect"value="Quit"/>                    
                     @RenderSection("header", required: false)
@@ -67,7 +68,12 @@
 
                 }
             </aside>
-
+            @if (ViewBag.isGame == "yes")
+            {
+            <div class="row" id="optionsDetails">
+                @Html.Partial("_options")
+            </div>
+            }
             <div data-role="page" id="game">
                 @RenderBody()
             </div>

@@ -23,54 +23,11 @@ namespace followMe.Controllers
 
         //GET: /options/
         [HttpGet]
-        public ActionResult options()
+        public ActionResult achievements(achievementsAwardsViewModel model)
         {
             ViewBag.isGame = "no";
-            return View();
+            return View(model);
         }
-        [HttpPost]
-        public ActionResult options(userDefined model)
-        {
-            var db = deploy.getDB();
-            var levels = db.GetCollection<levelList>("levelList");
-            var person = db.GetCollection<userDefined>("userDefined");
-            var userToQuery = person.FindOne(Query.EQ("username", userChange.changeStringDots(model.username, false)));
-            //We need to check the model isn't passing 0 because it takes a second for the UI to load the actual parameters with the dropdowns and so on
-            //Or the UI might not keep up
-            //Otherwise submit as normal
-            //If it is 0, continue with the model
-            if (model.up > 0) { userToQuery.up = model.up; }
-            if (model.right > 0) { userToQuery.right = model.right; }
-            if (model.surrender > 0) { userToQuery.surrender = model.surrender; }
-            if (model.left > 0) { userToQuery.left = model.left; }
-            if (model.enter > 0) { userToQuery.enter = model.enter; }
-            if (model.special > 0) { userToQuery.special = model.special; }
-            if (model.build > 0) { userToQuery.build = model.build; }
-
-            if (model.difficulty > 0)
-            {
-                userToQuery.difficulty = model.difficulty;
-            }
-            userToQuery.isVenoir = model.isVenoir;
-            userToQuery.online = model.online;
-            if (model.online)
-            {
-                userToQuery.email = model.email;
-                //Community
-                userToQuery.friendlyFire = model.friendlyFire;
-                userToQuery.socialOnly = model.socialOnly;
-                userToQuery.rankOnline = model.rankOnline;
-                userToQuery.shareXPInHelp = model.shareXPInHelp;
-                //Community end
-            }
-
-            person.Save(userToQuery);
-
-            levelList world = level.redirectToWorld(userToQuery.world, userToQuery.level, "");//username should just comefrom cient
-
-            return RedirectToAction(world.fullName, world.worldName);
-        }
-
         //GET: /levelSelect/      
         public ActionResult levelSelect()
         {

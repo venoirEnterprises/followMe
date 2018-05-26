@@ -3,7 +3,7 @@ function typeScriptFile() {
     console.log("typeScripthit");
 }
 var gameProperties = new FollowMeDefinition();
-function getObjectsByType(type) {
+function getObjectsByType(type, online) {
     switch (type.toUpperCase()) {
         case "SURFACE":
             return gameProperties.getSurfaces();
@@ -19,6 +19,13 @@ function getObjectsByType(type) {
             return gameProperties.getTeleports();
         case "CAVE":
             return gameProperties.getCaves();
+        case "PLAYER":
+            if (online === false) {
+                return gameProperties.getPlayer();
+            }
+            else {
+                return gameProperties.getOnlinePlayers();
+            }
     }
 }
 function getCheckpointByPlayerCheckpoint(identifier) {
@@ -70,6 +77,12 @@ function addGameObject(ObjIncoming) {
             newEnemy.setHealth(ObjIncoming.maxHealth, ObjIncoming.maxHealth);
             newEnemy.setAnimationProperties(ObjIncoming.animate, ObjIncoming.startFrame, ObjIncoming.endFrame, ObjIncoming.type);
             gameProperties.addEnemy(newEnemy);
+            break;
+        case "player":
+            var newPlayer = new Player(ObjIncoming.health, ObjIncoming.maxHealth, ObjIncoming.lives, ObjIncoming.username, ObjIncoming.local, ObjIncoming.venoir, ObjIncoming.online, ObjIncoming.hasSurvived, ObjIncoming.difficulty);
+            newPlayer.setHealth(ObjIncoming.maxHealth, ObjIncoming.health);
+            window.console.log(newPlayer);
+            gameProperties.addPlayer(newPlayer);
             break;
     }
 }

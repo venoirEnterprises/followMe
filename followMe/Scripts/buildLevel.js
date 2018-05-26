@@ -61,9 +61,9 @@
         if (type === "surface" || type === "enemies" || type =="checkpoint") {
             createDisplayForInternalClass(serveranimation._id, type)
         }
-        followMe.surfaces = getObjectsByType("surface");
-        followMe.enemies = getObjectsByType("enemies");
-        followMe.checkpoints = getObjectsByType("checkpoint");
+        followMe.surfaces = getObjectsByType("surface",false);
+        followMe.enemies = getObjectsByType("enemies",false);
+        followMe.checkpoints = getObjectsByType("checkpoint",false);
 
 
         if (username === localStorage.getItem("username")) {
@@ -606,7 +606,6 @@
                 break;
             case "checkpoint":
                 imageDefined.attr("alt", obj.checkpoint);
-                console.log(obj.checkpoint);
                 break;
         }
         if (obj.fan === true) {

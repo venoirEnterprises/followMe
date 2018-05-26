@@ -77,46 +77,50 @@
             if (isPrimary === false) {
                 identifier = 2;
             }
-            followMe.players[identifier] = new followMe.player({
-                head: object.head,
-                chest: object.chest,
-                legs: object.legs,
-                username: object.username,
-                health: object.health,//remaining
-                maxHealth: object.maxHealth,
-                lives: object.lives,
-                //keyboard
-                up: object.up,
-                left: object.left,
-                right: object.right,
-                surrender: object.surrender,
-                enter: object.enter,
-                special: object.special,
-                build : object.build,
-                rank: object.rank,
-                pace: xpStats.pace,
-                weaponHarmMultiplier: xpStats.weaponHarmMultiplier,
-                jumpHeightMultiplier: xpStats.jumpHeightMultiplier,
-                XP: object.XP,
-                maxLives: xpStats.numberOfLives,
-                caveName: "",
-                personType: object.personType,
-                //ABILITIES
-                usedStealth: 0,
-                playTime: object.levelPlayTime,
-                //COMMUNITY
-                venoir: object.isVenoir,
-                online: object.online,
-                hasSurvived: 1,
-                difficulty: object.difficulty,
-                //SOCIAL
-                friendlyFire: object.friendlyFire,
-                socialOnly: object.socialOnly,
-                rankOnline: object.rankOnline,
-                shareXPInHelp: object.shareXPInHelp,
-                currentSurfaceID : 0
-            });
-
+            object.type = "player";
+            window.console.log("81, playerDesign");
+            window.console.log(object);
+            addGameObject(object);
+            followMe.players2 = getObjectsByType("player");
+                followMe.players[identifier] = new followMe.player({
+                    head: object.head,
+                    chest: object.chest,
+                    legs: object.legs,
+                    username: object.username,
+                    health: object.health,//remaining
+                    maxHealth: object.maxHealth,
+                    lives: object.lives,
+                    //keyboard
+                    up: object.up,
+                    left: object.left,
+                    right: object.right,
+                    surrender: object.surrender,
+                    enter: object.enter,
+                    special: object.special,
+                    build: object.build,
+                    rank: object.rank,
+                    pace: xpStats.pace,
+                    weaponHarmMultiplier: xpStats.weaponHarmMultiplier,
+                    jumpHeightMultiplier: xpStats.jumpHeightMultiplier,
+                    XP: object.XP,
+                    maxLives: xpStats.numberOfLives,
+                    caveName: "",
+                    personType: object.personType,
+                    //ABILITIES
+                    usedStealth: 0,
+                    playTime: object.levelPlayTime,
+                    //COMMUNITY
+                    venoir: object.isVenoir,
+                    online: object.online,
+                    hasSurvived: 1,
+                    difficulty: object.difficulty,
+                    //SOCIAL
+                    friendlyFire: object.friendlyFire,
+                    socialOnly: object.socialOnly,
+                    rankOnline: object.rankOnline,
+                    shareXPInHelp: object.shareXPInHelp,
+                    currentSurfaceID: 0
+                });
 
             if (object.isVenoir) {
                 $(".commPlayer").show();
@@ -321,4 +325,6 @@
         $("#competeForm").show();
         $("#compError").attr("class", "required");
     }
+
+    
 })

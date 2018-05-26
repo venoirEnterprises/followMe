@@ -19,7 +19,17 @@ class Player extends GameObject {
         public lives: number,
         public username: string,
         public local: boolean,
+        //community start
+        public venoir: boolean,
+        public online: boolean,
+        public hasSurvived: boolean,
+        public difficulty: number,
+        //community end
     ) { super() }
+    setHealth(maxHealth, currentHealth) {
+        this.maxHealth = maxHealth;
+        this.health = currentHealth;
+    }
 }
 
 abstract class PassiveGameObject extends GameObject {

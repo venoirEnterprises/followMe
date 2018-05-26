@@ -12,6 +12,7 @@ namespace followMe.Services
     {
         multiplayerServices multi = new multiplayerServices();
         deployment deploy = new deployment();
+        levelServices level = new levelServices();
 
         public void updateAccessTime(string action, string username)
         {
@@ -346,6 +347,16 @@ namespace followMe.Services
             {
                 Clients.All.returnSettingsSave("success:username");
             }
+        }
+
+        public void navigateToGame(string username)
+        {
+            var db = deploy.getDB();
+            var levels = db.GetCollection<levelList>("levelList");
+            var person = db.GetCollection<userDefined>("userDefined");
+            var userToQuery = person.FindOne(Query.EQ("username", username));
+            levelList world = level.redirectToWorld(userToQuery.world, userToQuery.level, "");//username should just comefrom cient
+            Clients.All.returnGameNavigation(world.fullName, world.worldName);
         }
     }
 }
