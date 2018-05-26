@@ -370,3 +370,9 @@ button:hover, a:hover, input[type=button]:hover, input[type=submit]:hover {
     top: 8px;
 }
 /*Usability testing 1.4.1 END*/
+footer {
+    font-size:x-large;
+    color: darkgreen;
+    font-weight:800;
+    margin-top:2em;
+}
