@@ -80,8 +80,10 @@ function addGameObject(ObjIncoming) {
             break;
         case "player":
             var newPlayer = new Player();
-            newPlayer.setCoreFields(ObjIncoming.difficulty, ObjIncoming.checkpoint, ObjIncoming.xp, ObjIncoming.rank, ObjIncoming._id);
-            newPlayer.setDisplayStats(ObjIncoming.maxHealth, ObjIncoming.health, ObjIncoming.chest, ObjIncoming.head, ObjIncoming.legs, ObjIncoming.lives, ObjIncoming.weaponID, ObjIncoming.personType);
+            newPlayer.setCoreFields(ObjIncoming.difficulty, ObjIncoming.checkpoint, ObjIncoming.xp, ObjIncoming.rank, ObjIncoming._id, ObjIncoming.username);
+            newPlayer.setCommunityFields(ObjIncoming.isVenoir, ObjIncoming.hasSurvived, ObjIncoming.email, ObjIncoming.friendlyFire, ObjIncoming.online, ObjIncoming.shareXPInHelp, ObjIncoming.socialOnly, ObjIncoming.username);
+            newPlayer.setDisplayFields(ObjIncoming.maxHealth, ObjIncoming.health, ObjIncoming.chest, ObjIncoming.head, ObjIncoming.legs, ObjIncoming.lives, ObjIncoming.weaponID, ObjIncoming.personType);
+            newPlayer.setProgressFields(ObjIncoming.levelPlayTime, ObjIncoming.level, ObjIncoming.world);
             gameProperties.addPlayer(newPlayer);
             break;
     }

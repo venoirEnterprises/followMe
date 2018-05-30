@@ -18,17 +18,14 @@ class Player extends GameObject {
     public difficulty: number = 1;
     public checkpoint: number = 0;
     public xp: number = 0;
-    public rank: number = 0;
+    public rank: number = 0
     //community start
     public isVenoir: boolean = false;
     public local: boolean = true;
     public hasSurvived: boolean = false;
     public email: string;
     public friendlyFire: boolean = false;
-    public lastActive: Date;
-    public lastLoggedOut: Date;
     public online: boolean = false;
-    public rankOnline: boolean = false;
     public shareXPInHelp: boolean = false;
     public socialOnly: boolean = false;
     public username: string;
@@ -58,16 +55,31 @@ class Player extends GameObject {
     public world: number = 0
     //progress end
 
-    setCoreFields(difficulty, checkpoint, xp, rank, _id)
+
+    //setters start
+    setCoreFields(difficulty, checkpoint, xp, rank, _id, username)
     {
         this.difficulty = difficulty;
         this.checkpoint = checkpoint;
         this.xp = xp;
         this.rank = rank;
         this._id = _id//unique for array discovery in addPlayer() []
+        this.username = username;
     }
 
-    setDisplayStats(maxHealth, currentHealth, chest, head, legs, lives, weaponID, personType) {
+    setCommunityFields(isVenoir, hasSurvived, email, friendlyFire, online, shareXPInHelp, socialOnly,username)
+    {
+        this.isVenoir = isVenoir;
+        this.local = this.username == username ? true : false;
+        this.hasSurvived = hasSurvived;
+        this.email = email;
+        this.friendlyFire = friendlyFire;
+        this.online = online;
+        this.shareXPInHelp = shareXPInHelp;
+        this.socialOnly = socialOnly;        
+    }
+
+    setDisplayFields(maxHealth, currentHealth, chest, head, legs, lives, weaponID, personType) {
         this.maxHealth = maxHealth;
         this.health = currentHealth;
         this.chest = chest;
@@ -78,6 +90,18 @@ class Player extends GameObject {
         this.personType = personType;
     }
 
+    setProgressFields(levelPlayTime, level, world)
+    {
+        this.levelPlayTime = levelPlayTime;
+        this.level = level;
+        this.world = world;
+    }
+    //setters end
+    //getters start
+    getUsername()
+    {
+        return this.username;
+    }
 }
 
 abstract class PassiveGameObject extends GameObject {
@@ -250,8 +274,8 @@ class FollowMeDefinition {
         public Checkpoints: Array<Checkpoint> = new Array<Checkpoint>(),
         public Teleports: Array<Teleport> = new Array<Teleport>(),
         public Caves: Array<Cave> = new Array<Cave>(),
-        public localPlayers: Array<Player> = new Array<Player>().filter(m => m.local === true),
-        public onlinePlayers: Array<Player> = new Array<Player>().filter(m => m.local === true),
+        public localPlayers: Array<Player> = new Array<Player>(),
+        public onlinePlayers: Array<Player> = new Array<Player>(),
     ) { }
 
     //add start
@@ -263,7 +287,7 @@ class FollowMeDefinition {
     addTeleport(teleport: Teleport) { this.Teleports[teleport._id] = teleport; }
     addCave(cave: Cave) { this.Caves[cave._id] = cave; }
     addPlayer(player: Player) {
-        if (player.local == true) {
+        if (localStorage.getItem("username") === player.getUsername()) {
             this.localPlayers[player._id] = player;
         }
         else {

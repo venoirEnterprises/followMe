@@ -35,7 +35,6 @@ var Player = /** @class */ (function (_super) {
         _this.hasSurvived = false;
         _this.friendlyFire = false;
         _this.online = false;
-        _this.rankOnline = false;
         _this.shareXPInHelp = false;
         _this.socialOnly = false;
         //community end
@@ -65,14 +64,26 @@ var Player = /** @class */ (function (_super) {
         return _this;
     }
     //progress end
-    Player.prototype.setCoreFields = function (difficulty, checkpoint, xp, rank, _id) {
+    //setters start
+    Player.prototype.setCoreFields = function (difficulty, checkpoint, xp, rank, _id, username) {
         this.difficulty = difficulty;
         this.checkpoint = checkpoint;
         this.xp = xp;
         this.rank = rank;
         this._id = _id; //unique for array discovery in addPlayer() []
+        this.username = username;
     };
-    Player.prototype.setDisplayStats = function (maxHealth, currentHealth, chest, head, legs, lives, weaponID, personType) {
+    Player.prototype.setCommunityFields = function (isVenoir, hasSurvived, email, friendlyFire, online, shareXPInHelp, socialOnly, username) {
+        this.isVenoir = isVenoir;
+        this.local = this.username == username ? true : false;
+        this.hasSurvived = hasSurvived;
+        this.email = email;
+        this.friendlyFire = friendlyFire;
+        this.online = online;
+        this.shareXPInHelp = shareXPInHelp;
+        this.socialOnly = socialOnly;
+    };
+    Player.prototype.setDisplayFields = function (maxHealth, currentHealth, chest, head, legs, lives, weaponID, personType) {
         this.maxHealth = maxHealth;
         this.health = currentHealth;
         this.chest = chest;
@@ -81,6 +92,16 @@ var Player = /** @class */ (function (_super) {
         this.lives = lives;
         this.weaponID = weaponID;
         this.personType = personType;
+    };
+    Player.prototype.setProgressFields = function (levelPlayTime, level, world) {
+        this.levelPlayTime = levelPlayTime;
+        this.level = level;
+        this.world = world;
+    };
+    //setters end
+    //getters start
+    Player.prototype.getUsername = function () {
+        return this.username;
     };
     return Player;
 }(GameObject));
@@ -283,8 +304,8 @@ var FollowMeDefinition = /** @class */ (function () {
         if (Checkpoints === void 0) { Checkpoints = new Array(); }
         if (Teleports === void 0) { Teleports = new Array(); }
         if (Caves === void 0) { Caves = new Array(); }
-        if (localPlayers === void 0) { localPlayers = new Array().filter(function (m) { return m.local === true; }); }
-        if (onlinePlayers === void 0) { onlinePlayers = new Array().filter(function (m) { return m.local === true; }); }
+        if (localPlayers === void 0) { localPlayers = new Array(); }
+        if (onlinePlayers === void 0) { onlinePlayers = new Array(); }
         this.Enemies = Enemies;
         this.Weapons = Weapons;
         this.Items = Items;
@@ -304,7 +325,7 @@ var FollowMeDefinition = /** @class */ (function () {
     FollowMeDefinition.prototype.addTeleport = function (teleport) { this.Teleports[teleport._id] = teleport; };
     FollowMeDefinition.prototype.addCave = function (cave) { this.Caves[cave._id] = cave; };
     FollowMeDefinition.prototype.addPlayer = function (player) {
-        if (player.local == true) {
+        if (localStorage.getItem("username") === player.getUsername()) {
             this.localPlayers[player._id] = player;
         }
         else {
