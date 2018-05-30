@@ -79,9 +79,8 @@
             }
             object.type = "player";
             window.console.log("81, playerDesign");
-            window.console.log(object);
-            addGameObject(object);
-            followMe.players2 = getObjectsByType("player");
+            addGameObject(object);    
+            followMe.players2 = getObjectsByType("player", true);
                 followMe.players[identifier] = new followMe.player({
                     head: object.head,
                     chest: object.chest,

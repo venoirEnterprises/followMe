@@ -14,22 +14,70 @@ abstract class GameObject {
 
 class Player extends GameObject {
     constructor(
-        public health: number,
-        public maxHealth: number,
-        public lives: number,
-        public username: string,
-        public local: boolean,
-        //community start
-        public venoir: boolean,
-        public online: boolean,
-        public hasSurvived: boolean,
-        public difficulty: number,
-        //community end
     ) { super() }
-    setHealth(maxHealth, currentHealth) {
+    public difficulty: number = 1;
+    public checkpoint: number = 0;
+    public xp: number = 0;
+    public rank: number = 0;
+    //community start
+    public isVenoir: boolean = false;
+    public local: boolean = true;
+    public hasSurvived: boolean = false;
+    public email: string;
+    public friendlyFire: boolean = false;
+    public lastActive: Date;
+    public lastLoggedOut: Date;
+    public online: boolean = false;
+    public rankOnline: boolean = false;
+    public shareXPInHelp: boolean = false;
+    public socialOnly: boolean = false;
+    public username: string;
+    //community end
+    //keys start
+    public build: number = 0;
+    public left: number = 0;
+    public enter: number = 0;
+    public right: number = 0;
+    public special: number = 0;
+    public surrender: number = 0;
+    public up: number = 0;
+    //keys end
+    //display start
+    public chest: number = 0;
+    public head: number = 0;
+    public legs: number = 0;
+    public health: number = 0;
+    public maxHealth: number = 0;
+    public lives: number = 0;
+    public weaponID: number = 0;
+    public personType: number = 1;
+    //display end
+    //progress start
+    public levelPlayTime: number = 0;//seconds
+    public level: string = "";
+    public world: number = 0
+    //progress end
+
+    setCoreFields(difficulty, checkpoint, xp, rank, _id)
+    {
+        this.difficulty = difficulty;
+        this.checkpoint = checkpoint;
+        this.xp = xp;
+        this.rank = rank;
+        this._id = _id//unique for array discovery in addPlayer() []
+    }
+
+    setDisplayStats(maxHealth, currentHealth, chest, head, legs, lives, weaponID, personType) {
         this.maxHealth = maxHealth;
         this.health = currentHealth;
+        this.chest = chest;
+        this.head = head;
+        this.legs = legs;
+        this.lives = lives;
+        this.weaponID = weaponID;
+        this.personType = personType;
     }
+
 }
 
 abstract class PassiveGameObject extends GameObject {
@@ -44,7 +92,7 @@ abstract class PassiveGameObject extends GameObject {
     public inCave: boolean = false;
     public spriteY: number = 0;
 
-    setPassiveObjectProperties(type: string, _id: string, x: number, y: number, caveName: string, hideMinimumDifficulty: number, showMinimumDifficulty: number, spriteY: number, width:number, height: number) {
+    setPassiveObjectProperties(type: string, _id: string, x: number, y: number, caveName: string, hideMinimumDifficulty: number, showMinimumDifficulty: number, spriteY: number, width: number, height: number) {
         this.hideMinimumDifficulty = hideMinimumDifficulty;
         this.showMinimumDifficulty = showMinimumDifficulty;
         this._id = _id;
@@ -52,8 +100,7 @@ abstract class PassiveGameObject extends GameObject {
         this.y = y * 64;
         this.widthX = width * 64;
         this.heightY = height * 64;
-        if (type === "enemies")
-        {
+        if (type === "enemies") {
             this.heightY += 8;
         }
         this.spriteY = spriteY;
@@ -111,7 +158,7 @@ abstract class AnimatedGameObject extends PassiveGameObject {
                 break;
         }
         this.endFrame = endFrame;
-    }    
+    }
 }
 
 class Item extends AnimatedGameObject {
@@ -151,7 +198,7 @@ abstract class AnimatedMovementGameObject extends AnimatedGameObject {
         this.xend = xend;
         this.yend = yend;
         this.backToStartPoint = backToStartPoint;
-    }    
+    }
 }
 
 abstract class AnimatedHurtingGameObjectWithHealth extends AnimatedMovementGameObject {
@@ -159,8 +206,7 @@ abstract class AnimatedHurtingGameObjectWithHealth extends AnimatedMovementGameO
         public maxHealth: number = 0,
         public currentHealth: number = 0,
     ) { super() }
-    setHealth( maxHealth, currentHealth)
-    {
+    setHealth(maxHealth, currentHealth) {
         this.maxHealth = maxHealth;
         this.currentHealth = currentHealth;
     }
@@ -204,8 +250,11 @@ class FollowMeDefinition {
         public Checkpoints: Array<Checkpoint> = new Array<Checkpoint>(),
         public Teleports: Array<Teleport> = new Array<Teleport>(),
         public Caves: Array<Cave> = new Array<Cave>(),
-        public Players: Array<Player> = new Array<Player>(),
+        public localPlayers: Array<Player> = new Array<Player>().filter(m => m.local === true),
+        public onlinePlayers: Array<Player> = new Array<Player>().filter(m => m.local === true),
     ) { }
+
+    //add start
     addEnemy(enemy: Enemy) { this.Enemies[enemy._id] = enemy; }
     addWeapon(weapon: Weapon) { this.Weapons[weapon._id] = weapon }
     addItem(item: Item) { this.Items[item._id] = item; }
@@ -213,8 +262,16 @@ class FollowMeDefinition {
     addCheckpoint(checkpoint: Checkpoint) { this.Checkpoints[checkpoint._id] = checkpoint; }
     addTeleport(teleport: Teleport) { this.Teleports[teleport._id] = teleport; }
     addCave(cave: Cave) { this.Caves[cave._id] = cave; }
-    addPlayer(player: Player) { this.Players[player._id] = player; }
-
+    addPlayer(player: Player) {
+        if (player.local == true) {
+            this.localPlayers[player._id] = player;
+        }
+        else {
+            this.onlinePlayers[player._id] = player;
+        }
+    }
+    //add end
+    //get start
     getEnemies() { return this.Enemies; }
     getWeapons() { return this.Weapons; }
     getItems() { return this.Items }
@@ -222,6 +279,7 @@ class FollowMeDefinition {
     getCheckpoints() { return this.Checkpoints; }
     getTeleports() { return this.Teleports; }
     getCaves() { return this.Caves; }
-    getPlayer() { return this.Players.filter(m => m.local == true) }
-    getOnlinePlayers() { return this.Players.filter(m => m.local == true) }
+    getPlayer() { return this.localPlayers }
+    getOnlinePlayers() { return this.onlinePlayers }
+    //get end
 }

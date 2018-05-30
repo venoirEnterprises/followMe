@@ -6,7 +6,7 @@ function typeScriptFile() {
 
 let gameProperties = new FollowMeDefinition();
 
-function getObjectsByType(type: string, online: boolean) {
+function getObjectsByType(type: string, local: boolean) {
     switch (type.toUpperCase()) {
         case "SURFACE":
             return gameProperties.getSurfaces();
@@ -23,7 +23,7 @@ function getObjectsByType(type: string, online: boolean) {
         case "CAVE":
             return gameProperties.getCaves();
         case "PLAYER":
-            if (online === false) {
+            if (local === true) {
                 return gameProperties.getPlayer();
             }
             else {
@@ -86,9 +86,9 @@ function addGameObject(ObjIncoming) {
             gameProperties.addEnemy(newEnemy);
             break;
         case "player":
-            let newPlayer = new Player(ObjIncoming.health, ObjIncoming.maxHealth, ObjIncoming.lives, ObjIncoming.username, ObjIncoming.local, ObjIncoming.venoir, ObjIncoming.online, ObjIncoming.hasSurvived, ObjIncoming.difficulty);
-            newPlayer.setHealth(ObjIncoming.maxHealth, ObjIncoming.health);
-            window.console.log(newPlayer);
+            let newPlayer = new Player();
+            newPlayer.setCoreFields(ObjIncoming.difficulty, ObjIncoming.checkpoint, ObjIncoming.xp, ObjIncoming.rank, ObjIncoming._id);
+            newPlayer.setDisplayStats(ObjIncoming.maxHealth, ObjIncoming.health, ObjIncoming.chest, ObjIncoming.head, ObjIncoming.legs, ObjIncoming.lives, ObjIncoming.weaponID, ObjIncoming.personType);
             gameProperties.addPlayer(newPlayer);
             break;
     }    
