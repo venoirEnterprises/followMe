@@ -137,7 +137,7 @@ $(document).ready(function () {
         $.connection.hub.start("~/signalr").done(function () {
             followMe.memServer.server.getWeapons();
             
-            followMe.memServer.server.getUserStats(true, localStorage.getItem("username"), $("#welcome").text())
+            followMe.memServer.server.getUserStats(true, localStorage.getItem("username"), $("#welcome").text(), localStorage.getItem("sessionID"))//#70, stop user theft
         });
     }
 

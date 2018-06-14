@@ -83,7 +83,7 @@ namespace followMe.Services
             }
         }
 
-        public void getUserStats(bool leader, string username, string levelName)
+        public void getUserStats(bool leader, string username, string levelName, string sessionID)
         {
             var server = getMongoClient();
             var mongo = server.GetServer();
@@ -93,9 +93,10 @@ namespace followMe.Services
             var statsForXpAll = db.GetCollection<statsForXP>("xpStats");
             var statsUserLog = db.GetCollection<xpStatsUserLog>("xpStatsUserLog");
             var xptoRankAll = db.GetCollection<xpToRank>("xpToRank");
+            var loginLog = db.GetCollection("loginLog");
 
             var username2 = changeStringDots(username, false);
-            if (username != null)
+            if (username != null && sessionID != null && getLoginCount_usernameWithSession(username, sessionID) == 1)//#70
             {
                 var showPrizes = true;
                 var userToQuery = person.FindOne(Query.EQ("username", username2));
@@ -144,6 +145,12 @@ namespace followMe.Services
                     Clients.All.getXPAllocationArray(username, statsXPlist);
                     //Should be statsToRank
                 }
+            }
+            else
+            {
+                //#70 invalid sessionID relationship destroys the user's active session, just in case
+                quitUser(username);
+                Clients.All.forceQuitPlayer(username, sessionID);
             }
         }
         public void updateHealth(string username, int newhealth, int oldHealth, bool dying, int maxLives)
@@ -322,6 +329,20 @@ namespace followMe.Services
             var userToQuery = person.FindOne(Query.EQ("username", username));
             levelList world = redirectToWorld(userToQuery.world, userToQuery.level, "");//username should just comefrom cient
             Clients.All.returnGameNavigation(world.fullName, world.worldName, username);
+        }
+
+        public long getLoginCount_username(string username)
+        {
+            var db = getDB();
+            var loginLog = db.GetCollection("loginLog");
+            return loginLog.Count(Query.Exists(username));
+        }
+
+        public long getLoginCount_usernameWithSession(string username, string sessionID)
+        {
+            var db = getDB();
+            var loginLog = db.GetCollection("loginLog");
+            return loginLog.Find(Query.And(Query.EQ("_id", sessionID), Query.EQ(username, 1))).Count();
         }
     }
 }

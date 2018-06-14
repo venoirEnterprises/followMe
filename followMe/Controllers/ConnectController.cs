@@ -197,8 +197,7 @@ namespace followMe.Controllers
 
                     return RedirectToAction("design", "Connect", new { isRegistering = true });
                 }
-                //need to count loginLog for single user now, as this is going to be a login here
-                var loginLogCount = loginLog.Count(Query.Exists(model.Username));
+                var loginLogCount = userChange.getLoginCount_username(model.Username);
 
                 if (loginLogCount > 0)//They are already connected, user probably wrong
                 {
