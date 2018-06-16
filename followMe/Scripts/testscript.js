@@ -128,6 +128,7 @@ $(document).ready(function () {
         }
     }
     followMe.memServer = $.connection.userMethods;
+    followMe.moveServer = $.connection.NavigationServices;
     $("#userdesigned").val(localStorage.getItem("username"))
     var url = document.URL.valueOf();
     var lengthSlash = ((url.match(/\//g) || []).length);

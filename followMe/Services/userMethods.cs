@@ -321,16 +321,6 @@ namespace followMe.Services
             }
         }
 
-        public void navigateToGame(string username)
-        {
-            var db = getDB();
-            var levels = db.GetCollection<levelList>("levelList");
-            var person = db.GetCollection<userDefined>("userDefined");
-            var userToQuery = person.FindOne(Query.EQ("username", username));
-            levelList world = redirectToWorld(userToQuery.world, userToQuery.level, "");//username should just comefrom cient
-            Clients.All.returnGameNavigation(world.fullName, world.worldName, username);
-        }
-
         public long getLoginCount_username(string username)
         {
             var db = getDB();
