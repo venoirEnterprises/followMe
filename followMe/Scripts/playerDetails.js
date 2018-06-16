@@ -78,9 +78,9 @@
     followMe.xpStats = [];
 
     $.connection.hub.start("~/signalr").done(function () {
-        followMe.memServer.server.getWeapons(localStorage.getItem("username"));
+        followMe.userServicesDefined.server.getWeapons(localStorage.getItem("username"));
         if ($("#isGame").val() != "no") {
-            followMe.memServer.server.getWeapon(localStorage.getItem("username"), false, false);
+            followMe.userServicesDefined.server.getWeapon(localStorage.getItem("username"), false, false);
         }
         $("#namesubmit").click(function () {
             followMe.userServicesDefined.server.manipulateName($("#namelist").val(), $("#newname").val(), "update", localStorage.getItem("username"))

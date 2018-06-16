@@ -403,7 +403,7 @@
                     followMe.helpUsername
                 );
                 if (followMe.helpUsername !== null) {
-                    followMe.memServer.server.updateAccessTime(username, "newAccess")
+                    followMe.userServicesDefined.server.updateAccessTime(username, "newAccess")
                 }
 
                 followMe.levelServicesDefined.server.sendMessage("test");

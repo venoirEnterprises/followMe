@@ -3,7 +3,7 @@ using MongoDB.Driver.Builders;
 
 namespace followMe.Services
 {
-    public class NavigationServices : advancedServices
+    public class navigationServices : advancedServices
     {
 
         public void NavigateToGame(string username)

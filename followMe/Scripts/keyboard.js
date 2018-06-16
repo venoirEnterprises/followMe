@@ -160,7 +160,7 @@
                             if (surrenderTime >= 5) {
                                 surrenderTime = 0
                                 surrendering = false;
-                                followMe.memServer.server.surrender(localStorage.getItem("username"));
+                                followMe.userServicesDefined.server.surrender(localStorage.getItem("username"));
                                 if (confirm("Do you want to surrender? Back to level select...")) {
                                     window.location = "../../Connect/LevelSelect"
                                 }

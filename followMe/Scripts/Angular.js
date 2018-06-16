@@ -198,7 +198,7 @@ $(function () {
         $("#otherPlayerDetails").show("slow")
         
         $("#otherPlayerName").text(followMe.otherPlayername)
-        followMe.memServer.server.getWeapon(followMe.otherPlayername, true, true);
+        followMe.userServicesDefined.server.getWeapon(followMe.otherPlayername, true, true);
         $.getJSON("/playerCommunity/getOtherPlayer",
             {
                 rank: e.rank,

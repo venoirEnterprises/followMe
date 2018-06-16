@@ -98,7 +98,7 @@
 
         $(document).off("taphold").on("taphold", function () {//Time has to be changed manually [line 80]
 
-            followMe.memServer.server.surrender(localStorage.getItem("username"));
+            followMe.userServicesDefined.server.surrender(localStorage.getItem("username"));
             if (confirm("Do you want to surrender? Back to level select...")) {
                 window.location = "../../Connect/LevelSelect"
             }

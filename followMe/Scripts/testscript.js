@@ -46,6 +46,7 @@ $(document).ready(function () {
     followMe.userServicesDefined = $.connection.userMethods;
     followMe.authServicesDefined = $.connection.authServices;
     followMe.levelServicesDefined = $.connection.levelServices;
+    followMe.navigationServicesDefined = $.connection.navigationServices;
    
 
     followMe.imageDefintion = {};
@@ -127,8 +128,6 @@ $(document).ready(function () {
             }
         }
     }
-    followMe.memServer = $.connection.userMethods;
-    followMe.moveServer = $.connection.NavigationServices;
     $("#userdesigned").val(localStorage.getItem("username"))
     var url = document.URL.valueOf();
     var lengthSlash = ((url.match(/\//g) || []).length);
@@ -136,9 +135,9 @@ $(document).ready(function () {
 
     if (url.search("Welcome") === -1 && lengthSlash > 3) {
         $.connection.hub.start("~/signalr").done(function () {
-            followMe.memServer.server.getWeapons();
+            followMe.userServicesDefined.server.getWeapons();
             
-            followMe.memServer.server.getUserStats(true, localStorage.getItem("username"), $("#welcome").text(), localStorage.getItem("sessionID"))//#70, stop user theft
+            followMe.userServicesDefined.server.getUserStats(true, localStorage.getItem("username"), $("#welcome").text(), localStorage.getItem("sessionID"))//#70, stop user theft
         });
     }
 

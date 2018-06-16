@@ -154,7 +154,7 @@
                 }
                 //if (followMe.otherPlayers[highestOtherPlayer] != undefined) {
                 followMe.setPlayerDesign(false, followMe.otherPlayers[numberToUse])
-                followMe.memServer.server.getWeapon(userModel.username, true, false);
+                followMe.userServicesDefined.server.getWeapon(userModel.username, true, false);
                 //}
             }
         }

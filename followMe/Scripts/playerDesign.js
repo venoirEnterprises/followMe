@@ -69,7 +69,7 @@
 
     //Options end
 
-    followMe.memServer.client.displaydesign = function (isPrimary, head, chest, legs, object, username, xpStats, maxXP, countNotifications) {
+    followMe.userServicesDefined.client.displaydesign = function (isPrimary, head, chest, legs, object, username, xpStats, maxXP, countNotifications) {
 
         if (username === localStorage.getItem("username")) {
             //Hit every level, let's build the user here!
@@ -300,7 +300,7 @@
         })
     }
 
-    followMe.memServer.client.mongoHere = function (testText) {
+    followMe.userServicesDefined.client.mongoHere = function (testText) {
 
         //$("#collision").text(testText)
 
