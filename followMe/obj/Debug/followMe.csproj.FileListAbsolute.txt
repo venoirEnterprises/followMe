@@ -199,3 +199,4 @@ C:\Users\nvsib\Source\Repos\followMe\followMe\bin\zh-Hant\System.Spatial.resourc
 C:\Users\nvsib\Source\Repos\followMe\followMe\obj\Debug\followMe.csproj.App.config
 C:\Users\nvsib\Source\Repos\followMe\followMe\obj\Debug\followMe.dll
 C:\Users\nvsib\Source\Repos\followMe\followMe\obj\Debug\followMe.pdb
+C:\Users\nvsib\Source\Repos\followMe\followMe\obj\Debug\followMe.csprojResolveAssemblyReference.cache

@@ -7,10 +7,9 @@ namespace followMe.Services
 {
     public class levelServices : advancedServices
     {
-        authServices auth = new authServices();
         communityServices comm = new communityServices();
         deployment deploy = new deployment();
-
+        userMethods user = new userMethods();
         //temporary test script
         public string sendMessage(string msg)
         {
@@ -49,7 +48,7 @@ namespace followMe.Services
                 foreach (var item in collection.FindAll().Where(m => m.showMinimumDifficulty <= theUser.difficulty).Where(m => m.hideMinimumDifficulty >= theUser.difficulty))
                 {
                     var canAccessTeleport = false;
-                    canAccessTeleport = auth.hasAccessToLevel(username2, item.level, item.world);
+                    canAccessTeleport = user.hasAccessToLevel(username2, item.level, item.world);
                     int totalLevelCount = 0;
                     int totalPlayerDoneCount = 0;
                     if (item.type == "teleports")
@@ -134,7 +133,7 @@ namespace followMe.Services
                 userToChange.levelPlayTime = 0;
                 collection.Save(userToChange);
 
-                auth.newLevelAccess(username2, levelUnlocked, 1);
+                user.newLevelAccess(username2, levelUnlocked, 1);
                 comm.addPlayerProgress(username2, nextLevel.fullName, nextLevel.worldName);
                 comm.setFastestLevelTime(username2, levelname, timeToFinish);
 

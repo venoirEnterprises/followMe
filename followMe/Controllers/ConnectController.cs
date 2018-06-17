@@ -9,8 +9,7 @@ namespace followMe.Controllers
 {
     public class ConnectController : Controller
     {
-        userMethods userChange = new Services.userMethods();
-        authServices auth = new authServices();
+        userMethods userChange = new userMethods();
         deployment deploy = new deployment();
         communityServices comm = new communityServices();
         levelServices level = new levelServices();
@@ -165,7 +164,7 @@ namespace followMe.Controllers
                 {
                     var toCheckPassword = 0;
                     if (model.FirstPassword != null) { toCheckPassword = model.FirstPassword.GetHashCode(); }
-                    firstpasswordValid = auth.checkpassword(model.Username, toCheckPassword);
+                    firstpasswordValid = userChange.checkpassword(model.Username, toCheckPassword);
                     if (firstpasswordValid == false) { ViewBag.connectError = "User Credentials invalid"; return View(); }
 
                 }
@@ -192,9 +191,8 @@ namespace followMe.Controllers
 
                 if (userExistsCount == 0 && model.Register == true)
                 {
-                    auth.registerUser(model.Username, loginLog, userFirstPassword, false, model.Email, model.IsVenoir, model.GoOnline);
-
-                    return RedirectToAction("design", "Connect", new { isRegistering = true });
+                    userChange.registerUser(model.Username, loginLog, userFirstPassword, false, model.Email, model.IsVenoir, model.GoOnline);
+                    //return RedirectToAction("design", "Connect", new { isRegistering = true });
                 }
                 long loginLogCount = userChange.getLoginLogSessionID_username(model.Username).Count;
 
@@ -216,7 +214,6 @@ namespace followMe.Controllers
                 {
                     model.Username = userChange.changeStringDots(model.Username, false);
                     userChange.Login(model.Username, model.GoOnline);
-                    //return RedirectToAction("levelSelect", "Connect");
                 }
                 //Invalid settings
                 if (userExistsCount > 0 && model.Register)

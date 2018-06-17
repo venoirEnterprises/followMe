@@ -1,9 +1,9 @@
 ﻿$(function () {
     $("#goBack").click(function () {
-        followMe.navigationServicesDefined.server.navigateToGame(localStorage.getItem("username"))
+        followMe.navigationServicesDefined.server.navigateToGame(localStorage.getItem("username"), localStorage.getItem("sessionID"), false, false);
     })
 
-    followMe.navigationServicesDefined.client.returnGameNavigation = function (level, world, username, sessionID, design)
+    followMe.navigationServicesDefined.client.returnGameNavigation = function (level, world, username, sessionID, design, register)
     {
         localStorage.setItem("sessionID", sessionID);
         if (localStorage.getItem("username") === username)
@@ -11,7 +11,11 @@
             if (design) {
                 window.location.href = "/Connect/LevelSelect";
             }
-            else {
+            else if (register) {
+                window.location.href = "/Connect/Design?isRegistering=true";
+            }
+            else 
+            {
                 window.location.href = "/" + world + "/" + level
             }
         }        
