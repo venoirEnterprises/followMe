@@ -3,11 +3,17 @@
         followMe.navigationServicesDefined.server.navigateToGame(localStorage.getItem("username"))
     })
 
-    followMe.navigationServicesDefined.client.returnGameNavigation = function (level, world, username)
+    followMe.navigationServicesDefined.client.returnGameNavigation = function (level, world, username, sessionID, design)
     {
+        localStorage.setItem("sessionID", sessionID);
         if (localStorage.getItem("username") === username)
         {
-            window.location.href = "/" + world + "/" + level
+            if (design) {
+                window.location.href = "/Connect/LevelSelect";
+            }
+            else {
+                window.location.href = "/" + world + "/" + level
+            }
         }        
     }
 

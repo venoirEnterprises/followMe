@@ -246,7 +246,7 @@
     <Compile Include="Services\levelServices.cs" />
     <Compile Include="Services\messageServices.cs" />
     <Compile Include="Services\multiplayerServices.cs" />
-    <Compile Include="Services\navigationServices.cs" />
+    <Compile Include="Services\NavigationServices.cs" />
     <Compile Include="Services\userMethods.cs" />
     <Compile Include="startup.cs" />
     <Compile Include="ViewModels\achievementsAwardsViewModel.cs" />

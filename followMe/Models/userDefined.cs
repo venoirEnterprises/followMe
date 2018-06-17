@@ -162,4 +162,11 @@ namespace followMe.Models
         public int difficulty { get; set; }
         public bool confirmed { get; set; }
     }
+
+    public class loginLog
+    {
+        public ObjectId _id { get; set; }
+        public string username { get; set; }
+        public bool loggedIn { get; set; }
+    }
 }

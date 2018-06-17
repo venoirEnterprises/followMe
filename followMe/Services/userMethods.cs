@@ -9,9 +9,7 @@ namespace followMe.Services
 {
     public class userMethods : advancedServices
     {
-        //multiplayerServices multi = new multiplayerServices();        
-        //levelServices level = new levelServices();
-
+        NavigationServices move = new NavigationServices();
         public void updateAccessTime(string action, string username)
         {
             var db = getDB();
@@ -42,7 +40,7 @@ namespace followMe.Services
             users.Save(resetUserCheckpoint);
 
             var loginLog = db.GetCollection("loginLog");
-            loginLog.Remove(Query.EQ(username, 1));
+            loginLog.Remove(Query.And(Query.EQ("username", username), Query.EQ("loggedIn", true)));
 
             //Clients.All.userQuitting(username);
         }
@@ -93,10 +91,11 @@ namespace followMe.Services
             var statsForXpAll = db.GetCollection<statsForXP>("xpStats");
             var statsUserLog = db.GetCollection<xpStatsUserLog>("xpStatsUserLog");
             var xptoRankAll = db.GetCollection<xpToRank>("xpToRank");
-            var loginLog = db.GetCollection("loginLog");
+            var loginLog = db.GetCollection<loginLog>("loginLog");
 
             var username2 = changeStringDots(username, false);
-            if (username != null && sessionID != null && getLoginCount_usernameWithSession(username, sessionID) == 1)//#70
+            List<loginLog> validLoginCount = getLoginLogSessionID_username(username);
+            if (username != null && sessionID != null && validLoginCount.First()._id.ToString() == sessionID)//#70
             {
                 var showPrizes = true;
                 var userToQuery = person.FindOne(Query.EQ("username", username2));
@@ -321,18 +320,44 @@ namespace followMe.Services
             }
         }
 
-        public long getLoginCount_username(string username)
+        public List<loginLog> getLoginLogSessionID_username(string username)
         {
             var db = getDB();
-            var loginLog = db.GetCollection("loginLog");
-            return loginLog.Count(Query.Exists(username));
+            var loginLog = db.GetCollection<loginLog>("loginLog");
+            List<loginLog> returnedLogin = new List<Models.loginLog>();
+            loginLog addedLog = loginLog.Find(Query.And(Query.EQ("username", username), Query.EQ("loggedIn", true))).FirstOrDefault();
+            if (addedLog != null)
+            {
+                returnedLogin.Add(addedLog);
+            }
+            return returnedLogin;
         }
 
-        public long getLoginCount_usernameWithSession(string username, string sessionID)
+        public void Login(string Username, bool GoOnline)
         {
             var db = getDB();
-            var loginLog = db.GetCollection("loginLog");
-            return loginLog.Find(Query.And(Query.EQ("_id", sessionID), Query.EQ(username, 1))).Count();
+            var person = db.GetCollection<userDefined>("userDefined");
+            var personToUpdate = person.FindOne(Query.EQ("username", Username));
+            personToUpdate.online = GoOnline;
+            person.Save(personToUpdate);
+            loginLog newLog = createLoginLog(Username);
+            move.NavigateToGame(Username, newLog._id.ToString(), true);
         }
+
+        public loginLog createLoginLog(string Username)
+        {
+            var db = getDB();
+            var loginLog = db.GetCollection<loginLog>("loginLog");
+            var newlog = new loginLog();
+            if (getLoginLogSessionID_username(Username).Count() > 0)
+            {
+                return loginLog.Find(Query.And(Query.EQ("username", Username), Query.EQ("isLoggedIn", true))).FirstOrDefault();
+            }
+            newlog.loggedIn = true;
+            newlog.username = Username;
+            loginLog.Insert(newlog);
+            return newlog;
+        }
+
     }
 }

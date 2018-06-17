@@ -1,7 +1,6 @@
 ﻿using followMe.Models;
 using followMe.Services;
 using followMe.ViewModels;
-using MongoDB.Driver;
 using MongoDB.Driver.Builders;
 using System.Web.Mvc;
 
@@ -197,7 +196,7 @@ namespace followMe.Controllers
 
                     return RedirectToAction("design", "Connect", new { isRegistering = true });
                 }
-                var loginLogCount = userChange.getLoginCount_username(model.Username);
+                long loginLogCount = userChange.getLoginLogSessionID_username(model.Username).Count;
 
                 if (loginLogCount > 0)//They are already connected, user probably wrong
                 {
@@ -212,18 +211,12 @@ namespace followMe.Controllers
                         return View();
                     }
                 }
-                //If the count is 0 then they are allowed to connect
+                //If the count is 0 then they are allowed to connect. LOGIN
                 if (userExistsCount > 0 && model.Register == false && loginLogCount == 0)
                 {
                     model.Username = userChange.changeStringDots(model.Username, false);
-                    var person = db.GetCollection<userDefined>("userDefined");
-                    var personToUpdate = person.FindOne(Query.EQ("username", model.Username));
-                    personToUpdate.online = model.GoOnline;
-                    person.Save(personToUpdate);
-                    var newlog = new QueryDocument(model.Username, 1);
-                    loginLog.Insert(newlog);
-
-                    return RedirectToAction("levelSelect", "Connect");
+                    userChange.Login(model.Username, model.GoOnline);
+                    //return RedirectToAction("levelSelect", "Connect");
                 }
                 //Invalid settings
                 if (userExistsCount > 0 && model.Register)
